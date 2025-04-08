@@ -19,6 +19,7 @@ extern crate axlog;
 #[cfg(feature = "multitask")]
 extern crate alloc;
 
+pub mod sync;
 pub mod time;
 mod waker;
 

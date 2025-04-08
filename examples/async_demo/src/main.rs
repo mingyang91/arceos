@@ -10,6 +10,8 @@ use axasync::{block_on, sleep, TimeoutExt};
 #[cfg(feature = "multitask")]
 use axasync::Executor;
 
+mod sync_demo;
+
 // A simple async function that sleeps for a while
 async fn sleep_and_print(id: u32, duration_ms: u64) -> u32 {
     println!("Task {} started", id);
@@ -64,6 +66,13 @@ fn main() {
 
         println!("All tasks completed in the executor");
     }
+
+    // Synchronization primitives demo (moved outside the cfg block)
+    println!("\nStarting synchronization primitives demo");
+    block_on(sync_demo::mutex_demo());
+    block_on(sync_demo::rwlock_demo());
+    block_on(sync_demo::semaphore_demo());
+    block_on(sync_demo::barrier_demo());
 
     println!("Async Demo: Done!");
 }
