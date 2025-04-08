@@ -3,6 +3,7 @@ resolver = "2"
 
 members = [
     "modules/axalloc",
+    "modules/axasync",
     "modules/axconfig",
     "modules/axdisplay",
     "modules/axdriver",
@@ -29,6 +30,7 @@ members = [
     "examples/httpserver",
     "examples/httpserver",
     "examples/shell",
+    "examples/async_demo",
 ]
 
 [workspace.package]
@@ -51,6 +53,7 @@ arceos_posix_api = { path = "api/arceos_posix_api" }
 axfeat = { path = "api/axfeat" }
 
 axalloc = { path = "modules/axalloc" }
+axasync = { path = "modules/axasync" }
 axconfig = { path = "modules/axconfig" }
 axdisplay = { path = "modules/axdisplay" }
 axdriver = { path = "modules/axdriver" }

@@ -153,6 +153,9 @@ pub extern "C" fn rust_main(cpu_id: usize, dtb: usize) -> ! {
     #[cfg(feature = "multitask")]
     axtask::init_scheduler();
 
+    #[cfg(feature = "axasync-timer")]
+    axasync::init_timer_waker();
+
     #[cfg(any(feature = "fs", feature = "net", feature = "display"))]
     {
         #[allow(unused_variables)]
@@ -258,6 +261,8 @@ fn init_interrupt() {
         update_timer();
         #[cfg(feature = "multitask")]
         axtask::on_timer_tick();
+        #[cfg(feature = "axasync-timer")]
+        axasync::check_timer_events();
     });
 
     // Enable IRQs before starting app
