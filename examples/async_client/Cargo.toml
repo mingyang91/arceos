@@ -1,0 +1,16 @@
+[package]
+name = "async_client"
+version = "0.1.0"
+edition = "2021"
+authors = ["ArceOS Contributors"]
+
+[dependencies]
+axstd = { path = "../../ulib/axstd", features = ["alloc", "irq", "net"] }
+axruntime = { path = "../../modules/axruntime", features = ["alloc", "net"] }
+axlog = { path = "../../modules/axlog" }
+axalloc = { path = "../../modules/axalloc", features = ["tlsf"] }
+axasync = { path = "../../modules/axasync", features = ["net", "alloc"] }
+axnet = { path = "../../modules/axnet" }
+
+[features]
+default = ["axstd/default"]
