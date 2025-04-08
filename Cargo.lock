@@ -146,7 +146,7 @@ dependencies = [
  "axdisplay",
  "axdma",
  "axdriver",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axfeat",
  "axfs",
  "axhal",
@@ -165,7 +165,7 @@ version = "0.1.0"
 dependencies = [
  "axalloc",
  "axconfig",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axfeat",
  "axfs",
  "axhal",
@@ -220,6 +220,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "async_net_demo"
+version = "0.1.0"
+dependencies = [
+ "axalloc",
+ "axasync",
+ "axlog",
+ "axnet",
+ "axruntime",
+ "axstd",
+]
+
+[[package]]
 name = "atomic-polyfill"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -239,7 +251,7 @@ name = "axalloc"
 version = "0.1.0"
 dependencies = [
  "allocator",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cfg-if",
  "kspin",
  "log",
@@ -250,8 +262,11 @@ dependencies = [
 name = "axasync"
 version = "0.1.0"
 dependencies = [
+ "axerrno 0.1.0",
  "axhal",
  "axlog",
+ "axnet",
+ "axsync",
  "axtask",
  "cfg-if",
  "futures-executor",
@@ -307,7 +322,7 @@ dependencies = [
  "allocator",
  "axalloc",
  "axconfig",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axhal",
  "axmm",
  "kspin",
@@ -392,6 +407,13 @@ dependencies = [
 [[package]]
 name = "axerrno"
 version = "0.1.0"
+dependencies = [
+ "cfg-if",
+]
+
+[[package]]
+name = "axerrno"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "66ccd41dd4ef364e2385901a5c2a3adea974a41eccb2529c1f24e4c8bc93d834"
 dependencies = [
@@ -421,7 +443,7 @@ version = "0.1.0"
 dependencies = [
  "axdriver",
  "axdriver_block",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axfs_devfs",
  "axfs_ramfs",
  "axfs_vfs",
@@ -465,7 +487,7 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2314ebe07a2fef7b1c1a7d15ab817941cd306ace651bb50024b5a8b3e8485359"
 dependencies = [
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitflags 2.8.0",
  "log",
 ]
@@ -515,7 +537,7 @@ version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d8ca9c10ea4cd42bda87a2abde281fb481c76a0b05976fd03697385ea65d5122"
 dependencies = [
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -523,7 +545,7 @@ name = "axlibc"
 version = "0.1.0"
 dependencies = [
  "arceos_posix_api",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axfeat",
  "axio",
  "bindgen",
@@ -547,7 +569,7 @@ version = "0.1.0"
 dependencies = [
  "axalloc",
  "axconfig",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axhal",
  "kspin",
  "lazyinit",
@@ -562,7 +584,7 @@ version = "0.1.0"
 dependencies = [
  "axdriver",
  "axdriver_net",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axhal",
  "axio",
  "axsync",
@@ -610,7 +632,7 @@ name = "axstd"
 version = "0.1.0"
 dependencies = [
  "arceos_api",
- "axerrno",
+ "axerrno 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axfeat",
  "axio",
  "kspin",

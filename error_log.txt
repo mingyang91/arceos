@@ -1,0 +1,87 @@
+[37maxconfig-gen[0m [90mconfigs/defconfig.toml configs/platforms/riscv64-qemu-virt.toml  -w smp=1 -w arch=riscv64 -w platform=riscv64-qemu-virt -o "/Users/famer.me/Repository/arceos/.axconfig.toml" -c "/Users/famer.me/Repository/arceos/.axconfig.toml"[0m
+    [92;1mBuilding[0m App: async_net_demo, Arch: riscv64, Platform: riscv64-qemu-virt, App type: rust
+[37mcargo -C examples/async_net_demo build[0m [90m-Z unstable-options --target riscv64gc-unknown-none-elf --target-dir /Users/famer.me/Repository/arceos/target --release  --features "axstd/log-level-info"[0m
+   Compiling axtask v0.1.0 (/Users/famer.me/Repository/arceos/modules/axtask)
+   Compiling axsync v0.1.0 (/Users/famer.me/Repository/arceos/modules/axsync)
+   Compiling axnet v0.1.0 (/Users/famer.me/Repository/arceos/modules/axnet)
+   Compiling axruntime v0.1.0 (/Users/famer.me/Repository/arceos/modules/axruntime)
+   Compiling axasync v0.1.0 (/Users/famer.me/Repository/arceos/modules/axasync)
+warning: unused imports: `Context` and `Poll`
+  --> modules/axasync/src/lib.rs:27:18
+   |
+27 | use core::task::{Context, Poll};
+   |                  ^^^^^^^  ^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `core::task::Waker`
+ --> modules/axasync/src/waker.rs:3:5
+  |
+3 | use core::task::Waker;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `RawWakerVTable` and `RawWaker`
+ --> modules/axasync/src/waker.rs:4:18
+  |
+4 | use core::task::{RawWaker, RawWakerVTable};
+  |                  ^^^^^^^^  ^^^^^^^^^^^^^^
+
+   Compiling axfeat v0.1.0 (/Users/famer.me/Repository/arceos/api/axfeat)
+warning: unused variable: `cx`
+  --> modules/axasync/src/time.rs:47:35
+   |
+47 |     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+   |                                   ^^ help: if this is intentional, prefix it with an underscore: `_cx`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+   Compiling arceos_api v0.1.0 (/Users/famer.me/Repository/arceos/api/arceos_api)
+warning: field `mutex` is never read
+   --> modules/axasync/src/sync/mutex.rs:141:5
+    |
+140 | pub struct MutexGuard<'a, T: ?Sized> {
+    |            ---------- field in this struct
+141 |     mutex: &'a Mutex<T>,
+    |     ^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: constant `READER_MASK` is never used
+  --> modules/axasync/src/sync/rwlock.rs:17:7
+   |
+17 | const READER_MASK: usize = WRITER - 1;
+   |       ^^^^^^^^^^^
+
+warning: field `lock` is never read
+   --> modules/axasync/src/sync/rwlock.rs:232:5
+    |
+231 | pub struct RwLockReadGuard<'a, T: ?Sized> {
+    |            --------------- field in this struct
+232 |     lock: &'a RwLock<T>,
+    |     ^^^^
+
+warning: field `lock` is never read
+   --> modules/axasync/src/sync/rwlock.rs:274:5
+    |
+273 | pub struct RwLockWriteGuard<'a, T: ?Sized> {
+    |            ---------------- field in this struct
+274 |     lock: &'a RwLock<T>,
+    |     ^^^^
+
+warning: field `barrier` is never read
+   --> modules/axasync/src/sync/semaphore.rs:201:5
+    |
+200 | pub struct BarrierGuard {
+    |            ------------ field in this struct
+201 |     barrier: Barrier,
+    |     ^^^^^^^
+    |
+    = note: `BarrierGuard` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+   Compiling axstd v0.1.0 (/Users/famer.me/Repository/arceos/ulib/axstd)
+warning: `axasync` (lib) generated 9 warnings (run `cargo fix --lib -p axasync` to apply 3 suggestions)
+   Compiling async_net_demo v0.1.0 (/Users/famer.me/Repository/arceos/examples/async_net_demo)
+    Finished `release` profile [optimized] target(s) in 1.17s
+[37mrust-objcopy --binary-architecture=riscv64[0m [90mexamples/async_net_demo/async_net_demo_riscv64-qemu-virt.elf --strip-all -O binary examples/async_net_demo/async_net_demo_riscv64-qemu-virt.bin[0m
+    [96;1mRunning[0m on qemu...
+[37mqemu-system-riscv64[0m [90m-m 128M -smp 1 -machine virt -bios default -kernel examples/async_net_demo/async_net_demo_riscv64-qemu-virt.bin -nographic[0m

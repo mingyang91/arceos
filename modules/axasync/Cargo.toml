@@ -21,6 +21,15 @@ irq = ["axtask/irq"]
 # Enable async timeout functionality
 timer = ["irq"]
 
+# Enable async filesystem support
+file = []
+
+# Enable async networking support
+net = ["dep:axnet"]
+
+# Enable alloc support
+alloc = []
+
 [dependencies]
 spin = "0.9"
 futures-util = { version = "0.3", default-features = false, features = [
@@ -33,6 +42,9 @@ heapless = "0.7"
 axlog = { workspace = true }
 axhal = { workspace = true }
 axtask = { workspace = true }
+axsync = { workspace = true }
+axnet = { workspace = true, optional = true }
+axerrno = { workspace = true }
 
 [dev-dependencies]
 futures-executor = "0.3"

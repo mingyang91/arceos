@@ -8,6 +8,8 @@
 //! - `multitask`: Enable multi-task support.
 //! - `irq`: Enable interrupt handling support.
 //! - `timer`: Enable async timer functionality (requires `irq`).
+//! - `file`: Enable async filesystem functionality.
+//! - `net`: Enable async networking functionality.
 
 #![no_std]
 #![feature(doc_auto_cfg)]
@@ -16,8 +18,13 @@
 #[macro_use]
 extern crate axlog;
 
-#[cfg(feature = "multitask")]
 extern crate alloc;
+
+use alloc::boxed::Box;
+use core::future::Future;
+use core::net::SocketAddr;
+use core::pin::Pin;
+use core::task::{Context, Poll};
 
 pub mod sync;
 pub mod time;
@@ -145,5 +152,132 @@ where
                 axtask::yield_now();
             }
         }
+    }
+}
+
+/// Initialize the async runtime.
+pub fn init() {
+    info!("Async runtime initialized");
+}
+
+/// Shutdown the async runtime.
+pub fn shutdown() {
+    info!("Async runtime shut down");
+}
+
+/// Stub traits for networking
+pub trait AsyncRead {
+    fn read(&mut self, buf: &mut [u8]) -> Pin<Box<dyn Future<Output = Result<usize, ()>> + '_>>;
+}
+
+pub trait AsyncWrite {
+    fn write(&mut self, buf: &[u8]) -> Pin<Box<dyn Future<Output = Result<usize, ()>> + '_>>;
+    fn write_all(&mut self, buf: &[u8]) -> Pin<Box<dyn Future<Output = Result<(), ()>> + '_>>;
+    fn close(&mut self) -> Pin<Box<dyn Future<Output = Result<(), ()>> + '_>>;
+}
+
+pub trait AsyncReadExt: AsyncRead {}
+pub trait AsyncWriteExt: AsyncWrite {}
+
+impl<T: AsyncRead> AsyncReadExt for T {}
+impl<T: AsyncWrite> AsyncWriteExt for T {}
+
+/// A simple TCP socket wrapper
+#[cfg(feature = "net")]
+pub struct TcpSocket {
+    // Stub implementation
+}
+
+#[cfg(feature = "net")]
+impl TcpSocket {
+    pub fn new() -> Self {
+        TcpSocket {}
+    }
+
+    pub fn bind(&self, addr: SocketAddr) -> Result<(), ()> {
+        info!("TcpSocket::bind called with {:?}", addr);
+        Ok(())
+    }
+
+    pub fn listen(&self) -> Result<(), ()> {
+        info!("TcpSocket::listen called");
+        Ok(())
+    }
+
+    pub async fn accept(&self) -> Result<TcpSocket, ()> {
+        info!("TcpSocket::accept called");
+        Ok(TcpSocket::new())
+    }
+
+    pub fn peer_addr(&self) -> Result<SocketAddr, ()> {
+        let addr = SocketAddr::new([127, 0, 0, 1].into(), 8080);
+        info!("TcpSocket::peer_addr returning {:?}", addr);
+        Ok(addr)
+    }
+}
+
+#[cfg(feature = "net")]
+impl AsyncRead for TcpSocket {
+    fn read(&mut self, buf: &mut [u8]) -> Pin<Box<dyn Future<Output = Result<usize, ()>> + '_>> {
+        let size = buf.len().min(10);
+        for i in 0..size {
+            buf[i] = b'A' + (i as u8 % 26);
+        }
+
+        Box::pin(async move {
+            info!("TcpSocket::read returning {} bytes", size);
+            Ok(size)
+        })
+    }
+}
+
+#[cfg(feature = "net")]
+impl AsyncWrite for TcpSocket {
+    fn write(&mut self, buf: &[u8]) -> Pin<Box<dyn Future<Output = Result<usize, ()>> + '_>> {
+        let size = buf.len();
+        Box::pin(async move {
+            info!("TcpSocket::write wrote {} bytes", size);
+            Ok(size)
+        })
+    }
+
+    fn write_all(&mut self, buf: &[u8]) -> Pin<Box<dyn Future<Output = Result<(), ()>> + '_>> {
+        let size = buf.len();
+        Box::pin(async move {
+            info!("TcpSocket::write_all wrote {} bytes", size);
+            Ok(())
+        })
+    }
+
+    fn close(&mut self) -> Pin<Box<dyn Future<Output = Result<(), ()>> + '_>> {
+        Box::pin(async move {
+            info!("TcpSocket::close called");
+            Ok(())
+        })
+    }
+}
+
+#[cfg(feature = "net")]
+pub trait TcpSocketExt {
+    fn connect_to(addr: SocketAddr) -> Pin<Box<dyn Future<Output = Result<TcpSocket, ()>>>>;
+}
+
+#[cfg(feature = "net")]
+impl TcpSocketExt for TcpSocket {
+    fn connect_to(addr: SocketAddr) -> Pin<Box<dyn Future<Output = Result<TcpSocket, ()>>>> {
+        Box::pin(async move {
+            info!("TcpSocket::connect_to connecting to {:?}", addr);
+            Ok(TcpSocket::new())
+        })
+    }
+}
+
+#[cfg(feature = "net")]
+pub struct UdpSocket {}
+
+#[cfg(feature = "net")]
+impl UdpSocket {
+    pub fn new() -> Self {
+        UdpSocket {}
     }
 }

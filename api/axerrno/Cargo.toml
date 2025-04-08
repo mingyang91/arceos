@@ -1,0 +1,13 @@
+[package]
+name = "axerrno"
+version.workspace = true
+edition.workspace = true
+authors = ["ArceOS Contributors"]
+description = "Error types and utilities for ArceOS"
+license.workspace = true
+homepage.workspace = true
+repository = "https://github.com/arceos-org/arceos"
+documentation = "https://arceos-org.github.io/arceos/axerrno/index.html"
+
+[dependencies]
+cfg-if = "1.0"

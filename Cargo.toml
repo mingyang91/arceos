@@ -21,6 +21,7 @@ members = [
     "api/axfeat",
     "api/arceos_api",
     "api/arceos_posix_api",
+    "api/axerrno",
 
     "ulib/axstd",
     "ulib/axlibc",
@@ -31,6 +32,7 @@ members = [
     "examples/httpserver",
     "examples/shell",
     "examples/async_demo",
+    "examples/async_net_demo",
 ]
 
 [workspace.package]
@@ -57,6 +59,7 @@ axasync = { path = "modules/axasync" }
 axconfig = { path = "modules/axconfig" }
 axdisplay = { path = "modules/axdisplay" }
 axdriver = { path = "modules/axdriver" }
+axerrno = { path = "api/axerrno" }
 axfs = { path = "modules/axfs" }
 axhal = { path = "modules/axhal" }
 axlog = { path = "modules/axlog" }
