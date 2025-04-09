@@ -42,6 +42,7 @@ impl<'a> Future for RecvFuture<'a> {
             }
         }
 
+        SOCKET_SET.poll_interfaces();
         let handle = this.socket.handle();
         SOCKET_SET.with_socket_mut::<Socket, _, _>(handle, |socket| {
             if !socket.is_active() {
@@ -92,6 +93,7 @@ impl<'a> Future for SendFuture<'a> {
             }
         }
 
+        SOCKET_SET.poll_interfaces();
         let handle = this.socket.handle();
         SOCKET_SET.with_socket_mut::<Socket, _, _>(handle, |socket| {
             if !socket.is_active() || !socket.may_send() {
@@ -136,6 +138,7 @@ impl<'a> Future for AcceptFuture<'a> {
             }
         }
 
+        SOCKET_SET.poll_interfaces();
         let local_port = unsafe { this.socket.local_addr().unwrap().port() };
         let (handle, (local_addr, peer_addr)) = match LISTEN_TABLE.accept(local_port) {
             Ok(res) => res,
@@ -170,6 +173,7 @@ impl<'a> Future for ConnectFuture<'a> {
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.get_mut();
         if !this.init {
+            this.init = true;
             if let Err(e) = this
                 .socket
                 .update_state(STATE_CLOSED, STATE_CONNECTING, || {
@@ -216,17 +220,14 @@ impl<'a> Future for ConnectFuture<'a> {
             }
         }
 
-        if !this.socket.is_nonblocking() {
-            return Poll::Ready(Err(AxError::Unsupported));
+        SOCKET_SET.poll_interfaces();
+        let PollState { writable, .. } = this.socket.poll_connect()?;
+        if !writable {
+            return Poll::Pending;
+        } else if this.socket.is_connected() {
+            return Poll::Ready(Ok(()));
         } else {
-            let PollState { writable, .. } = this.socket.poll_connect()?;
-            if !writable {
-                return Poll::Pending;
-            } else if this.socket.is_connected() {
-                return Poll::Ready(Ok(()));
-            } else {
-                return Poll::Ready(ax_err!(ConnectionRefused, "socket connect() failed"));
-            }
+            return Poll::Ready(ax_err!(ConnectionRefused, "socket connect() failed"));
         }
     }
 }

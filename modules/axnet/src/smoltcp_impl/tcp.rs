@@ -61,7 +61,7 @@ impl TcpSocket {
     }
 
     /// Creates a new TCP socket that is already connected.
-    pub const fn new_connected(
+    pub(crate) const fn new_connected(
         handle: SocketHandle,
         local_addr: IpEndpoint,
         peer_addr: IpEndpoint,
@@ -180,7 +180,9 @@ impl TcpSocket {
         }
     }
 
+    #[cfg(feature = "async")]
     pub fn connect_async(&self, remote_addr: SocketAddr) -> ConnectFuture {
+        // self.nonblock.store(true, Ordering::Release);
         ConnectFuture::new(self, remote_addr)
     }
 
