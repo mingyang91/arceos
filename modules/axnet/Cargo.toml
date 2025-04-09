@@ -12,6 +12,7 @@ documentation = "https://arceos-org.github.io/arceos/axnet/index.html"
 [features]
 smoltcp = []
 default = ["smoltcp"]
+async = ["smoltcp/async"]
 
 [dependencies]
 log = "=0.4.21"

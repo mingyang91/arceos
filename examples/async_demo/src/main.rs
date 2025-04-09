@@ -3,7 +3,10 @@
 
 use axstd::println;
 use axstd::time::Duration;
+use core::future::Future;
+use core::pin::Pin;
 use core::result::Result::{Err, Ok};
+use core::task::{Context, Poll};
 
 use axasync::{block_on, sleep, TimeoutExt};
 
@@ -74,5 +77,27 @@ fn main() {
     block_on(sync_demo::semaphore_demo());
     block_on(sync_demo::barrier_demo());
 
+    block_on(async {
+        let no_waker = NoWaker(3);
+        no_waker.await;
+    });
     println!("Async Demo: Done!");
+}
+
+struct NoWaker(u8);
+
+impl Future for NoWaker {
+    type Output = ();
+
+    fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let this = self.get_mut();
+        this.0 -= 1;
+        if this.0 <= 0 {
+            println!("NoWaker completed");
+            Poll::Ready(())
+        } else {
+            println!("NoWaker waiting...");
+            Poll::Pending
+        }
+    }
 }

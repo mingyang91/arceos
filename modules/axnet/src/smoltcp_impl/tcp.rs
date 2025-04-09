@@ -6,6 +6,9 @@ use axerrno::{AxError, AxResult, ax_err, ax_err_type};
 use axio::PollState;
 use axsync::Mutex;
 
+#[cfg(feature = "async")]
+use super::future::{ConnectFuture, RecvFuture, SendFuture};
+
 use smoltcp::iface::SocketHandle;
 use smoltcp::socket::tcp::{self, ConnectError, State};
 use smoltcp::wire::{IpEndpoint, IpListenEndpoint};
@@ -19,9 +22,9 @@ use super::{ETH0, LISTEN_TABLE, SOCKET_SET, SocketSetWrapper};
 //       |-(listen)-> BUSY -> LISTENING -(shutdown)-> BUSY -> CLOSED
 //       |
 //        -(bind)-> BUSY -> CLOSED
-const STATE_CLOSED: u8 = 0;
+pub const STATE_CLOSED: u8 = 0;
 const STATE_BUSY: u8 = 1;
-const STATE_CONNECTING: u8 = 2;
+pub const STATE_CONNECTING: u8 = 2;
 const STATE_CONNECTED: u8 = 3;
 const STATE_LISTENING: u8 = 4;
 
@@ -37,9 +40,9 @@ const STATE_LISTENING: u8 = 4;
 /// [`accept`]: TcpSocket::accept
 pub struct TcpSocket {
     state: AtomicU8,
-    handle: UnsafeCell<Option<SocketHandle>>,
-    local_addr: UnsafeCell<IpEndpoint>,
-    peer_addr: UnsafeCell<IpEndpoint>,
+    pub handle: UnsafeCell<Option<SocketHandle>>,
+    pub local_addr: UnsafeCell<IpEndpoint>,
+    pub peer_addr: UnsafeCell<IpEndpoint>,
     nonblock: AtomicBool,
 }
 
@@ -58,7 +61,7 @@ impl TcpSocket {
     }
 
     /// Creates a new TCP socket that is already connected.
-    const fn new_connected(
+    pub const fn new_connected(
         handle: SocketHandle,
         local_addr: IpEndpoint,
         peer_addr: IpEndpoint,
@@ -70,6 +73,10 @@ impl TcpSocket {
             peer_addr: UnsafeCell::new(peer_addr),
             nonblock: AtomicBool::new(false),
         }
+    }
+
+    pub(crate) fn handle(&self) -> SocketHandle {
+        unsafe { self.handle.get().read().unwrap() }
     }
 
     /// Returns the local address and port, or
@@ -171,6 +178,10 @@ impl TcpSocket {
                 }
             })
         }
+    }
+
+    pub fn connect_async(&self, remote_addr: SocketAddr) -> ConnectFuture {
+        ConnectFuture::new(self, remote_addr)
     }
 
     /// Binds an unbound socket to the given address and port.
@@ -302,6 +313,11 @@ impl TcpSocket {
         })
     }
 
+    #[cfg(feature = "async")]
+    pub fn recv_async<'a>(&'a self, buf: &'a mut [u8]) -> RecvFuture<'a> {
+        RecvFuture::new(self, buf)
+    }
+
     /// Transmits data in the given buffer.
     pub fn send(&self, buf: &[u8]) -> AxResult<usize> {
         if self.is_connecting() {
@@ -330,6 +346,11 @@ impl TcpSocket {
                 }
             })
         })
+    }
+
+    #[cfg(feature = "async")]
+    pub fn send_async<'a>(&'a self, buf: &'a [u8]) -> SendFuture<'a> {
+        SendFuture::new(self, buf)
     }
 
     /// Whether the socket is readable or writable.
@@ -366,7 +387,7 @@ impl TcpSocket {
     ///
     /// It returns `Ok` if the current state is `expect`, otherwise it returns
     /// the current state in `Err`.
-    fn update_state<F, T>(&self, expect: u8, new: u8, f: F) -> Result<AxResult<T>, u8>
+    pub(crate) fn update_state<F, T>(&self, expect: u8, new: u8, f: F) -> Result<AxResult<T>, u8>
     where
         F: FnOnce() -> AxResult<T>,
     {
@@ -388,21 +409,21 @@ impl TcpSocket {
     }
 
     #[inline]
-    fn is_connecting(&self) -> bool {
+    pub fn is_connecting(&self) -> bool {
         self.get_state() == STATE_CONNECTING
     }
 
     #[inline]
-    fn is_connected(&self) -> bool {
+    pub fn is_connected(&self) -> bool {
         self.get_state() == STATE_CONNECTED
     }
 
     #[inline]
-    fn is_listening(&self) -> bool {
+    pub fn is_listening(&self) -> bool {
         self.get_state() == STATE_LISTENING
     }
 
-    fn bound_endpoint(&self) -> AxResult<IpListenEndpoint> {
+    pub fn bound_endpoint(&self) -> AxResult<IpListenEndpoint> {
         // SAFETY: no other threads can read or write `self.local_addr`.
         let local_addr = unsafe { self.local_addr.get().read() };
         let port = if local_addr.port != 0 {
@@ -419,7 +440,7 @@ impl TcpSocket {
         Ok(IpListenEndpoint { addr, port })
     }
 
-    fn poll_connect(&self) -> AxResult<PollState> {
+    pub fn poll_connect(&self) -> AxResult<PollState> {
         // SAFETY: `self.handle` should be initialized above.
         let handle = unsafe { self.handle.get().read().unwrap() };
         let writable =

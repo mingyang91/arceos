@@ -43,7 +43,7 @@ axlog = { workspace = true }
 axhal = { workspace = true }
 axtask = { workspace = true }
 axsync = { workspace = true }
-axnet = { workspace = true, optional = true }
+axnet = { workspace = true, optional = true, features = ["async"] }
 axerrno = { workspace = true }
 
 [dev-dependencies]

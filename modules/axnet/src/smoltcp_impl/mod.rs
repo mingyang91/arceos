@@ -1,6 +1,8 @@
 mod addr;
 mod bench;
 mod dns;
+#[cfg(feature = "async")]
+mod future;
 mod listen_table;
 mod tcp;
 mod udp;

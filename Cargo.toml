@@ -32,7 +32,6 @@ members = [
     "examples/httpserver",
     "examples/shell",
     "examples/async_demo",
-    "examples/async_net_demo",
     "examples/async_client",
     "examples/async_server",
 ]

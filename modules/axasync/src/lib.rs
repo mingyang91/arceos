@@ -182,6 +182,7 @@ pub trait AsyncWriteExt: AsyncWrite {}
 impl<T: AsyncRead> AsyncReadExt for T {}
 impl<T: AsyncWrite> AsyncWriteExt for T {}
 
+// pub mod io;
 /// A simple TCP socket wrapper
 #[cfg(feature = "net")]
 pub struct TcpSocket {

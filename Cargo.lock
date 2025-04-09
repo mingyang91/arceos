@@ -232,18 +232,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "async_net_demo"
-version = "0.1.0"
-dependencies = [
- "axalloc",
- "axasync",
- "axlog",
- "axnet",
- "axruntime",
- "axstd",
-]
-
-[[package]]
 name = "async_server"
 version = "0.1.0"
 dependencies = [
