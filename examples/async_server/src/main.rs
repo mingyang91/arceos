@@ -4,8 +4,7 @@
 extern crate alloc;
 
 use alloc::format;
-use alloc::string::String;
-use axasync::{block_on, init, shutdown, sleep, AsyncRead, AsyncWrite};
+use axasync::{block_on, init, shutdown, sleep};
 use axnet::TcpSocket;
 use axstd::println;
 use axstd::time::Duration;

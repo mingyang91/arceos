@@ -24,9 +24,6 @@ timer = ["irq"]
 # Enable async filesystem support
 file = []
 
-# Enable async networking support
-net = ["dep:axnet"]
-
 # Enable alloc support
 alloc = []
 
@@ -43,7 +40,6 @@ axlog = { workspace = true }
 axhal = { workspace = true }
 axtask = { workspace = true }
 axsync = { workspace = true }
-axnet = { workspace = true, optional = true, features = ["async"] }
 axerrno = { workspace = true }
 
 [dev-dependencies]

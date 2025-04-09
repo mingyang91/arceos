@@ -4,7 +4,7 @@
 extern crate alloc;
 
 use alloc::string::String;
-use axasync::{block_on, init, shutdown, sleep, AsyncRead, AsyncWrite};
+use axasync::{block_on, init, shutdown, sleep};
 use axnet::TcpSocket;
 use axstd::println;
 use axstd::time::Duration;
@@ -45,11 +45,11 @@ async fn run_http_client() -> Result<(), &'static str> {
 
     println!("Connecting to HTTP server at http://{}...", server_addr);
 
-    let mut socket = TcpSocket::new();
-    socket.connect_async(server_addr).await.map_err(|e| {
-        // println!("Failed to connect to HTTP server: {}", e);
-        "Failed to connect to HTTP server"
-    })?;
+    let socket = TcpSocket::new();
+    socket
+        .connect_async(server_addr)
+        .await
+        .map_err(|_| "Failed to connect to HTTP server")?;
 
     println!("Connected to HTTP server!");
 

@@ -277,7 +277,6 @@ dependencies = [
  "axerrno 0.1.0",
  "axhal",
  "axlog",
- "axnet",
  "axsync",
  "axtask",
  "cfg-if",

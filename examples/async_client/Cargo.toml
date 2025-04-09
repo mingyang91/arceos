@@ -9,8 +9,8 @@ axstd = { path = "../../ulib/axstd", features = ["alloc", "irq", "net"] }
 axruntime = { path = "../../modules/axruntime", features = ["alloc", "net"] }
 axlog = { path = "../../modules/axlog" }
 axalloc = { path = "../../modules/axalloc", features = ["tlsf"] }
-axasync = { path = "../../modules/axasync", features = ["net", "alloc"] }
-axnet = { path = "../../modules/axnet" }
+axasync = { path = "../../modules/axasync", features = ["alloc"] }
+axnet = { path = "../../modules/axnet", features = ["async"] }
 
 [features]
 default = ["axstd/default"]
