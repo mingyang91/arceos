@@ -3,7 +3,8 @@
 
 extern crate alloc;
 
-use alloc::string::String;
+use alloc::string::{String, ToString};
+use alloc::vec::Vec;
 use axasync::{block_on, init, shutdown, sleep};
 use axnet::TcpSocket;
 use axstd::println;
@@ -64,7 +65,10 @@ async fn run_http_client() -> Result<(), &'static str> {
     let mut buffer = [0u8; 4096];
     let mut total_bytes = 0;
     let mut response = String::new();
+    let mut headers;
     let mut read_count = 0;
+    let mut body = String::new();
+    let mut content_length = None;
 
     println!("Reading HTTP response...");
 
@@ -90,6 +94,23 @@ async fn run_http_client() -> Result<(), &'static str> {
                 // Convert bytes to string
                 if let Ok(chunk) = core::str::from_utf8(&buffer[..n]) {
                     response.push_str(chunk);
+                }
+
+                if let Some(delimiter) = response.find("\r\n\r\n") {
+                    // split the response into header and body
+                    let (header, content) = response.split_at(delimiter + 4);
+                    headers = parse_headers(header);
+                    body = content.to_string();
+                    content_length = headers
+                        .iter()
+                        .find(|(key, _)| key.to_lowercase() == "content-length")
+                        .map(|(_, value)| value.parse::<usize>().unwrap_or(0));
+                }
+
+                if let Some(content_length) = content_length {
+                    if body.len() >= content_length {
+                        break;
+                    }
                 }
 
                 // Small delay to avoid tight loops
@@ -149,4 +170,19 @@ async fn run_http_client() -> Result<(), &'static str> {
     println!("Connection closed");
 
     Ok(())
+}
+
+fn parse_headers(response: &str) -> Vec<(String, String)> {
+    let mut headers = Vec::new();
+    let mut lines = response.lines();
+    while let Some(line) = lines.next() {
+        if line.is_empty() {
+            break;
+        }
+        headers.push((
+            line.split(": ").next().unwrap_or("Unknown").to_string(),
+            line.split(": ").nth(1).unwrap_or("Unknown").to_string(),
+        ));
+    }
+    headers
 }
