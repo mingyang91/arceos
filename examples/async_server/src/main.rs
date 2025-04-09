@@ -3,19 +3,52 @@
 
 extern crate alloc;
 
+use alloc::format;
 use alloc::string::String;
-use axasync::{block_on, init, shutdown, AsyncRead, AsyncWrite, TcpSocket};
+use axasync::{block_on, init, shutdown, sleep, AsyncRead, AsyncWrite};
+use axnet::TcpSocket;
 use axstd::println;
+use axstd::time::Duration;
 use core::net::{IpAddr, Ipv4Addr, SocketAddr};
+
+const LOCAL_PORT: u16 = 5555;
+
+macro_rules! header {
+    () => {
+        "\
+HTTP/1.1 200 OK\r\n\
+Content-Type: text/html\r\n\
+Content-Length: {}\r\n\
+Connection: close\r\n\
+\r\n\
+{}"
+    };
+}
+
+const CONTENT: &str = r#"<html>
+<head>
+  <title>Hello, ArceOS</title>
+</head>
+<body>
+  <center>
+    <h1>Hello, <a href="https://github.com/arceos-org/arceos">ArceOS</a></h1>
+  </center>
+  <hr>
+  <center>
+    <i>Powered by <a href="https://github.com/arceos-org/arceos/tree/main/examples/httpserver">ArceOS example HTTP server</a> v0.1.0</i>
+  </center>
+</body>
+</html>
+"#;
 
 #[no_mangle]
 fn main() {
     // Initialize the async runtime
     init();
 
-    println!("Async TCP Server");
+    println!("Async HTTP Server");
 
-    // Start the TCP server
+    // Start the HTTP server
     let result = block_on(run_server());
     match result {
         Ok(_) => println!("Server completed successfully"),
@@ -28,73 +61,92 @@ fn main() {
 
 /// The main server function that accepts connections and handles client requests
 async fn run_server() -> Result<(), &'static str> {
-    // Listen on all interfaces on port 8000
-    let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), 8000);
+    // Listen on all interfaces on port 5555
+    let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), LOCAL_PORT);
 
     let socket = TcpSocket::new();
     socket.bind(addr).map_err(|_| "Failed to bind to address")?;
     socket.listen().map_err(|_| "Failed to listen")?;
 
-    println!("Server listening on {}", addr);
+    println!("HTTP Server listening on http://{}/", addr);
+    println!(
+        "You can test with a web browser or: curl http://localhost:{}/",
+        LOCAL_PORT
+    );
+
+    // Keep track of how many connections we've handled
+    let mut connection_count = 0;
 
     // Accept and handle client connections
     loop {
-        match socket.accept().await {
+        println!("Waiting for connection {}...", connection_count + 1);
+
+        match socket.accept_async().await {
             Ok(mut client) => {
+                connection_count += 1;
+
                 let peer_addr = client
                     .peer_addr()
                     .unwrap_or(SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), 0));
-                println!("Client connected from {}", peer_addr);
+                println!(
+                    "Client connected from {} (connection {})",
+                    peer_addr, connection_count
+                );
 
-                // Handle client connection
-                handle_client(&mut client).await?;
+                // Handle HTTP request
+                if let Err(e) = handle_http_request(&mut client).await {
+                    println!("Error handling HTTP request: {}", e);
+                }
 
                 println!("Client disconnected: {}", peer_addr);
+
+                // Add a small delay between connections
+                sleep(Duration::from_millis(100)).await;
             }
             Err(e) => {
                 println!("Failed to accept connection: {:?}", e);
-                // Continue accepting other connections
+                // Add a delay before retrying in case of errors
+                sleep(Duration::from_millis(1000)).await;
             }
         }
     }
 }
 
-/// Handle a client connection by reading data and sending responses
-async fn handle_client(client: &mut (impl AsyncRead + AsyncWrite)) -> Result<(), &'static str> {
-    let mut buffer = [0u8; 1024];
+/// Handle an HTTP request and send an HTML response
+async fn handle_http_request(client: &mut TcpSocket) -> Result<(), &'static str> {
+    let mut buffer = [0u8; 4096];
 
-    // Read data from client
+    // Read the HTTP request
     let bytes_read = client
-        .read(&mut buffer)
+        .recv_async(&mut buffer)
         .await
-        .map_err(|_| "Failed to read from client")?;
+        .map_err(|_| "Failed to read HTTP request")?;
 
     if bytes_read == 0 {
         // Client closed the connection
         return Ok(());
     }
+    println!("Received {} bytes", bytes_read);
 
-    // Process the received data
-    let message = core::str::from_utf8(&buffer[..bytes_read]).unwrap_or("Invalid UTF-8");
-    println!("Received message: {}", message);
+    // Log the request (first line only)
+    if let Ok(request_str) = core::str::from_utf8(&buffer[..core::cmp::min(bytes_read, 100)]) {
+        if let Some(first_line) = request_str.lines().next() {
+            println!("HTTP Request: {}", first_line);
+        }
+    }
 
-    // Prepare and send response (echo the received message with a prefix)
-    let response = format_response(message);
+    let response = format!(header!(), CONTENT.len(), CONTENT);
+
+    // Send the hardcoded HTTP response
     client
-        .write_all(response.as_bytes())
+        .send_async(response.as_bytes())
         .await
-        .map_err(|_| "Failed to send response")?;
+        .map_err(|_| "Failed to send HTTP response")?;
 
-    // Close connection
+    // Close the connection
     client
-        .close()
-        .await
+        .shutdown()
         .map_err(|_| "Failed to close client connection")?;
 
     Ok(())
-}
-
-/// Format a response to send back to the client
-fn format_response(client_message: &str) -> String {
-    alloc::format!("Server received: {}", client_message)
 }

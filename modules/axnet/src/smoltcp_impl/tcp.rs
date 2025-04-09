@@ -7,7 +7,7 @@ use axio::PollState;
 use axsync::Mutex;
 
 #[cfg(feature = "async")]
-use super::future::{ConnectFuture, RecvFuture, SendFuture};
+use super::future::{AcceptFuture, ConnectFuture, RecvFuture, SendFuture};
 
 use smoltcp::iface::SocketHandle;
 use smoltcp::socket::tcp::{self, ConnectError, State};
@@ -247,6 +247,11 @@ impl TcpSocket {
             debug!("TCP socket accepted a new connection {}", peer_addr);
             Ok(TcpSocket::new_connected(handle, local_addr, peer_addr))
         })
+    }
+
+    #[cfg(feature = "async")]
+    pub fn accept_async(&self) -> AcceptFuture {
+        AcceptFuture::new(self)
     }
 
     /// Close the connection.

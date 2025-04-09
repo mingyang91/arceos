@@ -142,7 +142,7 @@ impl<'a> Future for AcceptFuture<'a> {
         let local_port = unsafe { this.socket.local_addr().unwrap().port() };
         let (handle, (local_addr, peer_addr)) = match LISTEN_TABLE.accept(local_port) {
             Ok(res) => res,
-            Err(e) if e == ax_err_type!(WouldBlock) => return Poll::Pending,
+            Err(e) if e == AxError::WouldBlock => return Poll::Pending,
             Err(e) => return Poll::Ready(ax_err!(e)),
         };
 
