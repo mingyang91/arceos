@@ -139,7 +139,7 @@ impl<'a> Future for AcceptFuture<'a> {
         }
 
         SOCKET_SET.poll_interfaces();
-        let local_port = unsafe { this.socket.local_addr().unwrap().port() };
+        let local_port = this.socket.local_addr().unwrap().port();
         let (handle, (local_addr, peer_addr)) = match LISTEN_TABLE.accept(local_port) {
             Ok(res) => res,
             Err(e) if e == AxError::WouldBlock => return Poll::Pending,
@@ -223,6 +223,16 @@ impl<'a> Future for ConnectFuture<'a> {
         SOCKET_SET.poll_interfaces();
         let PollState { writable, .. } = this.socket.poll_connect()?;
         if !writable {
+            let handle = unsafe {
+                this.socket
+                    .handle
+                    .get()
+                    .read()
+                    .expect("handle should be initialized")
+            };
+            SOCKET_SET.with_socket_mut::<Socket, _, _>(handle, |socket| {
+                socket.register_recv_waker(cx.waker());
+            });
             return Poll::Pending;
         } else if this.socket.is_connected() {
             return Poll::Ready(Ok(()));
