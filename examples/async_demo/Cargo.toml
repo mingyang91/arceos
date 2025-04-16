@@ -7,6 +7,7 @@ authors = ["ArceOS Contributors"]
 [dependencies]
 axstd = { path = "../../ulib/axstd", features = ["alloc", "multitask", "irq"] }
 axasync = { path = "../../modules/axasync", features = ["multitask", "timer"] }
+axruntime = { path = "../../modules/axruntime", features = ["axasync-timer"] }
 
 [features]
 default = ["axstd/default"]

@@ -102,7 +102,7 @@ mod timer_waker {
     ///
     /// Only one timer can be active for each waker at a time.
     pub fn wake_at(deadline: TimeValue, waker: Waker) {
-        debug!("Setting waker to wake at {:?}", deadline);
+        // trace!("Setting waker to wake at {:?}", deadline);
         let ticket_id = TIMER_TICKET_ID.fetch_add(1, Ordering::AcqRel);
 
         let mut timer_list_guard = TIMER_LIST.lock();
@@ -121,7 +121,10 @@ mod timer_waker {
         loop {
             // Get an event to process
             let event_to_process = {
-                let mut timer_list_guard = TIMER_LIST.lock();
+                let Some(mut timer_list_guard) = TIMER_LIST.try_lock() else {
+                    debug!("Another timer event is being processed");
+                    return;
+                };
                 if let Some(timer_list) = timer_list_guard.as_mut() {
                     timer_list.expire_one(now)
                 } else {
@@ -131,7 +134,10 @@ mod timer_waker {
 
             // Process the event outside the lock
             match event_to_process {
-                Some((_deadline, event)) => event.callback(now),
+                Some((_deadline, event)) => {
+                    // debug!("Waking waker with ticket id {}", event.ticket_id);
+                    event.callback(now)
+                }
                 None => break,
             }
         }

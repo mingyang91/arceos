@@ -21,6 +21,7 @@ extern crate axlog;
 extern crate alloc;
 
 use alloc::boxed::Box;
+use alloc::collections::BinaryHeap;
 use core::future::Future;
 use core::net::SocketAddr;
 use core::pin::Pin;
@@ -45,9 +46,7 @@ pub trait TimerEvent {
 
 #[cfg(feature = "timer")]
 pub struct TimerList<E: TimerEvent> {
-    events: core::cell::RefCell<
-        heapless::BinaryHeap<TimerEventEntry<E>, heapless::binary_heap::Max, 32>,
-    >,
+    events: core::cell::RefCell<BinaryHeap<TimerEventEntry<E>>>,
 }
 
 #[cfg(feature = "timer")]
@@ -60,26 +59,42 @@ struct TimerEventEntry<E: TimerEvent> {
 impl<E: TimerEvent> TimerList<E> {
     pub fn new() -> Self {
         Self {
-            events: core::cell::RefCell::new(heapless::BinaryHeap::new()),
+            events: core::cell::RefCell::new(BinaryHeap::new()),
         }
     }
 
     pub fn set(&self, deadline: TimeValue, event: E) {
-        let entry = TimerEventEntry { deadline, event };
-        let mut events = self.events.borrow_mut();
-        let _ = events.push(entry); // Ignore if the heap is full
+        {
+            let entry = TimerEventEntry { deadline, event };
+            let mut events = self.events.borrow_mut();
+            let _ = events.push(entry); // Ignore if the heap is full
+        }
+        // self.set_timer();
     }
 
     pub fn expire_one(&self, now: TimeValue) -> Option<(TimeValue, E)> {
-        let mut events = self.events.borrow_mut();
-        if let Some(entry) = events.peek() {
-            if entry.deadline <= now {
-                if let Some(entry) = events.pop() {
-                    return Some((entry.deadline, entry.event));
-                }
+        let entry = {
+            let mut events = self.events.borrow_mut();
+            let Some(entry) = events.peek() else {
+                return None;
+            };
+            if entry.deadline > now {
+                return None;
             }
+            let Some(entry) = events.pop() else {
+                return None;
+            };
+            entry
+        };
+        // self.set_timer();
+        Some((entry.deadline, entry.event))
+    }
+
+    fn set_timer(&self) {
+        if let Some(entry) = self.events.borrow().peek() {
+            debug!("Setting timer for {:?}", entry.deadline);
+            axhal::time::set_oneshot_timer(entry.deadline.as_nanos() as u64);
         }
-        None
     }
 }
 

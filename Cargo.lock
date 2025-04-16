@@ -228,6 +228,7 @@ name = "async_demo"
 version = "0.1.0"
 dependencies = [
  "axasync",
+ "axruntime",
  "axstd",
 ]
 
@@ -282,7 +283,6 @@ dependencies = [
  "cfg-if",
  "futures-executor",
  "futures-util",
- "heapless",
  "spin",
 ]
 

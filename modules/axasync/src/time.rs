@@ -2,7 +2,7 @@
 
 use core::future::Future;
 use core::pin::Pin;
-use core::task::{Context, Poll};
+use core::task::{Context, Poll, Waker};
 use core::time::Duration;
 
 use axhal::time::{TimeValue, monotonic_time as current_time};
@@ -10,19 +10,23 @@ use axhal::time::{TimeValue, monotonic_time as current_time};
 /// A future that completes after a specified duration of time.
 pub struct Sleep {
     deadline: TimeValue,
+    registered_waker: Option<Waker>,
 }
 
 impl Sleep {
     /// Creates a new future that completes after the specified duration.
     pub fn new(duration: Duration) -> Self {
-        Self {
-            deadline: current_time() + duration,
-        }
+        let deadline = current_time() + duration;
+        debug!("Sleeping until {:?}", deadline);
+        Self::until(deadline)
     }
 
     /// Creates a new future that completes at the specified deadline.
     pub fn until(deadline: TimeValue) -> Self {
-        Self { deadline }
+        Self {
+            deadline,
+            registered_waker: None,
+        }
     }
 
     /// Returns the instant at which this sleep will complete.
@@ -51,10 +55,18 @@ impl Future for Sleep {
         } else {
             #[cfg(feature = "timer")]
             {
-                let waker = cx.waker().clone();
-                let deadline = self.deadline;
-                crate::waker::wake_at(deadline, waker);
+                let mut this = self.get_mut();
+                if let Some(ref waker) = this.registered_waker {
+                    if !waker.will_wake(cx.waker()) {
+                        this.registered_waker = Some(cx.waker().clone());
+                        crate::waker::wake_at(this.deadline, cx.waker().clone());
+                    }
+                } else {
+                    this.registered_waker = Some(cx.waker().clone());
+                    crate::waker::wake_at(this.deadline, cx.waker().clone());
+                }
             }
+            // info!("Sleeping for {:?}", self.deadline - now);
             Poll::Pending
         }
     }
