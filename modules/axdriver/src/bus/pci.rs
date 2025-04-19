@@ -107,7 +107,7 @@ impl AllDevices {
                                 bdf,
                                 dev.device_name(),
                             );
-                            self.add_device(dev);
+                            self.add_device(dev, 0);
                             continue; // skip to the next device
                         }
                     }),

@@ -10,6 +10,7 @@
 //! - `timer`: Enable async timer functionality (requires `irq`).
 //! - `file`: Enable async filesystem functionality.
 //! - `net`: Enable async networking functionality.
+//! - `mmio`: Enable async MMIO functionality (requires `irq`).
 
 #![no_std]
 #![feature(doc_auto_cfg)]
@@ -30,6 +31,9 @@ use core::task::{Context, Poll};
 pub mod sync;
 pub mod time;
 mod waker;
+
+#[cfg(feature = "mmio")]
+pub mod mmio;
 
 pub use futures_util;
 pub use time::{TimeoutExt, sleep};

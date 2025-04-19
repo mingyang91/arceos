@@ -24,6 +24,9 @@ timer = ["irq"]
 # Enable async filesystem support
 file = []
 
+# Enable async MMIO functionality
+mmio = ["irq"]
+
 # Enable alloc support
 alloc = []
 
@@ -33,6 +36,7 @@ futures-util = { version = "0.3", default-features = false, features = [
     "alloc",
 ] }
 cfg-if = "1.0"
+kspin = "0.1"
 
 # ArceOS dependencies
 axlog = { workspace = true }

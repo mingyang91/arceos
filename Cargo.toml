@@ -34,6 +34,7 @@ members = [
     "examples/async_demo",
     "examples/async_client",
     "examples/async_server",
+    "examples/mmio_async",
 ]
 
 [workspace.package]

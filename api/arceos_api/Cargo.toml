@@ -20,6 +20,7 @@ multitask = ["axtask/multitask", "axsync/multitask", "axfeat/multitask"]
 fs = ["dep:axfs", "dep:axdriver", "axfeat/fs"]
 net = ["dep:axnet", "dep:axdriver", "axfeat/net"]
 display = ["dep:axdisplay", "dep:axdriver", "axfeat/display"]
+mmio = ["dep:axasync", "axfeat/mmio"]
 
 myfs = ["axfeat/myfs"]
 
@@ -43,3 +44,4 @@ axdriver = { workspace = true, optional = true }
 axfs = { workspace = true, optional = true }
 axnet = { workspace = true, optional = true }
 axdisplay = { workspace = true, optional = true }
+axasync = { workspace = true, optional = true }

@@ -29,7 +29,7 @@ impl super::AxDeviceEnum {
 ///
 /// If the feature `dyn` is enabled, the inner type is [`Vec<D>`]. Otherwise,
 /// the inner type is [`Option<D>`] and at most one device can be contained.
-pub struct AxDeviceContainer<D>(Option<D>);
+pub struct AxDeviceContainer<D>(Option<D>, Option<u32>);
 
 impl<D> AxDeviceContainer<D> {
     /// Returns number of devices in this container.
@@ -47,16 +47,26 @@ impl<D> AxDeviceContainer<D> {
         self.0.take()
     }
 
+    /// Takes one device out of the container (will remove it from the container).
+    pub fn take_one_with_irq(&mut self) -> Option<(D, u32)> {
+        if let (Some(dev), Some(irq)) = (self.0.take(), self.1.take()) {
+            Some((dev, irq))
+        } else {
+            None
+        }
+    }
+
     /// Constructs the container from one device.
     pub const fn from_one(dev: D) -> Self {
-        Self(Some(dev))
+        Self(Some(dev), None)
     }
 
     /// Adds one device into the container.
     #[allow(dead_code)]
-    pub(crate) fn push(&mut self, dev: D) {
+    pub(crate) fn push(&mut self, dev: D, irq: u32) {
         if self.0.is_none() {
             self.0 = Some(dev);
+            self.1 = Some(irq);
         }
     }
 }
@@ -70,6 +80,6 @@ impl<D> core::ops::Deref for AxDeviceContainer<D> {
 
 impl<D> Default for AxDeviceContainer<D> {
     fn default() -> Self {
-        Self(Default::default())
+        Self(Default::default(), Default::default())
     }
 }
