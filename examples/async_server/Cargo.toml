@@ -5,7 +5,12 @@ edition = "2021"
 authors = ["ArceOS Contributors"]
 
 [dependencies]
-axstd = { path = "../../ulib/axstd", features = ["alloc", "irq", "net"] }
+axstd = { path = "../../ulib/axstd", features = [
+    "alloc",
+    "irq",
+    "net",
+    "mmio",
+] }
 axruntime = { path = "../../modules/axruntime", features = ["alloc", "net"] }
 axlog = { path = "../../modules/axlog" }
 axalloc = { path = "../../modules/axalloc", features = ["tlsf"] }
