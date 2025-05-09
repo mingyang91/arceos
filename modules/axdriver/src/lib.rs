@@ -54,7 +54,7 @@
 //! [trait objects]: https://doc.rust-lang.org/book/ch17-02-trait-objects.html
 //! [dyn]: https://doc.rust-lang.org/std/keyword.dyn.html
 
-#![no_std]
+#![cfg_attr(not(test), no_std)]
 #![feature(doc_auto_cfg)]
 #![feature(associated_type_defaults)]
 
@@ -182,3 +182,13 @@ pub fn init_drivers() -> AllDevices {
 
     all_devs
 }
+
+#[cfg(all(feature = "virtio", feature = "irq"))]
+pub mod virtio_irq;
+
+#[cfg(feature = "virtio")]
+pub use axdriver_virtio as virtio_drivers;
+
+pub use self::drivers::*;
+pub use self::structs::*;
+pub use axdriver_base::{BaseDriverOps, DevError, DevResult, DeviceType};

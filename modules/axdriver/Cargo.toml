@@ -2,7 +2,10 @@
 name = "axdriver"
 version.workspace = true
 edition.workspace = true
-authors = ["Yuekai Jia <equation618@gmail.com>", "ChengXiang Qi <kuangjux@outlook.com>"]
+authors = [
+    "Yuekai Jia <equation618@gmail.com>",
+    "ChengXiang Qi <kuangjux@outlook.com>",
+]
 description = "ArceOS device drivers"
 license.workspace = true
 homepage.workspace = true
@@ -16,6 +19,7 @@ bus-pci = ["dep:axdriver_pci", "dep:axhal", "dep:axconfig"]
 net = ["axdriver_net"]
 block = ["axdriver_block"]
 display = ["axdriver_display"]
+irq = ["dep:axhal", "dep:kspin", "dep:lazyinit"]
 
 # Enabled by features `virtio-*`
 virtio = ["axdriver_virtio", "dep:axalloc", "dep:axhal", "dep:axconfig"]
@@ -46,3 +50,5 @@ axalloc = { workspace = true, optional = true }
 axhal = { workspace = true, optional = true }
 axconfig = { workspace = true, optional = true }
 axdma = { workspace = true, optional = true }
+kspin = { version = "0.1", optional = true }
+lazyinit = { version = "0.2", optional = true }
