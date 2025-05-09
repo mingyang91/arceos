@@ -31,15 +31,6 @@ pub const TIMER_IRQ_NUM: usize = S_TIMER;
 pub const VIRTIO_NET_IRQ: usize = 2;
 pub const VIRTIO_BLK_IRQ: usize = 3;
 
-macro_rules! with_cause {
-    ($cause: expr, @TIMER => $timer_op: expr, @EXT => $ext_op: expr $(,)?) => {
-        match $cause {
-            S_TIMER => $timer_op,
-            _ => $ext_op,
-        }
-    };
-}
-
 /// Enables or disables the given IRQ.
 pub fn set_enable(irq_num: usize, enabled: bool) {
     let hart_id = crate::cpu::this_cpu_id();
@@ -51,19 +42,20 @@ pub fn set_enable(irq_num: usize, enabled: bool) {
 ///
 /// It also enables the IRQ if the registration succeeds. It returns `false` if
 /// the registration failed.
-pub fn register_handler(scause: usize, handler: IrqHandler) -> bool {
-    info!("cause: {:#x}", scause);
-    info!("cause & !INTC_IRQ_BASE: {:#x}", scause & !INTC_IRQ_BASE);
-    with_cause!(
-        scause,
-        @TIMER => if !TIMER_HANDLER.is_inited() {
-            TIMER_HANDLER.init_once(handler);
-            true
-        } else {
-            false
-        },
-        @EXT => crate::irq::register_handler_common(scause & !INTC_IRQ_BASE, handler),
-    )
+pub fn register_handler(irq_num: usize, handler: IrqHandler) -> bool {
+    info!("register_handler: {}", irq_num);
+
+    match irq_num {
+        TIMER_IRQ_NUM => {
+            if !TIMER_HANDLER.is_inited() {
+                TIMER_HANDLER.init_once(handler);
+                true
+            } else {
+                false
+            }
+        }
+        _ => crate::irq::register_handler_common(irq_num, handler),
+    }
 }
 
 /// Dispatches the IRQ.
@@ -71,14 +63,13 @@ pub fn register_handler(scause: usize, handler: IrqHandler) -> bool {
 /// This function is called by the common interrupt handler. It looks
 /// up in the IRQ handler table and calls the corresponding handler. If
 /// necessary, it also acknowledges the interrupt controller after handling.
-pub fn dispatch_irq(scause: usize) {
-    with_cause!(
-        scause,
-        @TIMER => {
+pub fn dispatch_irq(irq_num: usize) {
+    match irq_num {
+        TIMER_IRQ_NUM => {
             trace!("IRQ: timer");
             TIMER_HANDLER();
-        },
-        @EXT => {
+        }
+        _ => {
             // Handle external interrupt from PLIC
             let hart_id = crate::cpu::this_cpu_id();
             let irq_num = PLIC.claim(hart_id);
@@ -86,7 +77,7 @@ pub fn dispatch_irq(scause: usize) {
             crate::irq::dispatch_irq_common(irq_num as usize);
             PLIC.complete(hart_id, irq_num);
         }
-    );
+    }
 }
 
 pub(super) fn init_percpu() {
