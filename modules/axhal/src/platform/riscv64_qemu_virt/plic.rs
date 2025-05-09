@@ -1,5 +1,6 @@
 //! Platform-Level Interrupt Controller (PLIC) driver for RISC-V
 
+use crate::mem::{PhysAddr, phys_to_virt};
 use core::ptr::NonNull;
 use kspin::SpinNoIrq;
 use safe_mmio::{
@@ -7,7 +8,7 @@ use safe_mmio::{
     fields::{ReadOnly, ReadWrite},
 };
 /// PLIC base address in QEMU virt machine
-pub const PLIC_BASE: usize = 0x0c00_0000;
+const PLIC_BASE: PhysAddr = PhysAddr::from_usize(0x0c00_0000);
 
 /// The maximum number of interrupt sources
 pub const MAX_DEVICES: usize = 1024;
@@ -31,11 +32,11 @@ pub struct PlicRegs {
     /// Interrupt pending bits registers
     pending: [ReadOnly<u32>; MAX_PENDING_BITS],
     /// Reserved for future use
-    _reserved0: [u8; 0x80], // 0x1000 + 0x80 = 0x1080
+    _reserved0: [u8; 0xF80],
     /// Enable bits for sources (context 0)
     enable: [ReadWrite<u32>; MAX_DEVICES * MAX_CONTEXT / MAX_PENDING_BITS],
     /// Reserved for future use
-    _reserved1: [u8; 0x1FD80], // 0x2000 + 0x80 = 0x2080, 0x200000 - 0x2080 = 0x1FD80
+    _reserved1: [u8; 0xE000],
     /// Context local registers
     context_local: [ContextLocal; MAX_CONTEXT],
 }
@@ -47,7 +48,9 @@ pub struct Plic<'a> {
 
 pub static PLIC: Plic<'static> = Plic {
     regs: SpinNoIrq::new(unsafe {
-        UniqueMmioPointer::new(NonNull::new_unchecked(PLIC_BASE as *mut _))
+        UniqueMmioPointer::new(NonNull::new_unchecked(
+            phys_to_virt(PLIC_BASE).as_usize() as *mut _
+        ))
     }),
 };
 
@@ -102,10 +105,16 @@ impl Plic<'_> {
     /// Set threshold for a context
     pub fn set_threshold(&self, hart_id: usize, priority: usize, threshold: u32) {
         let pos = hart_id * 2 + priority;
+        info!(
+            "set_threshold: {:#x}, {:#x}, {:#x}",
+            hart_id, priority, threshold
+        );
         let mut regs = self.regs.lock();
         let mut context_local = field!(regs, context_local);
         let mut ctx = context_local.get(pos).unwrap();
+        info!("set_threshold: {:p}", &ctx);
         field!(ctx, priority_threshold).write(threshold);
+        info!("set_threshold: {:#x}", pos);
     }
 
     /// Claim the highest priority pending interrupt

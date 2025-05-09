@@ -90,6 +90,7 @@ pub(super) fn init_percpu() {
     }
 
     let hart_id = crate::cpu::this_cpu_id();
+    info!("init_percpu: {}", hart_id);
     PLIC.set_threshold(hart_id, 1, 0);
     PLIC.set_threshold(hart_id, 0, 1);
 }
