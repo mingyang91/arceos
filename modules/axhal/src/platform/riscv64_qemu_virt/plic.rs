@@ -86,6 +86,7 @@ impl Plic<'_> {
 
     /// Set priority for an interrupt source
     pub fn set_priority(&self, irq_id: usize, priority: u8) {
+        assert!(priority <= 7);
         if irq_id >= MAX_DEVICES || irq_id == 0 {
             return;
         }
@@ -95,6 +96,16 @@ impl Plic<'_> {
             .get(irq_id)
             .unwrap()
             .write(priority as u32);
+        info!("set_priority: {:#x}, {:#x}", irq_id, priority);
+    }
+
+    /// Set threshold for a context
+    pub fn set_threshold(&self, hart_id: usize, priority: usize, threshold: u32) {
+        let pos = hart_id * 2 + priority;
+        let mut regs = self.regs.lock();
+        let mut context_local = field!(regs, context_local);
+        let mut ctx = context_local.get(pos).unwrap();
+        field!(ctx, priority_threshold).write(threshold);
     }
 
     /// Claim the highest priority pending interrupt

@@ -36,6 +36,7 @@ pub fn set_enable(irq_num: usize, enabled: bool) {
     let hart_id = crate::cpu::this_cpu_id();
     // For other IRQs, enable/disable in PLIC
     PLIC.enable(hart_id, irq_num);
+    PLIC.set_priority(irq_num, 1);
 }
 
 /// Registers an IRQ handler for the given IRQ.
@@ -87,4 +88,8 @@ pub(super) fn init_percpu() {
         sie::set_stimer();
         sie::set_sext();
     }
+
+    let hart_id = crate::cpu::this_cpu_id();
+    PLIC.set_threshold(hart_id, 1, 0);
+    PLIC.set_threshold(hart_id, 0, 1);
 }
