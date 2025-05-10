@@ -61,7 +61,6 @@ impl Plic<'_> {
     /// Enable an interrupt source
     pub fn enable(&self, hart_id: usize, irq_id: usize) {
         let context_base = 0x80 * (hart_id * 2 + 1);
-        info!("context_base: {:#x}", context_base);
 
         let reg_idx = irq_id / 32;
         let bit_idx = irq_id % 32;
@@ -99,22 +98,15 @@ impl Plic<'_> {
             .get(irq_id)
             .unwrap()
             .write(priority as u32);
-        info!("set_priority: {:#x}, {:#x}", irq_id, priority);
     }
 
     /// Set threshold for a context
     pub fn set_threshold(&self, hart_id: usize, priority: usize, threshold: u32) {
         let pos = hart_id * 2 + priority;
-        info!(
-            "set_threshold: {:#x}, {:#x}, {:#x}",
-            hart_id, priority, threshold
-        );
         let mut regs = self.regs.lock();
         let mut context_local = field!(regs, context_local);
         let mut ctx = context_local.get(pos).unwrap();
-        info!("set_threshold: {:p}", &ctx);
         field!(ctx, priority_threshold).write(threshold);
-        info!("set_threshold: {:#x}", pos);
     }
 
     /// Claim the highest priority pending interrupt

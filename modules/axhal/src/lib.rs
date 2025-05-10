@@ -56,9 +56,6 @@ pub mod irq;
 #[cfg(feature = "paging")]
 pub mod paging;
 
-#[cfg(feature = "mmio")]
-pub mod mmio;
-
 /// Console input and output.
 pub mod console {
     pub use super::platform::console::*;

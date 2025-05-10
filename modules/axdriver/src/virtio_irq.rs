@@ -1,62 +1,57 @@
 //! Interrupt support for VirtIO devices
 
-use crate::virtio::VirtIoHalImpl;
-use axdriver_virtio::{MmioTransport, VirtIoBlkDev, VirtIoNetDev};
 use axhal::irq::{self, IrqHandler};
-use axhal::platform::riscv64_qemu_virt::irq::{VIRTIO_BLK_IRQ, VIRTIO_NET_IRQ};
-use kspin::SpinNoIrq;
-use lazyinit::LazyInit;
 
-/// Global reference to the virtio-net device for interrupt handling
-static VIRTIO_NET_DEV: LazyInit<SpinNoIrq<VirtIoNetDev<VirtIoHalImpl, MmioTransport, 64>>> =
-    LazyInit::new();
+#[cfg(feature = "net")]
+mod net {
+    use crate::virtio::VirtIoHalImpl;
+    use axdriver_virtio::{MmioTransport, VirtIoNetDev};
+    use kspin::SpinNoIrq;
+    use lazyinit::LazyInit;
 
-/// Global reference to the virtio-blk device for interrupt handling
-static VIRTIO_BLK_DEV: LazyInit<SpinNoIrq<VirtIoBlkDev<VirtIoHalImpl, MmioTransport>>> =
-    LazyInit::new();
+    const VIRTIO_NET_IRQ: usize = 2;
 
-/// Initialize interrupt handling for virtio-net device
-pub fn init_virtio_net_irq(dev: VirtIoNetDev<VirtIoHalImpl, MmioTransport, 64>) {
-    // Store device in global static for IRQ handler access
-    VIRTIO_NET_DEV.init_once(SpinNoIrq::new(dev));
+    /// Initialize interrupt handling for virtio-net device
+    pub fn init_virtio_net_irq() {
+        // Register IRQ handler
+        for irq in 1..=16 {
+            if axhal::irq::register_handler(irq, virtio_net_irq_handler) {
+                info!("Registered virtio-net IRQ handler");
+            } else {
+                warn!("Failed to register virtio-net IRQ handler");
+            }
+        }
+    }
 
-    // Register IRQ handler
-    irq::register_handler(VIRTIO_NET_IRQ, virtio_net_irq_handler);
-}
-
-/// Initialize interrupt handling for virtio-blk device
-pub fn init_virtio_blk_irq(dev: VirtIoBlkDev<VirtIoHalImpl, MmioTransport>) {
-    // Store device in global static for IRQ handler access
-    VIRTIO_BLK_DEV.init_once(SpinNoIrq::new(dev));
-
-    // Register IRQ handler
-    irq::register_handler(VIRTIO_BLK_IRQ, virtio_blk_irq_handler);
-}
-
-/// Virtio network device interrupt handler
-fn virtio_net_irq_handler() {
-    if VIRTIO_NET_DEV.is_inited() {
-        let mut dev = VIRTIO_NET_DEV.lock();
-
-        // Acknowledge the interrupt
-        dev.ack_interrupt();
-
-        // Process any pending packets
-        // In a real implementation, this would signal any waiting tasks
-        trace!("Virtio-net interrupt received");
+    /// Virtio network device interrupt handler
+    fn virtio_net_irq_handler() {
+        error!("Virtio-net interrupt received");
     }
 }
 
-/// Virtio block device interrupt handler
-fn virtio_blk_irq_handler() {
-    if VIRTIO_BLK_DEV.is_inited() {
-        let mut dev = VIRTIO_BLK_DEV.lock();
+#[cfg(feature = "block")]
+mod blk {
+    use crate::virtio::VirtIoHalImpl;
+    use axdriver_virtio::{MmioTransport, VirtIoBlkDev};
+    use kspin::SpinNoIrq;
+    use lazyinit::LazyInit;
 
-        // Acknowledge the interrupt
-        dev.ack_interrupt();
+    const VIRTIO_BLK_IRQ: usize = 3;
 
-        // Process any pending requests
-        // In a real implementation, this would signal any waiting tasks
+    /// Initialize interrupt handling for virtio-blk device
+    pub fn init_virtio_blk_irq() {
+        // Register IRQ handler
+        axhal::irq::register_handler(VIRTIO_BLK_IRQ, virtio_blk_irq_handler);
+    }
+
+    /// Virtio block device interrupt handler
+    fn virtio_blk_irq_handler() {
         trace!("Virtio-blk interrupt received");
     }
 }
+
+#[cfg(feature = "net")]
+pub use net::*;
+
+#[cfg(feature = "block")]
+pub use blk::*;

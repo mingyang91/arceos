@@ -11,7 +11,7 @@ axlog = { path = "../../modules/axlog" }
 axalloc = { path = "../../modules/axalloc", features = ["tlsf"] }
 axasync = { path = "../../modules/axasync", features = ["alloc"] }
 axnet = { path = "../../modules/axnet", features = ["async"] }
-axdriver = { workspace = true, features = ["virtio", "bus-mmio", "net"] }
+axdriver = { workspace = true, features = ["virtio", "bus-mmio", "net", "irq"] }
 axhal = { workspace = true, features = ["mmio"] }
 
 [features]

@@ -126,7 +126,7 @@ impl AllDevices {
                     dev.device_type(),
                     dev.device_name(),
                 );
-                self.add_device(dev, 0);
+                self.add_device(dev);
             }
         });
 
@@ -135,14 +135,14 @@ impl AllDevices {
 
     /// Adds one device into the corresponding container, according to its device category.
     #[allow(dead_code)]
-    fn add_device(&mut self, dev: AxDeviceEnum, irq: u32) {
+    fn add_device(&mut self, dev: AxDeviceEnum) {
         match dev {
             #[cfg(feature = "net")]
-            AxDeviceEnum::Net(dev) => self.net.push(dev, irq),
+            AxDeviceEnum::Net(dev) => self.net.push(dev),
             #[cfg(feature = "block")]
-            AxDeviceEnum::Block(dev) => self.block.push(dev, irq),
+            AxDeviceEnum::Block(dev) => self.block.push(dev),
             #[cfg(feature = "display")]
-            AxDeviceEnum::Display(dev) => self.display.push(dev, irq),
+            AxDeviceEnum::Display(dev) => self.display.push(dev),
         }
     }
 }

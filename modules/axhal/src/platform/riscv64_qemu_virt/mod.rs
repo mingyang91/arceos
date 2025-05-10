@@ -8,8 +8,8 @@ pub mod time;
 #[cfg(feature = "irq")]
 pub mod irq;
 
-#[cfg(feature = "irq")]
-pub mod plic;
+// #[cfg(feature = "irq")]
+// pub mod plic;
 
 #[cfg(feature = "smp")]
 pub mod mp;
