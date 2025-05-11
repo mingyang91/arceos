@@ -4,9 +4,11 @@ use crate::{AllDevices, AxDeviceEnum, prelude::*};
 impl AllDevices {
     pub(crate) fn probe_bus_devices(&mut self) {
         warn!("probing bus devices...");
+        let mut irq: u32 = 0;
         // TODO: parse device tree
         #[cfg(feature = "virtio")]
         for reg in axconfig::devices::VIRTIO_MMIO_REGIONS {
+            irq += 1;
             for_each_drivers!(type Driver, {
                 if let Some(dev) = Driver::probe_mmio(reg.0, reg.1) {
                     info!(

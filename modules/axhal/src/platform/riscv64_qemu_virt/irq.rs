@@ -133,10 +133,6 @@ pub(super) fn init_percpu() {
     PLIC.set_threshold(hart_ctx_machine, 1);
     let hart_ctx_supervisor = HartCtx::this_hart_supervisor();
     PLIC.set_threshold(hart_ctx_supervisor, 0);
-    for irq in 1..=16 {
-        PLIC.enable(Irq(irq), hart_ctx_supervisor);
-        PLIC.set_priority(Irq(irq), 1);
-    }
 
     // Enable all types of interrupts
     unsafe {

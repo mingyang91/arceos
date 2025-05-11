@@ -14,7 +14,7 @@ mod net {
     /// Initialize interrupt handling for virtio-net device
     pub fn init_virtio_net_irq() {
         // Register IRQ handler
-        for irq in 1..=16 {
+        for irq in 8..=8 {
             if axhal::irq::register_handler(irq, virtio_net_irq_handler) {
                 info!("Registered virtio-net IRQ handler");
             } else {
