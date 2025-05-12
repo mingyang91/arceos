@@ -42,7 +42,6 @@ impl<'a> Future for RecvFuture<'a> {
             }
         }
 
-        SOCKET_SET.poll_interfaces();
         let handle = this.socket.handle();
         SOCKET_SET.with_socket_mut::<Socket, _, _>(handle, |socket| {
             if !socket.is_active() {
@@ -93,7 +92,6 @@ impl<'a> Future for SendFuture<'a> {
             }
         }
 
-        SOCKET_SET.poll_interfaces();
         let handle = this.socket.handle();
         SOCKET_SET.with_socket_mut::<Socket, _, _>(handle, |socket| {
             if !socket.is_active() || !socket.may_send() {
@@ -138,7 +136,6 @@ impl<'a> Future for AcceptFuture<'a> {
             }
         }
 
-        SOCKET_SET.poll_interfaces();
         let local_port = this.socket.local_addr().unwrap().port();
         let (handle, (local_addr, peer_addr)) = match LISTEN_TABLE.accept(local_port) {
             Ok(res) => res,
@@ -220,7 +217,6 @@ impl<'a> Future for ConnectFuture<'a> {
             }
         }
 
-        SOCKET_SET.poll_interfaces();
         let PollState { writable, .. } = this.socket.poll_connect()?;
         if !writable {
             let handle = unsafe {

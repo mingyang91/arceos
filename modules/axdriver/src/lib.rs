@@ -126,7 +126,7 @@ impl AllDevices {
                     dev.device_type(),
                     dev.device_name(),
                 );
-                self.add_device(dev);
+                self.add_device(dev, 0); // TODO: 0 is the invalid IRQ number
             }
         });
 
@@ -135,14 +135,14 @@ impl AllDevices {
 
     /// Adds one device into the corresponding container, according to its device category.
     #[allow(dead_code)]
-    fn add_device(&mut self, dev: AxDeviceEnum) {
+    fn add_device(&mut self, dev: AxDeviceEnum, irq: u32) {
         match dev {
             #[cfg(feature = "net")]
-            AxDeviceEnum::Net(dev) => self.net.push(dev),
+            AxDeviceEnum::Net(dev) => self.net.push(dev, irq),
             #[cfg(feature = "block")]
-            AxDeviceEnum::Block(dev) => self.block.push(dev),
+            AxDeviceEnum::Block(dev) => self.block.push(dev, irq),
             #[cfg(feature = "display")]
-            AxDeviceEnum::Display(dev) => self.display.push(dev),
+            AxDeviceEnum::Display(dev) => self.display.push(dev, irq),
         }
     }
 }
@@ -158,33 +158,40 @@ pub fn init_drivers() -> AllDevices {
     #[cfg(feature = "net")]
     {
         debug!("number of NICs: {}", all_devs.net.len());
-        for (i, dev) in all_devs.net.iter().enumerate() {
+        for (i, (dev, irq)) in all_devs.net.iter().enumerate() {
             assert_eq!(dev.device_type(), DeviceType::Net);
-            debug!("  NIC {}: {:?}", i, dev.device_name());
+            debug!("  NIC {}: {:?}, IRQ: {}", i, dev.device_name(), irq);
         }
     }
     #[cfg(feature = "block")]
     {
         debug!("number of block devices: {}", all_devs.block.len());
-        for (i, dev) in all_devs.block.iter().enumerate() {
+        for (i, (dev, irq)) in all_devs.block.iter().enumerate() {
             assert_eq!(dev.device_type(), DeviceType::Block);
-            debug!("  block device {}: {:?}", i, dev.device_name());
+            debug!(
+                "  block device {}: {:?}, IRQ: {}",
+                i,
+                dev.device_name(),
+                irq
+            );
         }
     }
     #[cfg(feature = "display")]
     {
         debug!("number of graphics devices: {}", all_devs.display.len());
-        for (i, dev) in all_devs.display.iter().enumerate() {
+        for (i, (dev, irq)) in all_devs.display.iter().enumerate() {
             assert_eq!(dev.device_type(), DeviceType::Display);
-            debug!("  graphics device {}: {:?}", i, dev.device_name());
+            debug!(
+                "  graphics device {}: {:?}, IRQ: {}",
+                i,
+                dev.device_name(),
+                irq
+            );
         }
     }
 
     all_devs
 }
-
-#[cfg(all(feature = "virtio", feature = "irq"))]
-pub mod virtio_irq;
 
 #[cfg(feature = "virtio")]
 pub use axdriver_virtio as virtio_drivers;

@@ -1,4 +1,8 @@
 # 开发日志
+
+## 2025-05-12
+真 - 异步版 axnet 实现，支持 async_client 与 async_server 示例代码
+
 ## 2025-05-11
 学习 dtb/dts 机制，深入理解 IRQ number 与 MMIO 地址的映射关系，思考从何入手将中断与设备注册关联起来。
 

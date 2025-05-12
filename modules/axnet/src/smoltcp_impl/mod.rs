@@ -318,7 +318,7 @@ pub fn bench_receive() {
     ETH0.dev.lock().bench_receive_bandwidth();
 }
 
-pub(crate) fn init(net_dev: AxNetDevice) {
+pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
     let ether_addr = EthernetAddress(net_dev.mac_address().0);
     let eth0 = InterfaceWrapper::new("eth0", net_dev, ether_addr);
 
@@ -331,8 +331,16 @@ pub(crate) fn init(net_dev: AxNetDevice) {
     SOCKET_SET.init_once(SocketSetWrapper::new());
     LISTEN_TABLE.init_once(ListenTable::new());
 
+    axhal::irq::register_handler(irq as usize, handler);
+
     info!("created net interface {:?}:", ETH0.name());
     info!("  ether:    {}", ETH0.ethernet_address());
     info!("  ip:       {}/{}", ip, IP_PREFIX);
     info!("  gateway:  {}", gateway);
+    info!("  IRQ:      {}", irq);
+}
+
+fn handler() {
+    trace!("net IRQ handler called");
+    SOCKET_SET.poll_interfaces();
 }
