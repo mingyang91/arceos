@@ -20,7 +20,7 @@ static GLOBAL_EXECUTOR: LazyInit<Executor> = LazyInit::new();
 static CPU_LOCAL_EXECUTOR: RefCell<Option<Executor>> = RefCell::new(None);
 
 /// Helper function to get the global executor, initializing it if needed.
-fn executor() -> &'static Executor {
+pub fn executor() -> &'static Executor {
     if !GLOBAL_EXECUTOR.is_inited() {
         GLOBAL_EXECUTOR.init_once(Executor::new());
     }
@@ -320,7 +320,7 @@ impl<T: Send + 'static> Future for JoinHandle<T> {
 }
 
 /// A simple oneshot channel implementation.
-mod channel {
+pub mod channel {
     pub mod oneshot {
         use alloc::sync::Arc;
         use core::cell::UnsafeCell;

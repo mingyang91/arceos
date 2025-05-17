@@ -4,10 +4,9 @@
 extern crate alloc;
 
 use alloc::format;
-use axasync::{block_on, init, shutdown, sleep};
+use axasync::{block_on, init, shutdown, spawn};
 use axnet::TcpSocket;
 use axstd::println;
-use axstd::time::Duration;
 use core::net::{IpAddr, Ipv4Addr, SocketAddr};
 
 const LOCAL_PORT: u16 = 5555;
@@ -83,29 +82,26 @@ async fn run_server() -> Result<(), &'static str> {
         match socket.accept_async().await {
             Ok(mut client) => {
                 connection_count += 1;
+                let connection_count = connection_count;
+                spawn(async move {
+                    let peer_addr = client
+                        .peer_addr()
+                        .unwrap_or(SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), 0));
+                    println!(
+                        "Client connected from {} (connection {})",
+                        peer_addr, connection_count
+                    );
 
-                let peer_addr = client
-                    .peer_addr()
-                    .unwrap_or(SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), 0));
-                println!(
-                    "Client connected from {} (connection {})",
-                    peer_addr, connection_count
-                );
+                    // Handle HTTP request
+                    if let Err(e) = handle_http_request(&mut client).await {
+                        println!("Error handling HTTP request: {}", e);
+                    }
 
-                // Handle HTTP request
-                if let Err(e) = handle_http_request(&mut client).await {
-                    println!("Error handling HTTP request: {}", e);
-                }
-
-                println!("Client disconnected: {}", peer_addr);
-
-                // Add a small delay between connections
-                sleep(Duration::from_millis(100)).await;
+                    println!("Client disconnected: {}", peer_addr);
+                });
             }
             Err(e) => {
                 println!("Failed to accept connection: {:?}", e);
-                // Add a delay before retrying in case of errors
-                sleep(Duration::from_millis(1000)).await;
             }
         }
     }

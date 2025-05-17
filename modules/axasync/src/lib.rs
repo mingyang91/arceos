@@ -21,7 +21,7 @@ extern crate axlog;
 
 extern crate alloc;
 
-mod executor;
+pub mod executor;
 pub mod sync;
 pub mod time;
 mod waker;
@@ -33,11 +33,12 @@ pub use executor::{
     BoxFuture,
     Executor,
     JoinHandle,
+    // Global executor functions
+    executor,
     init as executor_init,
     poll_once as executor_poll,
     run as executor_run,
     run_local,
-    // Global executor functions
     spawn,
     spawn_local,
 };
@@ -157,16 +158,30 @@ where
 }
 
 /// Blocks on a future until it completes.
-pub fn block_on<F>(mut fut: F) -> F::Output
+pub fn block_on<F>(fut: F) -> F::Output
 where
-    F: core::future::Future,
+    F: core::future::Future + Send + 'static,
+    F::Output: Send + 'static,
 {
-    use core::task::Poll;
+    // Create a oneshot channel to get the result
+    let (sender, mut receiver) = executor::channel::oneshot::channel();
+
+    // Spawn the future on our executor
+    executor().spawn(async move {
+        let result = fut.await;
+        let _ = sender.send(result);
+    });
+
+    // Run the executor until our future completes
     loop {
-        match poll_once(&mut fut) {
-            Poll::Ready(output) => return output,
-            Poll::Pending => {
-                // Yield the CPU if this future is not ready
+        executor().step();
+
+        // Check if our future has completed
+        match poll_once(&mut receiver) {
+            core::task::Poll::Ready(Ok(output)) => return output,
+            core::task::Poll::Ready(Err(_)) => panic!("Task failed to complete"),
+            core::task::Poll::Pending => {
+                // Yield the CPU if the future is not ready
                 axtask::yield_now();
             }
         }
