@@ -68,6 +68,7 @@ impl<F: Fn() + Send + Sync + Clone + 'static> SimpleWaker<F> {
 mod timer_waker {
     use super::*;
     use crate::TimerEvent;
+    use core::task::Waker;
     use spin::Mutex;
 
     // Unique ID for timer events
@@ -112,6 +113,7 @@ mod timer_waker {
     ///
     /// This should be called periodically, e.g., from the timer interrupt handler.
     pub fn check_timer_events() {
+        // trace!("check_timer_events");
         let now = axhal::time::monotonic_time();
 
         // Process all pending events

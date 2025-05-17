@@ -11,7 +11,11 @@ axstd = { path = "../../ulib/axstd", features = [
     "net",
     "mmio",
 ] }
-axruntime = { path = "../../modules/axruntime", features = ["alloc", "net"] }
+axruntime = { path = "../../modules/axruntime", features = [
+    "alloc",
+    "net",
+    "axasync-timer",
+] }
 axlog = { path = "../../modules/axlog" }
 axalloc = { path = "../../modules/axalloc", features = ["tlsf"] }
 axasync = { path = "../../modules/axasync", features = ["alloc"] }

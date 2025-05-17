@@ -51,12 +51,6 @@ pub fn run() {
     executor().run();
 }
 
-/// Polls the global executor once, running a single step.
-/// Returns `true` if there are still tasks in the queue.
-pub fn poll_once() -> bool {
-    executor().step()
-}
-
 /// Initialize the per-CPU local executor.
 fn ensure_local_executor() -> &'static RefCell<Option<Executor>> {
     let cell = unsafe { CPU_LOCAL_EXECUTOR.current_ptr() };
@@ -135,21 +129,24 @@ impl Executor {
     ///
     /// Returns `true` if there are still tasks in the queue.
     pub fn step(&self) -> bool {
-        if let Some(mut task) = self.ready_tasks.lock().pop_front() {
+        let mut ready_tasks = self.ready_tasks.lock();
+        if let Some(mut task) = ready_tasks.pop_front() {
             // Create a waker and poll the task
             let waker = task.waker();
             let mut cx = Context::from_waker(&waker);
 
             let future = unsafe { Pin::new_unchecked(&mut task.future) };
 
+            info!("poll");
             if future.poll(&mut cx).is_pending() {
+                info!("poll2");
                 // Task is still pending, only re-queue if it hasn't been manually queued
                 if !task.was_woken {
-                    self.ready_tasks.lock().push_back(task);
+                    ready_tasks.push_back(task);
                 }
             }
 
-            !self.ready_tasks.lock().is_empty()
+            !ready_tasks.is_empty()
         } else {
             false
         }
@@ -158,6 +155,32 @@ impl Executor {
     // Queue a task, used by the waker
     fn queue_task(&self, task: Task) {
         self.ready_tasks.lock().push_back(task);
+    }
+
+    /// Blocks on a future until it completes, using this executor.
+    pub fn block_on<F>(&self, mut fut: F) -> F::Output
+    where
+        F: Future,
+    {
+        // safety: we don't move the future after this line.
+        let mut fut = unsafe { Pin::new_unchecked(&mut fut) };
+
+        let waker = dummy_waker();
+        let mut cx = Context::from_waker(&waker);
+        loop {
+            // Poll the future
+            if let Poll::Ready(res) = fut.as_mut().poll(&mut cx) {
+                return res;
+            }
+
+            // Run a step of this executor to make progress on other tasks
+            self.step();
+
+            // If the future is still not ready, yield to other tasks
+            if self.ready_tasks.lock().is_empty() {
+                axtask::yield_now();
+            }
+        }
     }
 }
 
@@ -400,6 +423,7 @@ pub mod channel {
             type Output = Result<T, ()>;
 
             fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+                trace!("oneshot poll");
                 Pin::get_mut(self).poll(cx)
             }
         }
@@ -413,4 +437,35 @@ pub mod channel {
             }
         }
     }
+}
+
+/// Blocks on a future until it completes, using the global executor.
+pub fn block_on<F>(fut: F) -> F::Output
+where
+    F: Future,
+{
+    executor().block_on(fut)
+}
+
+/// Creates a new [`Waker`] that is a no-op.
+pub fn dummy_waker() -> Waker {
+    use core::task::{RawWaker, RawWakerVTable};
+
+    const VTABLE: RawWakerVTable = RawWakerVTable::new(
+        |_| RawWaker::new(core::ptr::null(), &VTABLE),
+        |_| {},
+        |_| {},
+        |_| {},
+    );
+    unsafe { Waker::from_raw(RawWaker::new(core::ptr::null(), &VTABLE)) }
+}
+
+/// Polls a future once, returning `Poll::Ready` if it completes.
+pub fn poll_once<F>(fut: &mut F) -> Poll<F::Output>
+where
+    F: Future,
+{
+    let waker = dummy_waker();
+    let mut cx = Context::from_waker(&waker);
+    unsafe { Pin::new_unchecked(fut) }.poll(&mut cx)
 }

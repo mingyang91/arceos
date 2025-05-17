@@ -25,6 +25,9 @@ pub mod executor;
 pub mod sync;
 pub mod time;
 mod waker;
+use alloc::collections::BinaryHeap;
+use core::pin::Pin;
+use core::task::{Context, Poll};
 
 #[cfg(feature = "mmio")]
 pub mod mmio;
@@ -34,9 +37,11 @@ pub use executor::{
     Executor,
     JoinHandle,
     // Global executor functions
+    block_on,
+    dummy_waker,
     executor,
     init as executor_init,
-    poll_once as executor_poll,
+    poll_once,
     run as executor_run,
     run_local,
     spawn,
@@ -132,61 +137,6 @@ impl<E: TimerEvent> core::cmp::PartialEq for TimerEventEntry<E> {
 
 #[cfg(feature = "timer")]
 impl<E: TimerEvent> core::cmp::Eq for TimerEventEntry<E> {}
-
-/// Creates a new [`Waker`] that is a no-op.
-pub fn dummy_waker() -> core::task::Waker {
-    use core::task::{RawWaker, RawWakerVTable, Waker};
-
-    const VTABLE: RawWakerVTable = RawWakerVTable::new(
-        |_| RawWaker::new(core::ptr::null(), &VTABLE),
-        |_| {},
-        |_| {},
-        |_| {},
-    );
-    unsafe { Waker::from_raw(RawWaker::new(core::ptr::null(), &VTABLE)) }
-}
-
-/// Polls a future once, returning `Poll::Ready` if it completes.
-pub fn poll_once<F>(fut: &mut F) -> core::task::Poll<F::Output>
-where
-    F: core::future::Future,
-{
-    use core::task::Context;
-    let waker = dummy_waker();
-    let mut cx = Context::from_waker(&waker);
-    unsafe { core::pin::Pin::new_unchecked(fut) }.poll(&mut cx)
-}
-
-/// Blocks on a future until it completes.
-pub fn block_on<F>(fut: F) -> F::Output
-where
-    F: core::future::Future + Send + 'static,
-    F::Output: Send + 'static,
-{
-    // Create a oneshot channel to get the result
-    let (sender, mut receiver) = executor::channel::oneshot::channel();
-
-    // Spawn the future on our executor
-    executor().spawn(async move {
-        let result = fut.await;
-        let _ = sender.send(result);
-    });
-
-    // Run the executor until our future completes
-    loop {
-        executor().step();
-
-        // Check if our future has completed
-        match poll_once(&mut receiver) {
-            core::task::Poll::Ready(Ok(output)) => return output,
-            core::task::Poll::Ready(Err(_)) => panic!("Task failed to complete"),
-            core::task::Poll::Pending => {
-                // Yield the CPU if the future is not ready
-                axtask::yield_now();
-            }
-        }
-    }
-}
 
 /// Initialize the async runtime.
 pub fn init() {

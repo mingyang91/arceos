@@ -48,7 +48,8 @@ impl Sleep {
 impl Future for Sleep {
     type Output = ();
 
-    fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("sleep poll");
         let now = current_time();
         if now >= self.deadline {
             Poll::Ready(())
@@ -136,6 +137,7 @@ impl<F: Future> Future for Timeout<F> {
     type Output = Result<F::Output, TimeoutError>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("timeout poll");
         // Safety: We're not moving any fields out of the pinned future
         let this = unsafe { self.get_unchecked_mut() };
 

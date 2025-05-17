@@ -109,6 +109,7 @@ async fn run_server() -> Result<(), &'static str> {
 
 /// Handle an HTTP request and send an HTML response
 async fn handle_http_request(client: &mut TcpSocket) -> Result<(), &'static str> {
+    println!("handle_http_request");
     let mut buffer = [0u8; 4096];
 
     // Read the HTTP request

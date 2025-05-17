@@ -158,6 +158,7 @@ impl<'a, T: ?Sized> Future for RwLockReadFuture<'a, T> {
     type Output = RwLockReadGuard<'a, T>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("rwlock read poll");
         // Fast path: try to acquire the read lock
         if let Some(guard) = self.lock.try_read() {
             return Poll::Ready(guard);
@@ -196,6 +197,7 @@ impl<'a, T: ?Sized> Future for RwLockWriteFuture<'a, T> {
     type Output = RwLockWriteGuard<'a, T>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("rwlock write poll");
         // Fast path: try to acquire the write lock
         if let Some(guard) = self.lock.try_write() {
             return Poll::Ready(guard);

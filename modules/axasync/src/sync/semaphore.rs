@@ -104,6 +104,7 @@ impl<'a> Future for SemaphoreAcquireFuture<'a> {
     type Output = SemaphorePermit;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("semaphore acquire poll");
         // Fast path: try to acquire a permit immediately
         if let Some(permit) = self.semaphore.try_acquire() {
             return Poll::Ready(permit);

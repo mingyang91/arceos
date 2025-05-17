@@ -32,6 +32,7 @@ impl<'a> Future for RecvFuture<'a> {
     type Output = AxResult<usize>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("recv poll");
         let this = self.get_mut();
         if !this.init {
             this.init = true;
@@ -82,6 +83,7 @@ impl<'a> Future for SendFuture<'a> {
     type Output = AxResult<usize>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("send poll");
         let this = self.get_mut();
         if !this.init {
             this.init = true;
@@ -128,6 +130,7 @@ impl<'a> Future for AcceptFuture<'a> {
     type Output = AxResult<TcpSocket>;
 
     fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
+        // trace!("accept poll");
         let this = self.get_mut();
         if !this.init {
             this.init = true;
@@ -143,7 +146,7 @@ impl<'a> Future for AcceptFuture<'a> {
             Err(e) => return Poll::Ready(ax_err!(e)),
         };
 
-        debug!("TCP socket accepted a new connection {}", peer_addr);
+        trace!("TCP socket accepted a new connection {}", peer_addr);
         Poll::Ready(Ok(TcpSocket::new_connected(handle, local_addr, peer_addr)))
     }
 }
@@ -168,6 +171,7 @@ impl<'a> Future for ConnectFuture<'a> {
     type Output = AxResult<()>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("connect poll");
         let this = self.get_mut();
         if !this.init {
             this.init = true;

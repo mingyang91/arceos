@@ -108,6 +108,7 @@ impl<'a, T: ?Sized> Future for MutexLockFuture<'a, T> {
     type Output = MutexGuard<'a, T>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("mutex lock poll");
         // Fast path: try to acquire the lock without going to sleep
         if let Some(guard) = self.mutex.try_lock() {
             return Poll::Ready(guard);
