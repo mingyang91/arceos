@@ -21,13 +21,7 @@ extern crate axlog;
 
 extern crate alloc;
 
-use alloc::boxed::Box;
-use alloc::collections::BinaryHeap;
-use core::future::Future;
-use core::net::SocketAddr;
-use core::pin::Pin;
-use core::task::{Context, Poll};
-
+mod executor;
 pub mod sync;
 pub mod time;
 mod waker;
@@ -35,6 +29,18 @@ mod waker;
 #[cfg(feature = "mmio")]
 pub mod mmio;
 
+pub use executor::{
+    BoxFuture,
+    Executor,
+    JoinHandle,
+    init as executor_init,
+    poll_once as executor_poll,
+    run as executor_run,
+    run_local,
+    // Global executor functions
+    spawn,
+    spawn_local,
+};
 pub use futures_util;
 pub use time::{TimeoutExt, sleep};
 pub use waker::*;
@@ -126,13 +132,6 @@ impl<E: TimerEvent> core::cmp::PartialEq for TimerEventEntry<E> {
 #[cfg(feature = "timer")]
 impl<E: TimerEvent> core::cmp::Eq for TimerEventEntry<E> {}
 
-cfg_if::cfg_if! {
-    if #[cfg(feature = "multitask")] {
-        mod executor;
-        pub use executor::*;
-    }
-}
-
 /// Creates a new [`Waker`] that is a no-op.
 pub fn dummy_waker() -> core::task::Waker {
     use core::task::{RawWaker, RawWakerVTable, Waker};
@@ -176,10 +175,39 @@ where
 
 /// Initialize the async runtime.
 pub fn init() {
+    executor_init();
     info!("Async runtime initialized");
 }
 
 /// Shutdown the async runtime.
 pub fn shutdown() {
     info!("Async runtime shut down");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use alloc::sync::Arc;
+    use core::sync::atomic::{AtomicBool, Ordering};
+
+    #[test]
+    fn test_global_spawn() {
+        // Initialize runtime
+        init();
+
+        // Create a shared completion flag
+        let completed = Arc::new(AtomicBool::new(false));
+        let completed_clone = completed.clone();
+
+        // Spawn a task using the global spawn function
+        let _handle = spawn(async move {
+            completed_clone.store(true, Ordering::SeqCst);
+        });
+
+        // Run the executor
+        executor_run();
+
+        // Verify the task completed
+        assert!(completed.load(Ordering::SeqCst));
+    }
 }

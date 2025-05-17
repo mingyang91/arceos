@@ -1,8 +1,5 @@
 //! Task waker implementation.
 
-use core::task::Waker;
-use core::task::{RawWaker, RawWakerVTable};
-
 #[cfg(feature = "multitask")]
 use alloc::boxed::Box;
 

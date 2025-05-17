@@ -1,4 +1,4 @@
-use super::addr::{UNSPECIFIED_ENDPOINT, from_core_sockaddr, into_core_sockaddr, is_unspecified};
+use super::addr::from_core_sockaddr;
 use crate::net_impl::{ETH0, LISTEN_TABLE, SOCKET_SET, SocketSetWrapper};
 use crate::smoltcp_impl::tcp::{STATE_CLOSED, STATE_CONNECTING};
 use axio::PollState;
@@ -127,7 +127,7 @@ impl<'a> AcceptFuture<'a> {
 impl<'a> Future for AcceptFuture<'a> {
     type Output = AxResult<TcpSocket>;
 
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.get_mut();
         if !this.init {
             this.init = true;

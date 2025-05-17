@@ -123,7 +123,7 @@ const PLIC_BASE: usize = 0x0c00_0000;
 
 fn init_plic() {
     let base = phys_to_virt(PhysAddr::from_usize(PLIC_BASE));
-    let regs = unsafe { base.as_mut_ptr() };
+    let regs = base.as_mut_ptr();
     PLIC.init_once(Plic::new(regs));
 }
 

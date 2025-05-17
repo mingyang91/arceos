@@ -288,6 +288,8 @@ dependencies = [
  "futures-executor",
  "futures-util",
  "kspin",
+ "lazyinit",
+ "percpu",
  "spin",
 ]
 

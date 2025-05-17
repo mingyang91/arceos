@@ -2,13 +2,104 @@
 
 use alloc::boxed::Box;
 use alloc::collections::VecDeque;
+use core::cell::RefCell;
 use core::future::Future;
 use core::pin::Pin;
 use core::task::{Context, Poll, Waker};
+use lazyinit::LazyInit;
 use spin::Mutex;
 
 /// Type alias for a pinned and boxed future.
 pub type BoxFuture<T> = Pin<Box<dyn Future<Output = T> + Send + 'static>>;
+
+// Global executor singleton
+static GLOBAL_EXECUTOR: LazyInit<Executor> = LazyInit::new();
+
+// Per-CPU executor for local tasks
+#[percpu::def_percpu]
+static CPU_LOCAL_EXECUTOR: RefCell<Option<Executor>> = RefCell::new(None);
+
+/// Helper function to get the global executor, initializing it if needed.
+fn executor() -> &'static Executor {
+    if !GLOBAL_EXECUTOR.is_inited() {
+        GLOBAL_EXECUTOR.init_once(Executor::new());
+    }
+    GLOBAL_EXECUTOR
+        .get()
+        .expect("IMPOSSIBLE: global executor not initialized")
+}
+
+/// Spawns a new asynchronous task on the global executor.
+pub fn spawn<F>(future: F) -> JoinHandle<F::Output>
+where
+    F: Future + Send + 'static,
+    F::Output: Send + 'static,
+{
+    executor().spawn(future)
+}
+
+/// Initialize the global executor runtime.
+pub fn init() {
+    // Initialize the global executor if it hasn't been initialized yet
+    if !GLOBAL_EXECUTOR.is_inited() {
+        GLOBAL_EXECUTOR.init_once(Executor::new());
+    }
+}
+
+/// Runs the global executor until all tasks are complete.
+pub fn run() {
+    executor().run();
+}
+
+/// Polls the global executor once, running a single step.
+/// Returns `true` if there are still tasks in the queue.
+pub fn poll_once() -> bool {
+    executor().step()
+}
+
+/// Initialize the per-CPU local executor.
+fn ensure_local_executor() -> &'static RefCell<Option<Executor>> {
+    let cell = unsafe { CPU_LOCAL_EXECUTOR.current_ptr() };
+    let cell_ref = unsafe { &*cell };
+    if cell_ref.borrow().is_none() {
+        *cell_ref.borrow_mut() = Some(Executor::new());
+    }
+    cell_ref
+}
+
+/// Spawns a future on the current CPU's local executor.
+pub fn spawn_local<F>(future: F) -> JoinHandle<F::Output>
+where
+    F: Future + Send + 'static,
+    F::Output: Send + 'static,
+{
+    let cell = ensure_local_executor();
+    // Initialize the executor if needed
+    if cell.borrow().is_none() {
+        *cell.borrow_mut() = Some(Executor::new());
+    }
+
+    // Unwrap is safe because we just ensured the executor exists
+    let executor = cell.borrow();
+    let executor = executor.as_ref().unwrap();
+
+    // We need to use raw pointers since we can't return a reference from the RefCell borrow
+    let executor_ptr = executor as *const Executor;
+
+    // SAFETY: We ensure the pointer is valid during the scope of this call
+    unsafe { (*executor_ptr).spawn(future) }
+}
+
+/// Run the current CPU's local executor until completion.
+pub fn run_local() {
+    let cell = ensure_local_executor();
+    if let Some(executor) = cell.borrow().as_ref() {
+        // We need to use raw pointers since we can't modify through a shared reference
+        let executor_ptr = executor as *const Executor;
+        // SAFETY: We ensure the pointer is valid during the scope of this call
+        unsafe { (*(executor_ptr as *mut Executor)).run() };
+    }
+}
 
 /// An executor that can run futures to completion.
 pub struct Executor {

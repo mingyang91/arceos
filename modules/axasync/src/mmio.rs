@@ -8,8 +8,6 @@ use core::sync::atomic::{AtomicU64, Ordering};
 use core::task::{Context, Poll, Waker};
 use kspin::SpinNoIrq;
 
-use crate::waker::SimpleWaker;
-
 /// Type for MMIO device event ID
 pub type MmioEventId = u64;
 
