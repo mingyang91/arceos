@@ -2,6 +2,18 @@
 
 ## 2025-05-17
 已通过 async_server 示例代码测试
+```
+λ wrk -t12 -c36 -d30s http://127.0.0.1:5555/
+Running 30s test @ http://127.0.0.1:5555/
+  12 threads and 36 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   674.44us    1.43ms  11.15ms   94.00%
+    Req/Sec   208.37    358.97     1.84k    93.33%
+  650 requests in 30.07s, 271.68KB read
+  Socket errors: connect 0, read 306, write 21, timeout 0
+Requests/sec:     21.61
+Transfer/sec:      9.03KB
+```
 - 增加 spawn 与 spawn_local 函数，用于并行执行任务
 - 将 axasync 模块中的 block_on 与 poll_once 函数移至 executor 模块中，并添加 dummy_waker 函数。
 - 将 axasync 模块中的 init 与 shutdown 函数移至 lib.rs 中，并添加 executor 模块中的 block_on 与 dummy_waker 函数。

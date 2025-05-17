@@ -137,9 +137,7 @@ impl Executor {
 
             let future = unsafe { Pin::new_unchecked(&mut task.future) };
 
-            info!("poll");
             if future.poll(&mut cx).is_pending() {
-                info!("poll2");
                 // Task is still pending, only re-queue if it hasn't been manually queued
                 if !task.was_woken {
                     ready_tasks.push_back(task);
