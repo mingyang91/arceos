@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2025-05-17
+已通过 async_server 示例代码测试
+- 增加 spawn 与 spawn_local 函数，用于并行执行任务
+- 将 axasync 模块中的 block_on 与 poll_once 函数移至 executor 模块中，并添加 dummy_waker 函数。
+- 将 axasync 模块中的 init 与 shutdown 函数移至 lib.rs 中，并添加 executor 模块中的 block_on 与 dummy_waker 函数。
+
 ## 2025-05-12
 真 - 异步版 axnet 实现，支持 async_client 与 async_server 示例代码
 
