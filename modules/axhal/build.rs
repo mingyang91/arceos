@@ -18,6 +18,7 @@ const BUILTIN_PLATFORM_FAMILIES: &[&str] = &[
     "aarch64-raspi",
     "loongarch64-qemu-virt",
     "riscv64-qemu-virt",
+    "riscv64-starfive",
     "x86-pc",
 ];
 

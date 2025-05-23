@@ -1,6 +1,9 @@
 #![no_std]
 #![no_main]
 
+// Force linking of axruntime to include the panic handler
+extern crate axruntime;
+
 extern crate alloc;
 
 use alloc::format;
