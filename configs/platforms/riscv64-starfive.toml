@@ -39,7 +39,7 @@ mmio-regions = [
     [0x4000_0000, 0x4000_0000],     # PCI memory ranges (ranges 1: 32-bit MMIO space)
 ]                                   # [(uint, uint)]
 
-ethernet-mmio-regions = [
+virtio-mmio-regions = [
     [0x16030000, 0x10000], # ethernet@0x16030000
     [0x16040000, 0x10000], # ethernet@0x16040000
 
@@ -71,7 +71,7 @@ pci-ranges = [
 
 
 # Timer interrupt frequency in Hz.
-timer-frequency = "10_000_000" # 10MHz
+timer-frequency = 10_000_000 # uint
 
 # rtc@101000 {
 #     interrupts = <0x0b>;

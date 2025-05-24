@@ -24,3 +24,4 @@ axdriver = { workspace = true, features = ["virtio", "bus-mmio", "net", "irq"] }
 
 [features]
 default = ["axstd/default"]
+starfive = ["axdriver/bus-mmio"]
