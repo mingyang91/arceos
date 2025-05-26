@@ -152,6 +152,8 @@ ifeq ($(PLAT_NAME), aarch64-raspi4)
   include scripts/make/raspi4.mk
 else ifeq ($(PLAT_NAME), aarch64-bsta1000b)
   include scripts/make/bsta1000b-fada.mk
+else ifeq ($(PLAT_NAME), riscv64-starfive)
+  include scripts/make/starfive.mk
 endif
 
 defconfig: _axconfig-gen

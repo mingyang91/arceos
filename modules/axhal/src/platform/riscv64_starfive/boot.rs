@@ -10,14 +10,25 @@ static mut BOOT_PT_SV39: [u64; 512] = [0; 512];
 
 #[allow(clippy::identity_op)] // (0x0 << 10) here makes sense because it's an address
 unsafe fn init_boot_page_table() {
-    // 0x0000_0000..0x4000_0000, VRWX_GAD, 1G block
+    // VisionFive 2 memory layout: DDR starts at 0x40000000
+    // 0x0000_0000..0x4000_0000, VRWX_GAD, 1G block (peripherals)
     BOOT_PT_SV39[0] = (0x0 << 10) | 0xef;
-    // 0x8000_0000..0xc000_0000, VRWX_GAD, 1G block
+    // 0x4000_0000..0x8000_0000, VRWX_GAD, 1G block (DDR memory start)
+    BOOT_PT_SV39[1] = (0x40000 << 10) | 0xef;
+    // 0x8000_0000..0xc000_0000, VRWX_GAD, 1G block (DDR memory continued)
     BOOT_PT_SV39[2] = (0x80000 << 10) | 0xef;
-    // 0xffff_ffc0_0000_0000..0xffff_ffc0_4000_0000, VRWX_GAD, 1G block
+    // 0xc000_0000..0x10000_0000, VRWX_GAD, 1G block (DDR memory continued)
+    BOOT_PT_SV39[3] = (0xc0000 << 10) | 0xef;
+
+    // Virtual high address mappings
+    // 0xffff_ffc0_0000_0000..0xffff_ffc0_4000_0000, VRWX_GAD, 1G block (peripherals)
     BOOT_PT_SV39[0x100] = (0x0 << 10) | 0xef;
-    // 0xffff_ffc0_8000_0000..0xffff_ffc0_c000_0000, VRWX_GAD, 1G block
+    // 0xffff_ffc0_4000_0000..0xffff_ffc0_8000_0000, VRWX_GAD, 1G block (DDR memory start)
+    BOOT_PT_SV39[0x101] = (0x40000 << 10) | 0xef;
+    // 0xffff_ffc0_8000_0000..0xffff_ffc0_c000_0000, VRWX_GAD, 1G block (DDR memory continued)
     BOOT_PT_SV39[0x102] = (0x80000 << 10) | 0xef;
+    // 0xffff_ffc0_c000_0000..0xffff_ffc1_0000_0000, VRWX_GAD, 1G block (DDR memory continued)
+    BOOT_PT_SV39[0x103] = (0xc0000 << 10) | 0xef;
 }
 
 unsafe fn init_mmu() {
@@ -31,7 +42,7 @@ unsafe fn init_mmu() {
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".text.boot")]
 unsafe extern "C" fn _start() -> ! {
-    // PC = 0x8020_0000
+    // PC = 0x4020_0000
     // a0 = hartid
     // a1 = dtb
     core::arch::naked_asm!("

@@ -1,26 +1,22 @@
-use memory_addr::VirtAddr;
-
-use crate::mem::virt_to_phys;
+// Legacy SBI console implementation - no need for memory address conversion
 
 /// The maximum number of bytes that can be read at once.
 const MAX_RW_SIZE: usize = 256;
 
 /// Writes a byte to the console.
 pub fn putchar(c: u8) {
-    sbi_rt::console_write_byte(c);
+    sbi_rt::legacy::console_putchar(c as usize);
 }
 
 /// Tries to write bytes to the console from input u8 slice.
 /// Returns the number of bytes written.
 fn try_write_bytes(bytes: &[u8]) -> usize {
-    sbi_rt::console_write(sbi_rt::Physical::new(
-        // A maximum of 256 bytes can be written at a time
-        // to prevent SBI from disabling IRQs for too long.
-        bytes.len().min(MAX_RW_SIZE),
-        virt_to_phys(VirtAddr::from_ptr_of(bytes.as_ptr())).as_usize(),
-        0,
-    ))
-    .value
+    // Legacy SBI doesn't have bulk write, so write byte by byte
+    let len = bytes.len().min(MAX_RW_SIZE);
+    for &byte in &bytes[..len] {
+        sbi_rt::legacy::console_putchar(byte as usize);
+    }
+    len
 }
 
 /// Writes bytes to the console from input u8 slice.
@@ -38,10 +34,19 @@ pub fn write_bytes(bytes: &[u8]) {
 /// Reads bytes from the console into the given mutable slice.
 /// Returns the number of bytes read.
 pub fn read_bytes(bytes: &mut [u8]) -> usize {
-    sbi_rt::console_read(sbi_rt::Physical::new(
-        bytes.len().min(MAX_RW_SIZE),
-        virt_to_phys(VirtAddr::from_mut_ptr_of(bytes.as_mut_ptr())).as_usize(),
-        0,
-    ))
-    .value
+    // Legacy SBI doesn't have bulk read, so read byte by byte
+    let max_len = bytes.len().min(MAX_RW_SIZE);
+    for i in 0..max_len {
+        let ch = sbi_rt::legacy::console_getchar();
+        if ch == usize::MAX {
+            // No character available
+            return i;
+        }
+        bytes[i] = ch as u8;
+        // Stop on newline or carriage return
+        if ch == b'\n' as usize || ch == b'\r' as usize {
+            return i + 1;
+        }
+    }
+    max_len
 }
