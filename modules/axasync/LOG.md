@@ -1,8 +1,11 @@
 # 开发日志
 
 ## 2025-05-26
-内核启动成功，日志已输出，目前内核启动后会`panic`在`allocator`，不管怎么说，内核启动成功了。
+
+内核启动成功，日志已输出，~~目前内核启动后会`panic`在`allocator`~~，不管怎么说，内核启动成功了。
+物理内存设置过大会导致allocator panic，问题未知。目前确认`0x1000_0000`不会panic，但是`0x8000_0000`以上会panic。但星光2的物理内存为4GB，所以应当支持大约 `0x1_0000_0000 - <reserved>` 内存空间。
 详见[2025-05-26.md](./2025-05-26.md)
+
 ```
 U-Boot SPL 2021.10 (Feb 28 2023 - 21:44:53 +0800)
 DDR version: dc2e84f0.
@@ -90,7 +93,7 @@ bootmode flash device 1
 Importing environment from mmc1 ...
 Can't set block device
 Hit any key to stop autoboot:  0 
-158423 bytes read in 17 ms (8.9 MiB/s)
+158539 bytes read in 16 ms (9.4 MiB/s)
 ## Loading kernel from FIT Image at c0000000 ...
    Using 'conf' configuration
    Trying 'kernel' kernel subimage
@@ -98,7 +101,7 @@ Hit any key to stop autoboot:  0
      Type:         Kernel Image
      Compression:  gzip compressed
      Data Start:   0xc00000f0
-     Data Size:    103820 Bytes = 101.4 KiB
+     Data Size:    103935 Bytes = 101.5 KiB
      Architecture: RISC-V
      OS:           Linux
      Load Address: 0x40200000
@@ -110,19 +113,19 @@ Hit any key to stop autoboot:  0
      Description:  Flattened Device Tree blob for zCore-visionfive
      Type:         Flat Device Tree
      Compression:  uncompressed
-     Data Start:   0xc0019740
+     Data Start:   0xc00197b4
      Data Size:    52853 Bytes = 51.6 KiB
      Architecture: RISC-V
    Verifying Hash Integrity ... OK
-   Booting using the fdt blob at 0xc0019740
+   Booting using the fdt blob at 0xc00197b4
    Uncompressing Kernel Image
-   Using Device Tree in place at 00000000c0019740, end 00000000c00295b4
+   Using Device Tree in place at 00000000c00197b4, end 00000000c0029628
 
 Starting kernel ...
 
 clk u5_dw_i2c_clk_core already disabled
 clk u5_dw_i2c_clk_apb already disabled
-1R234567
+
        d8888                            .d88888b.   .d8888b.
       d88888                           d88P" "Y88b d88P  Y88b
      d88P888                           888     888 Y88b.
@@ -139,32 +142,75 @@ build_mode = release
 log_level = info
 smp = 4
 
-[  5.111728 axruntime:130] Logging is enabled.
-[  5.117273 axruntime:131] Primary CPU 1 started, dtb = 0xc0019740.
-[  5.124640 axruntime:133] Found physcial memory regions:
-[  5.131141 axruntime:135]   [PA:0x40200000, PA:0x40222000) .text (READ | EXECUTE | RESERVED)
-[  5.140760 axruntime:135]   [PA:0x40222000, PA:0x4022d000) .rodata (READ | RESERVED)
-[  5.149687 axruntime:135]   [PA:0x4022d000, PA:0x40230000) .data .tdata .tbss .percpu (READ | WRITE | RESERVED)
-[  5.160954 axruntime:135]   [PA:0x40230000, PA:0x40330000) boot stack (READ | WRITE | RESERVED)
-[  5.170834 axruntime:135]   [PA:0x40330000, PA:0x40338000) .bss (READ | WRITE | RESERVED)
-[  5.180193 axruntime:135]   [PA:0x40338000, PA:0x140000000) free memory (READ | WRITE | FREE)
-[  5.189900 axruntime:135]   [PA:0x10000000, PA:0x10001000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.200040 axruntime:135]   [PA:0xc000000, PA:0x10000000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.210093 axruntime:135]   [PA:0x10010000, PA:0x10011000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.220233 axruntime:135]   [PA:0x10020000, PA:0x10021000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.230373 axruntime:135]   [PA:0x10030000, PA:0x10031000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.240513 axruntime:135]   [PA:0x10040000, PA:0x10041000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.250653 axruntime:135]   [PA:0x10050000, PA:0x10051000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.260793 axruntime:135]   [PA:0x16010000, PA:0x16011000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.270933 axruntime:135]   [PA:0x16020000, PA:0x16021000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.281073 axruntime:135]   [PA:0x16030000, PA:0x16031000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.291213 axruntime:135]   [PA:0x16040000, PA:0x16041000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.301353 axruntime:135]   [PA:0x13040000, PA:0x13041000) mmio (READ | WRITE | DEVICE | RESERVED)
-[  5.311494 axruntime:213] Initialize global memory allocator...
-[  5.318600 axruntime:214]   use TLSF allocator.
-[  5.324321 axruntime::lang_items:5] panicked at /Users/famer.me/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bitmap-allocator-0.2.0/src/lib.rs:200:9:
-assertion failed: end <= Self::CAP
-[  5.342694 axhal::platform::riscv64_starfive::misc:3] Shutting down...
+[  5.103254 axruntime:130] Logging is enabled.
+[  5.108800 axruntime:131] Primary CPU 1 started, dtb = 0xc00197b4.
+[  5.116166 axruntime:133] Found physcial memory regions:
+[  5.122667 axruntime:135]   [PA:0x40200000, PA:0x40222000) .text (READ | EXECUTE | RESERVED)
+[  5.132286 axruntime:135]   [PA:0x40222000, PA:0x4022d000) .rodata (READ | RESERVED)
+[  5.141213 axruntime:135]   [PA:0x4022d000, PA:0x40230000) .data .tdata .tbss .percpu (READ | WRITE | RESERVED)
+[  5.152480 axruntime:135]   [PA:0x40230000, PA:0x40330000) boot stack (READ | WRITE | RESERVED)
+[  5.162360 axruntime:135]   [PA:0x40330000, PA:0x40338000) .bss (READ | WRITE | RESERVED)
+[  5.171719 axruntime:135]   [PA:0x40338000, PA:0x50000000) free memory (READ | WRITE | FREE)
+[  5.181340 axruntime:135]   [PA:0xc000000, PA:0x10000000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.191393 axruntime:135]   [PA:0x10000000, PA:0x10001000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.201533 axruntime:135]   [PA:0x10010000, PA:0x10011000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.211673 axruntime:135]   [PA:0x10020000, PA:0x10021000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.221813 axruntime:135]   [PA:0x10030000, PA:0x10031000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.231953 axruntime:135]   [PA:0x10040000, PA:0x10041000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.242093 axruntime:135]   [PA:0x10050000, PA:0x10051000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.252233 axruntime:135]   [PA:0x16010000, PA:0x16011000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.262373 axruntime:135]   [PA:0x16020000, PA:0x16021000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.272513 axruntime:135]   [PA:0x16030000, PA:0x16031000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.282653 axruntime:135]   [PA:0x16040000, PA:0x16041000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.292793 axruntime:135]   [PA:0x13040000, PA:0x13041000) mmio (READ | WRITE | DEVICE | RESERVED)
+[  5.302933 axruntime:213] Initialize global memory allocator...
+[  5.310040 axruntime:214]   use TLSF allocator.
+[  5.315872 axmm:72] Initialize virtual memory management...
+[  5.329465 axruntime:150] Initialize platform devices...
+[  5.335806 axdriver:152] Initialize device drivers...
+[  5.342043 axdriver:153]   device model: static
+[  5.347763 axdriver::bus::mmio:6] probing bus devices...
+[  5.354265 axhal::arch::riscv::trap:24] No registered handler for trap PAGE_FAULT
+[  5.362930 axruntime::lang_items:5] panicked at modules/axhal/src/arch/riscv/trap.rs:25:9:
+Unhandled Supervisor Page Fault @ 0xffffffc040205b10, fault_vaddr=VA:0xffffffc082001000 (READ):
+TrapFrame {
+    regs: GeneralRegisters {
+        ra: 0xffffffc040205a06,
+        sp: 0xffffffc040266ba0,
+        gp: 0xffffffc04021a2b8,
+        tp: 0xffffffc040266b58,
+        t0: 0x5a00000001,
+        t1: 0x30000,
+        t2: 0xe00000001,
+        s0: 0xffffffc04026ac48,
+        s1: 0x2,
+        a0: 0xffffffc040224aec,
+        a1: 0xffffffc04026da6f,
+        a2: 0xffffffffffffffff,
+        a3: 0x2,
+        a4: 0xc0,
+        a5: 0xf0f0f0f,
+        a6: 0x74727000,
+        a7: 0x30010000,
+        s2: 0x74726976,
+        s3: 0x1000,
+        s4: 0xffffffc082001000,
+        s5: 0xffffffc040224668,
+        s6: 0x20,
+        s7: 0xffffffc0403375b8,
+        s8: 0x82001000,
+        s9: 0x1,
+        s10: 0xffffffc04026d25c,
+        s11: 0x1000,
+        t3: 0x55555000,
+        t4: 0x33333000,
+        t5: 0xffffffc04026d270,
+        t6: 0xf,
+    },
+    sepc: 0xffffffc040205b10,
+    sstatus: 0x8000000200006100,
+}
+[  5.463203 axhal::platform::riscv64_starfive::misc:3] Shutting down...
 i2c read: write daddr 36 to
 i2c read: write daddr 36 to
 i2c read: write daddr 36 to
@@ -176,6 +222,7 @@ i2c read: write daddr 36 to
 i2c read: write daddr 36 to
 i2c read: write daddr 36 to
 cannot read pmic power register
+
 ```
 
 ## 2025-05-25
