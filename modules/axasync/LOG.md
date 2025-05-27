@@ -1,5 +1,30 @@
 # 开发日志
 
+## 2025-05-27
+加入`dwmac`驱动框架代码（未实现），并编译`async_server`示例代码，启动成功。
+```
+[  5.338284 axdriver::bus::mmio:6] probing bus devices...
+[  5.425644 axdriver::drivers:192] DWMAC device found at 0x16030000
+[  5.433011 axdriver_net::dwmac:184] DWMAC device initialized successfully
+[  5.440984 axdriver::drivers:203] DWMAC device initialized successfully
+[  5.448784 axdriver::bus::mmio:15] registered a new Net device at [PA:0x16030000, PA:0x16040000): "dwmac-ethernet"
+[  5.460310 axdriver::bus::mmio:11] Probing MMIO region: (369360896, 65536)
+[  5.468370 axdriver::drivers:192] DWMAC device found at 0x16040000
+[  5.475738 axdriver_net::dwmac:184] DWMAC device initialized successfully
+[  5.483710 axdriver::drivers:203] DWMAC device initialized successfully
+[  5.491510 axdriver::bus::mmio:15] registered a new Net device at [PA:0x16040000, PA:0x16050000): "dwmac-ethernet"
+[  5.503037 axnet:42] Initialize network subsystem...
+[  5.509190 axnet:45]   use NIC 0: "dwmac-ethernet", IRQ: 10
+[  5.516678 axhal::platform::riscv64_starfive::irq:80] register_handler: 10
+[  5.524578 axnet::smoltcp_impl:336] created net interface "eth0":
+[  5.531857 axnet::smoltcp_impl:337]   ether:    6c-cf-39-00-5d-34
+[  5.539136 axnet::smoltcp_impl:338]   ip:       10.0.2.15/24
+[  5.545983 axnet::smoltcp_impl:339]   gateway:  10.0.2.2
+[  5.552483 axnet::smoltcp_impl:340]   IRQ:      10
+sbi_trap_error: hart0: trap handler failed (error -2)
+sbi_trap_error: hart0: mcause=0x0000000000000005 mtval=0x0000000040048060
+sbi_trap_error: hart0: mepc=0x0000000040004cac mstatus=0x0000000200001800
+```
 ## 2025-05-26
 
 内核启动成功，日志已输出，~~目前内核启动后会`panic`在`allocator`~~，不管怎么说，内核启动成功了。
