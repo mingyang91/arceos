@@ -33,6 +33,7 @@ bcm2835-sdhci = ["block", "axdriver_block/bcm2835-sdhci"]
 ixgbe = ["net", "axdriver_net/ixgbe", "dep:axalloc", "dep:axhal", "dep:axdma"]
 fxmac = ["net", "axdriver_net/fxmac", "dep:axalloc", "dep:axhal", "dep:axdma"]
 # more devices example: e1000 = ["net", "axdriver_net/e1000"]
+dwmac = ["net", "axdriver_net/dwmac", "dep:axalloc", "dep:axhal", "dep:axdma"]
 
 default = ["bus-pci"]
 
@@ -40,12 +41,12 @@ default = ["bus-pci"]
 log = "=0.4.21"
 cfg-if = "1.0"
 crate_interface = "0.1.4"
-axdriver_base = { git = "https://github.com/arceos-org/axdriver_crates.git", tag = "v0.1.2" }
-axdriver_block = { git = "https://github.com/arceos-org/axdriver_crates.git", tag = "v0.1.2", optional = true }
-axdriver_net = { git = "https://github.com/arceos-org/axdriver_crates.git", tag = "v0.1.2", optional = true }
-axdriver_display = { git = "https://github.com/arceos-org/axdriver_crates.git", tag = "v0.1.2", optional = true }
-axdriver_pci = { git = "https://github.com/arceos-org/axdriver_crates.git", tag = "v0.1.2", optional = true }
-axdriver_virtio = { git = "https://github.com/arceos-org/axdriver_crates.git", tag = "v0.1.2", optional = true }
+axdriver_base = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support" }
+axdriver_block = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
+axdriver_net = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
+axdriver_display = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
+axdriver_pci = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
+axdriver_virtio = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
 axalloc = { workspace = true, optional = true }
 axhal = { workspace = true, optional = true }
 axconfig = { workspace = true, optional = true }

@@ -174,3 +174,43 @@ cfg_if::cfg_if! {
         }
     }
 }
+
+cfg_if::cfg_if! {
+    if #[cfg(net_dev = "dwmac")] {
+        use crate::dwmac::DwmacHalImpl;
+        use axhal::mem::phys_to_virt;
+        use core::ptr::NonNull;
+
+        pub struct DwmacDriver;
+        register_net_driver!(DwmacDriver, axdriver_net::dwmac::DwmacNic<DwmacHalImpl>);
+
+        impl DriverProbe for DwmacDriver {
+            #[cfg(bus = "mmio")]
+            fn probe_mmio(mmio_base: usize, mmio_size: usize) -> Option<AxDeviceEnum> {
+                // Check if this is a DWMAC device at the expected addresses
+                if mmio_base == 0x16030000 || mmio_base == 0x16040000 {
+                    info!("DWMAC device found at {:#x}", mmio_base);
+
+                    // Convert physical address to virtual address and then to NonNull<u8>
+                    let virt_addr = phys_to_virt(mmio_base.into()).as_usize();
+                    let base_ptr = NonNull::new(virt_addr as *mut u8).unwrap();
+
+                    match axdriver_net::dwmac::DwmacNic::<DwmacHalImpl>::init(
+                        base_ptr,
+                        mmio_size
+                    ) {
+                        Ok(dwmac_nic) => {
+                            info!("DWMAC device initialized successfully");
+                            return Some(AxDeviceEnum::from_net(dwmac_nic));
+                        }
+                        Err(e) => {
+                            error!("Failed to initialize DWMAC device: {:?}", e);
+                            return None;
+                        }
+                    }
+                }
+                None
+            }
+        }
+    }
+}
