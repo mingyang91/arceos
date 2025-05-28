@@ -11,18 +11,43 @@ static ENTERED_CPUS: AtomicUsize = AtomicUsize::new(1);
 #[allow(clippy::absurd_extreme_comparisons)]
 pub fn start_secondary_cpus(primary_cpu_id: usize) {
     let mut logic_cpu_id = 0;
-    for i in 0..SMP {
-        if i != primary_cpu_id && logic_cpu_id < SMP - 1 {
-            let stack_top = virt_to_phys(VirtAddr::from(unsafe {
-                SECONDARY_BOOT_STACK[logic_cpu_id].as_ptr_range().end as usize
-            }));
 
-            debug!("starting CPU {}...", i);
-            axhal::mp::start_secondary_cpu(i, stack_top);
-            logic_cpu_id += 1;
+    // VisionFive 2: Skip CPU 0 (S7 core) as it's incompatible with riscv64gc target
+    if axconfig::PLATFORM == "riscv64-starfive" {
+        debug!(
+            "VisionFive 2: Starting secondary CPUs 1-{} (skipping CPU 0 S7 core)",
+            SMP - 1
+        );
+        for i in 1..SMP {
+            if i != primary_cpu_id && logic_cpu_id < SMP - 1 {
+                let stack_top = virt_to_phys(VirtAddr::from(unsafe {
+                    SECONDARY_BOOT_STACK[logic_cpu_id].as_ptr_range().end as usize
+                }));
 
-            while ENTERED_CPUS.load(Ordering::Acquire) <= logic_cpu_id {
-                core::hint::spin_loop();
+                debug!("starting CPU {}...", i);
+                axhal::mp::start_secondary_cpu(i, stack_top);
+                logic_cpu_id += 1;
+
+                while ENTERED_CPUS.load(Ordering::Acquire) <= logic_cpu_id {
+                    core::hint::spin_loop();
+                }
+            }
+        }
+    } else {
+        // Other platforms: Start all CPUs 0-(SMP-1)
+        for i in 0..SMP {
+            if i != primary_cpu_id && logic_cpu_id < SMP - 1 {
+                let stack_top = virt_to_phys(VirtAddr::from(unsafe {
+                    SECONDARY_BOOT_STACK[logic_cpu_id].as_ptr_range().end as usize
+                }));
+
+                debug!("starting CPU {}...", i);
+                axhal::mp::start_secondary_cpu(i, stack_top);
+                logic_cpu_id += 1;
+
+                while ENTERED_CPUS.load(Ordering::Acquire) <= logic_cpu_id {
+                    core::hint::spin_loop();
+                }
             }
         }
     }

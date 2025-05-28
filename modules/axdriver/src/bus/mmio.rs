@@ -3,12 +3,9 @@ use crate::{AllDevices, AxDeviceEnum, prelude::*};
 
 impl AllDevices {
     pub(crate) fn probe_bus_devices(&mut self) {
-        warn!("probing bus devices...");
-        let mut irq: u32 = 0;
-
+        info!("probing bus devices...");
         // Probe regular MMIO devices
         for reg in axconfig::devices::MMIO_REGIONS {
-            irq += 1;
             for_each_drivers!(type Driver, {
                 if let Some(dev) = Driver::probe_mmio(reg.0, reg.1) {
                     info!(
@@ -18,12 +15,23 @@ impl AllDevices {
                         dev.device_name(),
                     );
 
-                    self.add_device(dev, irq);
+                    // TODO: hardcode for tutorial
+                    if reg.0 == 0x16030000 {
+                        self.add_device(dev, 7);
+                    } else if reg.0 == 0x16040000 {
+                        // self.add_device(dev, 78);
+                        // TODO: skip for tutorial
+                        continue;
+                    } else {
+                        unimplemented!("unknown device");
+                    }
+
                     continue; // skip to the next device
                 }
             });
         }
 
+        let mut irq = 0;
         // TODO: parse device tree
         #[cfg(feature = "virtio")]
         for reg in axconfig::devices::VIRTIO_MMIO_REGIONS {

@@ -24,11 +24,11 @@ spin = "0.9"
 lazyinit = "0.2"
 axerrno = "0.1"
 axio = "0.1"
-axhal = { workspace = true }
+axhal = { workspace = true, features = ["irq"] }
 axsync = { workspace = true }
 axtask = { workspace = true }
 axdriver = { workspace = true, features = ["net"] }
-axdriver_net = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support" }
+axdriver_net = { workspace = true }
 
 [dependencies.smoltcp]
 git = "https://github.com/rcore-os/smoltcp.git"

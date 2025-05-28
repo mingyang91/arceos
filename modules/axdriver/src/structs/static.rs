@@ -43,12 +43,6 @@ impl<D> AxDeviceContainer<D> {
     }
 
     /// Takes one device out of the container (will remove it from the container).
-    #[cfg(not(feature = "irq"))]
-    pub fn take_one(&mut self) -> Option<D> {
-        self.0.take()
-    }
-
-    #[cfg(feature = "irq")]
     pub fn take_one(&mut self) -> Option<(D, u32)> {
         self.0.take()
     }

@@ -35,7 +35,10 @@ unsafe extern "C" fn rust_entry_secondary(cpu_id: usize) {
 /// For example, the interrupt controller and the timer.
 pub fn platform_init() {
     #[cfg(feature = "irq")]
-    self::irq::init_percpu();
+    {
+        self::irq::init_primary();
+        self::irq::init_percpu();
+    }
     self::time::init_percpu();
 }
 

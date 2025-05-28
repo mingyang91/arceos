@@ -20,7 +20,7 @@ static MAIN_DISPLAY: LazyInit<Mutex<AxDisplayDevice>> = LazyInit::new();
 pub fn init_display(mut display_devs: AxDeviceContainer<AxDisplayDevice>) {
     info!("Initialize graphics subsystem...");
 
-    let dev = display_devs.take_one().expect("No graphics device found!");
+    let (dev, _irq) = display_devs.take_one().expect("No graphics device found!");
     info!("  use graphics device 0: {:?}", dev.device_name());
     MAIN_DISPLAY.init_once(Mutex::new(dev));
 }

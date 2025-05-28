@@ -35,9 +35,9 @@ impl super::AxDeviceEnum {
 
 /// A structure that contains all device drivers of a certain category.
 ///
-/// If the feature `dyn` is enabled, the inner type is [`Vec<D>`]. Otherwise,
-/// the inner type is [`Option<D>`] and at most one device can be contained.
-pub struct AxDeviceContainer<D>(Vec<D>);
+/// If the feature `dyn` is enabled, the inner type is [`Vec<(D, u32)>`]. Otherwise,
+/// the inner type is [`Option<(D, u32)>`] and at most one device can be contained.
+pub struct AxDeviceContainer<D>(Vec<(D, u32)>);
 
 impl<D> AxDeviceContainer<D> {
     /// Returns number of devices in this container.
@@ -51,7 +51,7 @@ impl<D> AxDeviceContainer<D> {
     }
 
     /// Takes one device out of the container (will remove it from the container).
-    pub fn take_one(&mut self) -> Option<D> {
+    pub fn take_one(&mut self) -> Option<(D, u32)> {
         if self.is_empty() {
             None
         } else {
@@ -60,19 +60,19 @@ impl<D> AxDeviceContainer<D> {
     }
 
     /// Constructs the container from one device.
-    pub fn from_one(dev: D) -> Self {
-        Self(vec![dev])
+    pub fn from_one(dev: D, irq: u32) -> Self {
+        Self(vec![(dev, irq)])
     }
 
     /// Adds one device into the container.
     #[allow(dead_code)]
-    pub(crate) fn push(&mut self, dev: D) {
-        self.0.push(dev);
+    pub(crate) fn push(&mut self, dev: D, irq: u32) {
+        self.0.push((dev, irq));
     }
 }
 
 impl<D> core::ops::Deref for AxDeviceContainer<D> {
-    type Target = Vec<D>;
+    type Target = Vec<(D, u32)>;
     fn deref(&self) -> &Self::Target {
         &self.0
     }

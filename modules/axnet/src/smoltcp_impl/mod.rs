@@ -331,6 +331,8 @@ pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
     SOCKET_SET.init_once(SocketSetWrapper::new());
     LISTEN_TABLE.init_once(ListenTable::new());
 
+    axhal::irq::register_handler(6, eth_wake_irq);
+    axhal::irq::register_handler(5, eth_lpi);
     axhal::irq::register_handler(irq as usize, handler);
 
     info!("created net interface {:?}:", ETH0.name());
@@ -343,4 +345,12 @@ pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
 fn handler() {
     trace!("net IRQ handler called");
     SOCKET_SET.poll_interfaces();
+}
+
+fn eth_wake_irq() {
+    info!("eth_wake_irq called");
+}
+
+fn eth_lpi() {
+    info!("rth_lpi called");
 }

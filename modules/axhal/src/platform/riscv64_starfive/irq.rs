@@ -127,8 +127,13 @@ fn init_plic() {
     PLIC.init_once(Plic::new(regs));
 }
 
-pub(super) fn init_percpu() {
+/// Initialize PLIC for the primary CPU.
+pub(super) fn init_primary() {
     init_plic();
+}
+
+pub(super) fn init_percpu() {
+    // PLIC is already initialized by primary CPU, just configure per-CPU settings
     let hart_ctx_machine = HartCtx::this_hart_machine();
     PLIC.set_threshold(hart_ctx_machine, 1);
     let hart_ctx_supervisor = HartCtx::this_hart_supervisor();

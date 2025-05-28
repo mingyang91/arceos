@@ -19,7 +19,7 @@ bus-pci = ["dep:axdriver_pci", "dep:axhal", "dep:axconfig"]
 net = ["axdriver_net"]
 block = ["axdriver_block"]
 display = ["axdriver_display"]
-irq = ["dep:axhal", "dep:kspin", "dep:lazyinit"]
+irq = ["dep:axhal", "axhal/irq", "dep:kspin", "dep:lazyinit"]
 
 # Enabled by features `virtio-*`
 virtio = ["axdriver_virtio", "dep:axalloc", "dep:axhal", "dep:axconfig"]
@@ -33,7 +33,14 @@ bcm2835-sdhci = ["block", "axdriver_block/bcm2835-sdhci"]
 ixgbe = ["net", "axdriver_net/ixgbe", "dep:axalloc", "dep:axhal", "dep:axdma"]
 fxmac = ["net", "axdriver_net/fxmac", "dep:axalloc", "dep:axhal", "dep:axdma"]
 # more devices example: e1000 = ["net", "axdriver_net/e1000"]
-dwmac = ["net", "axdriver_net/dwmac", "dep:axalloc", "dep:axhal", "dep:axdma"]
+dwmac = [
+    "net",
+    "irq",
+    "axdriver_net/dwmac",
+    "dep:axalloc",
+    "dep:axhal",
+    "dep:axdma",
+]
 
 default = ["bus-pci"]
 
@@ -41,12 +48,12 @@ default = ["bus-pci"]
 log = "=0.4.21"
 cfg-if = "1.0"
 crate_interface = "0.1.4"
-axdriver_base = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support" }
-axdriver_block = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
-axdriver_net = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
-axdriver_display = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
-axdriver_pci = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
-axdriver_virtio = { git = "https://github.com/mingyang91/axdriver_crates.git", branch = "dwmac-support", optional = true }
+axdriver_base = { workspace = true }
+axdriver_block = { workspace = true, optional = true }
+axdriver_net = { workspace = true, optional = true }
+axdriver_display = { workspace = true, optional = true }
+axdriver_pci = { workspace = true, optional = true }
+axdriver_virtio = { workspace = true, optional = true }
 axalloc = { workspace = true, optional = true }
 axhal = { workspace = true, optional = true }
 axconfig = { workspace = true, optional = true }

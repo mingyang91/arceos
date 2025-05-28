@@ -35,6 +35,14 @@ members = [
     "examples/async_client",
     "examples/async_server",
     "examples/mmio_async",
+
+    # axdriver_crates for local development
+    "axdriver_crates/axdriver_base",
+    "axdriver_crates/axdriver_block",
+    "axdriver_crates/axdriver_net",
+    "axdriver_crates/axdriver_display",
+    "axdriver_crates/axdriver_pci",
+    "axdriver_crates/axdriver_virtio",
 ]
 
 [workspace.package]
@@ -72,6 +80,14 @@ axruntime = { path = "modules/axruntime" }
 axsync = { path = "modules/axsync" }
 axtask = { path = "modules/axtask" }
 axdma = { path = "modules/axdma" }
+
+# axdriver_crates for local development
+axdriver_base = { path = "axdriver_crates/axdriver_base" }
+axdriver_block = { path = "axdriver_crates/axdriver_block" }
+axdriver_net = { path = "axdriver_crates/axdriver_net" }
+axdriver_display = { path = "axdriver_crates/axdriver_display" }
+axdriver_pci = { path = "axdriver_crates/axdriver_pci" }
+axdriver_virtio = { path = "axdriver_crates/axdriver_virtio" }
 
 [profile.release]
 lto = true
