@@ -18,7 +18,7 @@ pub fn start_secondary_cpus(primary_cpu_id: usize) {
             "VisionFive 2: Starting secondary CPUs 1-{} (skipping CPU 0 S7 core)",
             SMP - 1
         );
-        for i in 1..SMP {
+        for i in 1..=SMP {
             if i != primary_cpu_id && logic_cpu_id < SMP - 1 {
                 let stack_top = virt_to_phys(VirtAddr::from(unsafe {
                     SECONDARY_BOOT_STACK[logic_cpu_id].as_ptr_range().end as usize
