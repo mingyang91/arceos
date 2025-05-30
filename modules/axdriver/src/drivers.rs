@@ -187,24 +187,34 @@ cfg_if::cfg_if! {
         impl DriverProbe for DwmacDriver {
             #[cfg(bus = "mmio")]
             fn probe_mmio(mmio_base: usize, mmio_size: usize) -> Option<AxDeviceEnum> {
-                // Check if this is a DWMAC device at the expected addresses
+                // Try both GMAC0 and GMAC1 for debugging
                 if mmio_base == 0x16030000 || mmio_base == 0x16040000 {
-                    info!("DWMAC device found at {:#x}", mmio_base);
+                    let gmac_name = if mmio_base == 0x16030000 { "GMAC0" } else { "GMAC1" };
+                    info!("DWMAC device found at {:#x} ({})", mmio_base, gmac_name);
 
                     // Convert physical address to virtual address and then to NonNull<u8>
                     let virt_addr = phys_to_virt(mmio_base.into()).as_usize();
                     let base_ptr = NonNull::new(virt_addr as *mut u8).unwrap();
 
-                    match axdriver_net::dwmac::DwmacNic::<DwmacHalImpl>::init(
+                    // Use StarFive-specific configuration with correct GMAC selection
+                    let starfive_config = axdriver_net::dwmac::StarfiveConfig {
+                        phy_interface: axdriver_net::dwmac::PhyInterfaceMode::Rgmii,
+                        gtxclk_dlychain: None,
+                        tx_use_rgmii_clk: false,
+                        phy_addr: 0, // Default PHY address for VisionFive 2
+                    };
+
+                    match axdriver_net::dwmac::DwmacNic::<DwmacHalImpl>::init_with_config(
                         base_ptr,
-                        mmio_size
+                        mmio_size,
+                        starfive_config
                     ) {
                         Ok(dwmac_nic) => {
-                            info!("DWMAC device initialized successfully");
+                            info!("DWMAC device ({}) initialized successfully", gmac_name);
                             return Some(AxDeviceEnum::from_net(dwmac_nic));
                         }
                         Err(e) => {
-                            error!("Failed to initialize DWMAC device: {:?}", e);
+                            error!("Failed to initialize DWMAC device ({}): {:?}", gmac_name, e);
                             return None;
                         }
                     }
@@ -212,5 +222,6 @@ cfg_if::cfg_if! {
                 None
             }
         }
+
     }
 }

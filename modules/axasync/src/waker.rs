@@ -121,7 +121,7 @@ mod timer_waker {
             // Get an event to process
             let event_to_process = {
                 let Some(mut timer_list_guard) = TIMER_LIST.try_lock() else {
-                    debug!("Another timer event is being processed");
+                    trace!("Another timer event is being processed");
                     return;
                 };
                 if let Some(timer_list) = timer_list_guard.as_mut() {

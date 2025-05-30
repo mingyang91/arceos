@@ -49,8 +49,8 @@ fn dma_alloc(size: usize) -> (DwmacPhysAddr, NonNull<u8>) {
     let layout = Layout::from_size_align(size, 16).unwrap(); // 16-byte alignment
     match unsafe { alloc_coherent(layout) } {
         Ok(dma_info) => {
-            log::debug!("DMA alloc: size={}, cpu_addr={:p}, bus_addr={:#x}", 
-                       size, dma_info.cpu_addr.as_ptr(), dma_info.bus_addr.as_u64());
+            // log::debug!("DMA alloc: size={}, cpu_addr={:p}, bus_addr={:#x}", 
+                    //    size, dma_info.cpu_addr.as_ptr(), dma_info.bus_addr.as_u64());
             (dma_info.bus_addr.as_u64() as usize, dma_info.cpu_addr)
         },
         Err(e) => {

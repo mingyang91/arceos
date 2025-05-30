@@ -31,18 +31,70 @@ kernel-aspace-size = "0x0000_003f_ffff_f000" # uint
 [devices]
 # MMIO regions with format (`base_paddr`, `size`).
 mmio-regions = [
-    [0x0c00_0000, 0x0400_0000], # PLIC
-    [0x1000_0000, 0x1_0000],    # UART0 (console)
-    [0x1001_0000, 0x1_0000],    # UART1
-    [0x1002_0000, 0x1_0000],    # UART2
-    [0x1003_0000, 0x1_0000],    # UART3
-    [0x1004_0000, 0x1_0000],    # UART4
-    [0x1005_0000, 0x1_0000],    # UART5
-    [0x1601_0000, 0x1_0000],    # SDIO0
-    [0x1602_0000, 0x1_0000],    # SDIO1
-    [0x1603_0000, 0x1_0000],    # DWMAC0 (ethernet@16030000)
-    [0x1604_0000, 0x1_0000],    # DWMAC1 (ethernet@16040000)
-    # [0x1304_0000, 0x1_0000],    # GPIO
+    [
+        0x0c00_0000,
+        0x0400_0000,
+    ], # PLIC
+    [
+        0x1000_0000,
+        0x1_0000,
+    ], # UART0 (console)
+    [
+        0x1001_0000,
+        0x1_0000,
+    ], # UART1
+    [
+        0x1002_0000,
+        0x1_0000,
+    ], # UART2
+    [
+        0x1003_0000,
+        0x1_0000,
+    ], # UART3
+    [
+        0x1004_0000,
+        0x1_0000,
+    ], # UART4
+    [
+        0x1005_0000,
+        0x1_0000,
+    ], # UART5
+    [
+        0x1302_0000,
+        0x1_0000,
+    ], # System Clock/Reset Controller (syscrg)
+    [
+        0x1303_0000,
+        0x1_0000,
+    ], # System Control Registers (syscon) - PHY interface config
+    [
+        0x1304_0000,
+        0x1_0000,
+    ], # GPIO
+    [
+        0x1601_0000,
+        0x1_0000,
+    ], # SDIO0
+    [
+        0x1602_0000,
+        0x1_0000,
+    ], # SDIO1
+    [
+        0x1603_0000,
+        0x1_0000,
+    ], # DWMAC0 (ethernet@16030000)
+    [
+        0x1604_0000,
+        0x1_0000,
+    ], # DWMAC1 (ethernet@16040000)
+    [
+        0x1700_0000,
+        0x1_0000,
+    ], # Always-On Clock/Reset Controller (aoncrg) - WORKING DRIVER REQUIREMENT
+    [
+        0x1703_0000,
+        0x1_0000,
+    ], # PMU (Power Management Unit)
 ] # [(uint, uint)]
 
 virtio-mmio-regions = [
