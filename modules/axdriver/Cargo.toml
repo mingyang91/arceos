@@ -60,3 +60,6 @@ axconfig = { workspace = true, optional = true }
 axdma = { workspace = true, optional = true }
 kspin = { version = "0.1", optional = true }
 lazyinit = { version = "0.2", optional = true }
+
+# StarFive VisionFive 2 Platform Access Crate
+jh7110-vf2-13b-pac = "0.2.0"

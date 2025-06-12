@@ -187,41 +187,28 @@ cfg_if::cfg_if! {
         impl DriverProbe for DwmacDriver {
             #[cfg(bus = "mmio")]
             fn probe_mmio(mmio_base: usize, mmio_size: usize) -> Option<AxDeviceEnum> {
-                // Try both GMAC0 and GMAC1 for debugging
+                // Try both GMAC0 and GMAC1 for tutorial
                 if mmio_base == 0x16030000 || mmio_base == 0x16040000 {
                     let gmac_name = if mmio_base == 0x16030000 { "GMAC0" } else { "GMAC1" };
-                    info!("DWMAC device found at {:#x} ({})", mmio_base, gmac_name);
+                    info!("DWMAC tutorial device found at {:#x} ({})", mmio_base, gmac_name);
 
-                    // Convert physical address to virtual address and then to NonNull<u8>
-                    let virt_addr = phys_to_virt(mmio_base.into()).as_usize();
-                    let base_ptr = NonNull::new(virt_addr as *mut u8).unwrap();
+                    let base_ptr = unsafe { NonNull::new_unchecked(phys_to_virt(mmio_base.into()).as_mut_ptr()) };
 
-                    // Use StarFive-specific configuration with correct GMAC selection
-                    let starfive_config = axdriver_net::dwmac::StarfiveConfig {
-                        phy_interface: axdriver_net::dwmac::PhyInterfaceMode::Rgmii,
-                        gtxclk_dlychain: None,
-                        tx_use_rgmii_clk: false,
-                        phy_addr: 0, // Default PHY address for VisionFive 2
-                    };
-
-                    match axdriver_net::dwmac::DwmacNic::<DwmacHalImpl>::init_with_config(
-                        base_ptr,
-                        mmio_size,
-                        starfive_config
-                    ) {
-                        Ok(dwmac_nic) => {
-                            info!("DWMAC device ({}) initialized successfully", gmac_name);
-                            return Some(AxDeviceEnum::from_net(dwmac_nic));
+                    // Initialize the DWMAC device (clock verification is now informational only)
+                    match axdriver_net::dwmac::DwmacNic::<DwmacHalImpl>::init(base_ptr, mmio_size) {
+                        Ok(device) => {
+                            info!("✅ DWMAC tutorial device ({}) initialized successfully!", gmac_name);
+                            Some(AxDeviceEnum::Net(device))
                         }
                         Err(e) => {
-                            error!("Failed to initialize DWMAC device ({}): {:?}", gmac_name, e);
-                            return None;
+                            error!("❌ DWMAC tutorial device ({}) initialization failed: {}", gmac_name, e);
+                            None
                         }
                     }
+                } else {
+                    None
                 }
-                None
             }
         }
-
     }
 }
