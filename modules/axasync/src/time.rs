@@ -56,7 +56,7 @@ impl Future for Sleep {
         } else {
             #[cfg(feature = "timer")]
             {
-                let mut this = self.get_mut();
+                let this = self.get_mut();
                 if let Some(ref waker) = this.registered_waker {
                     if !waker.will_wake(cx.waker()) {
                         this.registered_waker = Some(cx.waker().clone());
