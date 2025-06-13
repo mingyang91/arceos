@@ -276,10 +276,26 @@ impl DwmacHalImpl {
             syscrg.clk_gmac0_gtx().write(|w| w.clk_icg().set_bit());
             syscrg.clk_gmac0_ptp().write(|w| w.clk_icg().set_bit());
             syscrg.clk_gmac_phy().write(|w| w.clk_icg().set_bit());
+            // 添加缺失的SYSCRG时钟
+            syscrg
+                .clk_gmac5_axi64_rx()
+                .write(|w| w.dly_chain_sel().bits(0x0));
+            syscrg
+                .clk_gmac5_axi64_rxi()
+                .write(|w| w.clk_polarity().set_bit());
+            syscrg.clk_noc_stg_axi().write(|w| w.clk_icg().set_bit());
+            syscrg.clk_gmac_src().write(|w| w.clk_divcfg().bits(2));
+
+            // 可选：GMAC0 GTXC时钟（用于时序调整）
+            syscrg
+                .clk_gmac0_gtxclk()
+                .write(|w| w.dly_chain_sel().bits(0x0));
 
             aoncrg.clk_ahb_gmac5().write(|w| w.clk_icg().set_bit());
             aoncrg.clk_axi_gmac5().write(|w| w.clk_icg().set_bit());
-            aoncrg.clk_gmac5_axi64_tx().write(|w| w.bits(0x8000_0000));
+            aoncrg
+                .clk_gmac5_axi64_tx()
+                .write(|w| w.bits(0x8000_0000).clk_mux_sel().bits(0));
 
             // GMAC1 clocks
             let gmac1_ahb = syscrg.clk_gmac5_axi64_ahb().read();
