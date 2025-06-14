@@ -129,8 +129,8 @@ impl<'a> AcceptFuture<'a> {
 impl<'a> Future for AcceptFuture<'a> {
     type Output = AxResult<TcpSocket>;
 
-    fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
-        // trace!("accept poll");
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        trace!("accept poll");
         let this = self.get_mut();
         if !this.init {
             this.init = true;
@@ -139,10 +139,13 @@ impl<'a> Future for AcceptFuture<'a> {
             }
         }
 
+        SOCKET_SET.poll_interfaces();
         let local_port = this.socket.local_addr().unwrap().port();
         let (handle, (local_addr, peer_addr)) = match LISTEN_TABLE.accept(local_port) {
             Ok(res) => res,
-            Err(e) if e == AxError::WouldBlock => return Poll::Pending,
+            Err(e) if e == AxError::WouldBlock => {
+                return Poll::Pending;
+            }
             Err(e) => return Poll::Ready(ax_err!(e)),
         };
 

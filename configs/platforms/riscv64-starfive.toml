@@ -129,7 +129,7 @@ pci-ranges = [
 
 
 # Timer interrupt frequency in Hz.
-timer-frequency = 4_000_000 # uint
+timer-frequency = 24_000_000 # uint
 
 # VisionFive 2 doesn't use goldfish RTC
 # rtc-paddr = 0x10_1000 # uint

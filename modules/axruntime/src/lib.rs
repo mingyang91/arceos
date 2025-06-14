@@ -245,6 +245,8 @@ fn init_interrupt() {
 
     #[percpu::def_percpu]
     static NEXT_DEADLINE: u64 = 0;
+    // WHY???
+    unsafe { NEXT_DEADLINE.write_current_raw(0) };
 
     fn update_timer() {
         let now_ns = axhal::time::monotonic_time_nanos();
