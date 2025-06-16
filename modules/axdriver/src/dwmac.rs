@@ -69,9 +69,12 @@ impl DwmacHal for DwmacHalImpl {
         log::info!("   ✅ Skipping reset operations");
         log::info!("   ✅ Trusting U-Boot's GMAC/PHY/MDIO setup");
 
-        Self::please_do_not_use_this_function_set_clocks();
         // Just do a quick status check without changing anything
         Self::print_preserved_status();
+
+        Self::please_do_not_use_this_function_set_clocks();
+
+        Self::verify_pll2_status_with_pac();
 
         log::info!("✅ Platform configuration preserved - ready for DWMAC operation");
         log::info!("💡 TIP: U-Boot has already initialized everything - just trust it!");
@@ -263,6 +266,37 @@ impl DwmacHalImpl {
             // Fall back to manual register access for GMAC clocks
             log::info!("   🔧 GMAC clocks (manual register access):");
 
+            // Base Clock
+            syscrg.clk_gmac_src().write(|w| w.clk_divcfg().bits(2));
+            syscrg.clk_noc_stg_axi().write(|w| w.clk_icg().set_bit());
+
+            // GMAC0 Clocks
+            syscrg.clk_gmac0_gtx().write(|w| w.clk_icg().set_bit());
+            syscrg
+                .clk_gmac5_axi64_ptp()
+                .write(|w| w.clk_icg().set_bit());
+            syscrg.clk_gmac_phy().write(|w| w.clk_icg().set_bit());
+            syscrg
+                .clk_gmac0_gtxclk()
+                .write(|w| w.dly_chain_sel().bits(0xa));
+
+            // AON CRG Clocks
+            aoncrg
+                .clk_gmac0_rmii_rtx()
+                .write(|w| w.clk_divcfg().variant(2));
+            aoncrg.clk_ahb_gmac5().write(|w| w.clk_icg().set_bit());
+            aoncrg.clk_axi_gmac5().write(|w| w.clk_icg().set_bit());
+
+            // GMAC1 Clocks
+            syscrg.clk_gmac1_gtx().write(|w| w.clk_divcfg().variant(10)); // Default
+            syscrg
+                .clk_gmac1_rmii_rtx()
+                .write(|w| w.clk_divcfg().variant(2)); // Default
+            syscrg
+                .clk_gmac1_gtxclk()
+                .write(|w| w.dly_chain_sel().bits(1));
+
+            // Shared Clocks
             syscrg
                 .clk_gmac5_axi64_ahb()
                 .write(|w| w.clk_icg().set_bit());
@@ -272,30 +306,33 @@ impl DwmacHalImpl {
             syscrg
                 .clk_gmac5_axi64_ptp()
                 .write(|w| w.clk_icg().set_bit());
+
+            // TX/RX Clocks
             syscrg.clk_gmac5_axi64_tx().write(|w| w.clk_icg().set_bit());
-            syscrg.clk_gmac0_gtx().write(|w| w.clk_icg().set_bit());
-            syscrg.clk_gmac0_ptp().write(|w| w.clk_icg().set_bit());
-            syscrg.clk_gmac_phy().write(|w| w.clk_icg().set_bit());
-            // 添加缺失的SYSCRG时钟
             syscrg
                 .clk_gmac5_axi64_rx()
-                .write(|w| w.dly_chain_sel().bits(0x0));
+                .write(|w| w.dly_chain_sel().variant(1));
+            syscrg
+                .clk_gmac5_axi64_txi()
+                .write(|w| w.clk_polarity().set_bit());
             syscrg
                 .clk_gmac5_axi64_rxi()
                 .write(|w| w.clk_polarity().set_bit());
-            syscrg.clk_noc_stg_axi().write(|w| w.clk_icg().set_bit());
-            syscrg.clk_gmac_src().write(|w| w.clk_divcfg().bits(2));
 
-            // 可选：GMAC0 GTXC时钟（用于时序调整）
-            syscrg
-                .clk_gmac0_gtxclk()
-                .write(|w| w.dly_chain_sel().bits(0x0));
+            // syscrg.clk_gmac5_axi64_tx().write(|w| w.clk_icg().set_bit());
+            // syscrg.clk_gmac0_ptp().write(|w| w.clk_icg().set_bit());
+            // // 添加缺失的SYSCRG时钟
+            // syscrg
+            //     .clk_gmac5_axi64_rx()
+            //     .write(|w| w.dly_chain_sel().bits(0x0));
+            // syscrg
+            //     .clk_gmac5_axi64_rxi()
+            //     .write(|w| w.clk_polarity().set_bit());
 
-            aoncrg.clk_ahb_gmac5().write(|w| w.clk_icg().set_bit());
-            aoncrg.clk_axi_gmac5().write(|w| w.clk_icg().set_bit());
-            aoncrg
-                .clk_gmac5_axi64_tx()
-                .write(|w| w.bits(0x8000_0000).clk_mux_sel().bits(0));
+            // // 可选：GMAC0 GTXC时钟（用于时序调整）
+            // aoncrg
+            //     .clk_gmac5_axi64_tx()
+            //     .write(|w| w.bits(0x8000_0000).clk_mux_sel().bits(0));
 
             // GMAC1 clocks
             let gmac1_ahb = syscrg.clk_gmac5_axi64_ahb().read();
@@ -344,25 +381,22 @@ impl DwmacHalImpl {
                 );
             }
 
-            syscrg
-                .soft_rst_addr_sel_2()
-                .modify(|_, w| w.bits(0xffe5afc4));
+            // syscrg
+            //     .soft_rst_addr_sel_2()
+            //     .modify(|_, w| w.bits(0xffe5afc4));
 
-            syscrg
-                .soft_rst_addr_sel_2()
-                .modify(|_, w| w.bits(0xffe5afc0));
+            // syscrg
+            //     .soft_rst_addr_sel_2()
+            //     .modify(|_, w| w.bits(0xffe5afc0));
 
-            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe1));
-            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe0));
-            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe2));
-            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe3));
+            // aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe1));
+            // aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe0));
+            // aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe2));
+            // aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe3));
 
-            syscrg
-                .clk_gmac1_gtx()
-                .write(|w| w.clk_divcfg().variant(0x8));
-            syscrg
-                .clk_gmac1_rmii_rtx()
-                .write(|w| w.clk_divcfg().variant(0x1));
+            // syscrg
+            //     .clk_gmac1_gtx()
+            //     .write(|w| w.clk_divcfg().variant(0x8));
         }
     }
 
