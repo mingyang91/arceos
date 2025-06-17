@@ -362,7 +362,7 @@ impl DwmacHalImpl {
                 .write(|w| w.clk_divcfg().variant(0x8));
             syscrg
                 .clk_gmac1_rmii_rtx()
-                .write(|w| w.clk_divcfg().variant(0x1));
+                .write(|w| w.clk_divcfg().variant(0x2));
         }
     }
 
