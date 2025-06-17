@@ -259,27 +259,6 @@ fn init_interrupt() {
         axhal::time::set_oneshot_timer(deadline);
     }
 
-    static COUNTER: AtomicUsize = AtomicUsize::new(0);
-
-    axhal::irq::register_handler(6, || {
-        trace!("IRQ 6 handler called");
-    });
-    axhal::irq::register_handler(5, || {
-        trace!("IRQ 5 handler called");
-    });
-    axhal::irq::register_handler(7, || {
-        trace!("IRQ 7 handler called");
-    });
-    axhal::irq::register_handler(77, || {
-        trace!("IRQ 77 handler called");
-    });
-    axhal::irq::register_handler(76, || {
-        trace!("IRQ 76 handler called");
-    });
-    axhal::irq::register_handler(78, || {
-        trace!("IRQ 78 handler called");
-    });
-
     axhal::irq::register_handler(TIMER_IRQ_NUM, || {
         // trace!("timer IRQ handler called");
 
@@ -289,65 +268,6 @@ fn init_interrupt() {
         axtask::on_timer_tick();
         #[cfg(feature = "axasync-timer")]
         axasync::check_timer_events();
-
-        let base_addr: usize = 0xFFFF_FFC0_1604_0000;
-        let plic_addr: usize = 0xFFFF_FFC0_0c00_0000;
-        let mac_dma_chan0_debug_status =
-            unsafe { read_volatile((base_addr + 0x1100 + 0x64) as *const u32) };
-        let tx_fsm = mac_dma_chan0_debug_status & 0x7;
-        let rx_fsm = (mac_dma_chan0_debug_status >> 16) & 0x7;
-        if tx_fsm != 0 || rx_fsm != 0 {
-            info!(
-                "mac_dma_chan0_debug_status: {:#x}, tx_fsm: {:#x}, rx_fsm: {:#x}",
-                mac_dma_chan0_debug_status, tx_fsm, rx_fsm
-            );
-        }
-
-        if COUNTER.fetch_add(1, Ordering::Relaxed) % 100 == 0 {
-            for i in [5, 6, 7, 76, 77, 78] {
-                let priority = unsafe { read_volatile((plic_addr + 0x4 + i * 4) as *const u32) };
-                trace!("priority of IRQ {}: {:#x}", i, priority);
-            }
-
-            let enable_reg = unsafe { read_volatile((plic_addr + 0x2100) as *const u32) };
-            trace!("plic enable_reg: {:#x}", enable_reg);
-
-            let pending_reg = unsafe { read_volatile((plic_addr + 0x1000) as *const u32) };
-            trace!("plic pending_reg: {:#x}", pending_reg);
-
-            let debug_status0 = unsafe { read_volatile((base_addr + 0x1000) as *const u32) };
-            trace!("debug_status0: {:#x}", debug_status0);
-            let debug_status1 = unsafe { read_volatile((base_addr + 0x1004) as *const u32) };
-            trace!("debug_status1: {:#x}", debug_status1);
-            let debug_status2 = unsafe { read_volatile((base_addr + 0x1008) as *const u32) };
-            trace!("debug_status2: {:#x}", debug_status2);
-
-            let mac_dma_chan0_intr_status =
-                unsafe { read_volatile((base_addr + 0x1100 + 0x60) as *const u32) };
-            trace!(
-                "mac_dma_chan0_intr_status: {:#x}",
-                mac_dma_chan0_intr_status
-            );
-
-            let mac_dma_chan0_debug_status =
-                unsafe { read_volatile((base_addr + 0x1100 + 0x64) as *const u32) };
-            let tx_fsm = mac_dma_chan0_debug_status & 0x7;
-            let rx_fsm = (mac_dma_chan0_debug_status >> 16) & 0x7;
-            if tx_fsm != 0 || rx_fsm != 0 {
-                info!(
-                    "mac_dma_chan0_debug_status: {:#x}, tx_fsm: {:#x}, rx_fsm: {:#x}",
-                    mac_dma_chan0_debug_status, tx_fsm, rx_fsm
-                );
-            } else {
-                trace!(
-                    "mac_dma_chan0_debug_status: {:#x}, tx_fsm: {:#x}, rx_fsm: {:#x}",
-                    mac_dma_chan0_debug_status, tx_fsm, rx_fsm
-                );
-            }
-
-            let dma_rx_ctrl = unsafe { read_volatile((base_addr + 0x1100 + 0x08) as *const u32) };
-            trace!("dma_rx_ctrl: {:#x}", dma_rx_ctrl);
-        }
     });
 
     // Enable IRQs before starting app

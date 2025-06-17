@@ -188,7 +188,7 @@ cfg_if::cfg_if! {
             #[cfg(bus = "mmio")]
             fn probe_mmio(mmio_base: usize, mmio_size: usize) -> Option<AxDeviceEnum> {
                 // Try both GMAC0 and GMAC1 for tutorial
-                if mmio_base == 0x16030000 || mmio_base == 0x16040000 {
+                if mmio_base == 0x16040000 {
                     let gmac_name = if mmio_base == 0x16030000 { "GMAC0" } else { "GMAC1" };
                     info!("DWMAC tutorial device found at {:#x} ({})", mmio_base, gmac_name);
 

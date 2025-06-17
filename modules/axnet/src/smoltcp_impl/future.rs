@@ -130,7 +130,6 @@ impl<'a> Future for AcceptFuture<'a> {
     type Output = AxResult<TcpSocket>;
 
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-        // trace!("accept poll");
         let this = self.get_mut();
         if !this.init {
             this.init = true;
