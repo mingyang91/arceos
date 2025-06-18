@@ -5,7 +5,8 @@
 
 use axdma::{BusAddr, DMAInfo, alloc_coherent, dealloc_coherent};
 use axdriver_net::dwmac::{DwmacHal, PhysAddr as DwmacPhysAddr};
-use axhal::mem::{phys_to_virt, virt_to_phys};
+use axdriver_virtio::PhysAddr;
+use axhal::mem::{MemoryAddr, phys_to_virt, virt_to_phys};
 use core::sync::atomic::Ordering;
 use core::{alloc::Layout, ptr::NonNull, sync::atomic::AtomicBool};
 use jh7110_vf2_13b_pac::{self as pac, aon_pinctrl::gmac0_mdio::GMAC0_MDIO_SPEC};
@@ -16,6 +17,25 @@ pub struct DwmacHalImpl;
 static INITIALIZED: AtomicBool = AtomicBool::new(false);
 
 impl DwmacHal for DwmacHalImpl {
+    fn cache_flush_range(start: NonNull<u8>, end: NonNull<u8>) {
+        const CCACHE_BASE: usize = 0x0201_0000;
+        const FLUSH64_OFFSET: usize = 0x200;
+        const LINE_SIZE: usize = 64;
+
+        let mut addr = start.as_ptr() as usize & !(LINE_SIZE - 1);
+
+        let flush_addr = phys_to_virt(CCACHE_BASE.into())
+            .add(FLUSH64_OFFSET)
+            .as_mut_ptr() as *mut u32;
+        let end_addr = end.as_ptr() as usize;
+        while addr < end_addr {
+            unsafe {
+                core::ptr::write_volatile(flush_addr, addr as u32);
+                addr += LINE_SIZE;
+            }
+        }
+    }
+
     fn dma_alloc(size: usize) -> (DwmacPhysAddr, NonNull<u8>) {
         let layout = Layout::from_size_align(size, 16).unwrap();
         match unsafe { alloc_coherent(layout) } {
@@ -69,7 +89,8 @@ impl DwmacHal for DwmacHalImpl {
         log::info!("   ✅ Skipping reset operations");
         log::info!("   ✅ Trusting U-Boot's GMAC/PHY/MDIO setup");
 
-        Self::please_do_not_use_this_function_set_clocks();
+        // Self::setup_clocks();
+        Self::init_clocks();
         // Just do a quick status check without changing anything
         Self::print_preserved_status();
 
@@ -81,6 +102,99 @@ impl DwmacHal for DwmacHalImpl {
 }
 
 impl DwmacHalImpl {
+    /// 这部分 syscrg 和 aoncrg 的值是用 md 命令从 uboot 中 dump 出来的
+    /// 但是 uboot 仅在执行网络命令的时候才会启用网卡，执行完毕后会关闭网卡
+    /// 所以有效值无法在 uboot 中获取
+    fn setup_clocks() {
+        let dump = r"
+17000000: 00000004 01000000 80000000 80000000  ................
+17000010: 00000002 81000000 40000000 00000020  ...........@ ...
+17000020: 40000000 80000000 80000000 000002ee  ...@............
+17000030: 00000000 00000000 000000e3 0000001c  ................
+13020000: 01000000 00000001 00000002 00000000  ................
+13020010: 01000002 01000000 00000003 00000003  ................
+13020020: 00000002 80000000 80000000 00000004  ................
+13020030: 80000000 00000002 00000002 00000002  ................
+13020040: 00000002 0000000c 00000000 00000000  ................
+13020050: 00000002 00000002 80000014 80000010  ................
+13020060: 8000000c 80000000 80000000 80000000  ................
+13020070: 80000000 80000000 80000000 00000006  ................
+13020080: 80000000 80000000 80000000 80000000  ................
+13020090: 80000000 80000000 80000000 80000000  ................
+130200a0: 00000002 00000002 00000002 01000000  ................
+130200b0: 80000000 00000003 00000000 00000000  ................
+130200c0: 00000000 0000000c 00000000 00000000  ................
+130200d0: 00000000 80000000 00000003 00000002  ................
+130200e0: 80000000 80000000 00000000 00000002  ................
+130200f0: 00000000 00000000 00000000 00000000  ................
+13020100: 00000002 00000006 00000000 00000006  ................
+13020110: 00000000 00000003 00000000 00000003  ................
+13020120: 00000002 00000000 80000000 80000000  ................
+13020130: 00000000 00000005 00000000 00000005  ................
+13020140: 00000005 00000000 00000000 80000000  ................
+13020150: 80000000 80000000 80000000 80000000  ................
+13020160: 80000000 0000000a 81000000 80000000  ................
+13020170: 80000000 80000002 80000002 00000008  ................
+13020180: 80000000 80000000 80000000 00000002  ................
+13020190: 0000000f 00000002 8000000a 00000020  ............ ...
+130201a0: 40000000 81000000 40000000 80000020  ...@.......@ ...
+130201b0: 80000008 8000000a 0000000a 80000020  ............ ...
+130201c0: 80000000 80000000 80000000 00000000  ................
+130201d0: 00000018 00000008 00000000 00000018  ................
+130201e0: 00000008 00000000 80000000 80000000  ................
+130201f0: 80000000 80000000 80000000 80000000  ................
+13020200: 80000000 00000000 00000018 00000000  ................
+13020210: 00000000 00000000 00000000 00000000  ................
+13020220: 00000000 00000000 00000000 00000000  ................
+13020230: 00000000 00000000 00000000 80000000  ................
+13020240: 00000000 80000000 80000000 00000000  ................
+13020250: 00000000 00000000 00000000 00000000  ................
+13020260: 00000a00 00000000 00000a00 00000000  ................
+13020270: 00000a00 00000000 0000000c 00000000  ................
+13020280: 00000000 00000000 00000004 40000000  ...............@
+13020290: 00000040 00000000 40000000 00000000  @..........@....
+130202a0: 00000000 00000004 40000000 00000040  ...........@@...
+130202b0: 00000000 40000000 00000000 00000000  .......@........
+130202c0: 00000004 40000000 00000040 00000000  .......@@.......
+130202d0: 40000000 00000000 00000008 00000000  ...@............
+130202e0: 00000000 00000000 00000001 00000000  ................
+130202f0: 40000000 00000004 00600000 07e7fe00  ...@......`.....
+13020300: ffe5efcc 1c1fffff ff9fffff f80001ff  ................
+13020310: 001a1033 23e00000 00000000 00000000  3......#........
+";
+
+        for line in dump.lines() {
+            if line.trim().is_empty() {
+                continue;
+            }
+
+            let (addr, tail) = line.split_once(':').unwrap();
+            let addr = u32::from_str_radix(addr.trim(), 16).unwrap();
+            let val1 = u32::from_str_radix(&tail[1..9], 16).unwrap();
+            let val2 = u32::from_str_radix(&tail[10..18], 16).unwrap();
+            let val3 = u32::from_str_radix(&tail[19..27], 16).unwrap();
+            let val4 = u32::from_str_radix(&tail[28..36], 16).unwrap();
+
+            log::trace!("    🔍 {:#x}: {:#x}", addr, val1);
+            log::trace!("    🔍 {:#x}: {:#x}", addr + 4, val2);
+            log::trace!("    🔍 {:#x}: {:#x}", addr + 8, val3);
+            log::trace!("    🔍 {:#x}: {:#x}", addr + 12, val4);
+            unsafe {
+                Self::write_reg(addr as usize, val1);
+                Self::write_reg(addr as usize + 4, val2);
+                Self::write_reg(addr as usize + 8, val3);
+                Self::write_reg(addr as usize + 12, val4);
+            }
+        }
+    }
+
+    fn write_reg(paddr: PhysAddr, val: u32) {
+        unsafe {
+            let vaddr = <Self as DwmacHal>::mmio_phys_to_virt(paddr, 0x1000);
+            core::ptr::write_volatile(vaddr.as_ptr() as *mut u32, val);
+        }
+    }
+
     /// Print status without modifying any registers
     fn print_preserved_status() {
         log::info!("   📊 Current hardware status (read-only, preserved from U-Boot):");
@@ -236,7 +350,7 @@ impl DwmacHalImpl {
 
     /// Verify that U-Boot has properly enabled the GMAC clocks using JH7110 PAC
     /// This demonstrates both PAC usage and its real-world limitations
-    fn please_do_not_use_this_function_set_clocks() {
+    fn init_clocks() {
         log::info!("🔍 Verifying StarFive GMAC clock configuration (PAC + manual)...");
 
         // Use PAC for available registers
@@ -273,18 +387,23 @@ impl DwmacHalImpl {
                 .clk_gmac5_axi64_ptp()
                 .write(|w| w.clk_icg().set_bit());
             syscrg.clk_gmac5_axi64_tx().write(|w| w.clk_icg().set_bit());
+            syscrg
+                .clk_gmac5_axi64_txi()
+                .write(|w| w.bits(0x8000_0000).clk_polarity().set_bit());
             syscrg.clk_gmac0_gtx().write(|w| w.clk_icg().set_bit());
             syscrg.clk_gmac0_ptp().write(|w| w.clk_icg().set_bit());
             syscrg.clk_gmac_phy().write(|w| w.clk_icg().set_bit());
             // 添加缺失的SYSCRG时钟
             syscrg
                 .clk_gmac5_axi64_rx()
-                .write(|w| w.dly_chain_sel().bits(0x0));
+                .write(|w| w.bits(0x8000_0000).dly_chain_sel().bits(0x0));
             syscrg
                 .clk_gmac5_axi64_rxi()
-                .write(|w| w.clk_polarity().set_bit());
+                .write(|w| w.bits(0x8000_0000).clk_polarity().set_bit());
             syscrg.clk_noc_stg_axi().write(|w| w.clk_icg().set_bit());
-            syscrg.clk_gmac_src().write(|w| w.clk_divcfg().bits(2));
+            syscrg
+                .clk_gmac_src()
+                .write(|w| w.bits(0x8000_0000).clk_divcfg().bits(3));
 
             // 可选：GMAC0 GTXC时钟（用于时序调整）
             syscrg
@@ -359,10 +478,10 @@ impl DwmacHalImpl {
 
             syscrg
                 .clk_gmac1_gtx()
-                .write(|w| w.clk_divcfg().variant(0x8));
+                .write(|w| w.bits(0x8000_0000).clk_divcfg().variant(0x8));
             syscrg
                 .clk_gmac1_rmii_rtx()
-                .write(|w| w.clk_divcfg().variant(0x2));
+                .write(|w| w.bits(0x8000_0000).clk_divcfg().variant(0x5));
         }
     }
 
