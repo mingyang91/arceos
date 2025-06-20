@@ -136,3 +136,20 @@ The axasync module can be configured with the following Cargo features:
 - `multitask`: Enable multi-task support (requires axtask)
 - `irq`: Enable interrupt handling support
 - `timer`: Enable timer functionality for timeouts and sleep operations 
+
+
+## Utils
+run async server example:
+```bash
+make A=examples/async_server ARCH=riscv64 PLATFORM=riscv64-qemu-virt LOG=debug NET=y SMP=1 BUS=mmio FEATURES=net,bus-mmio APP_FEATURES=default run
+```
+
+curl:
+```bash
+curl http://127.0.0.1:5555 -v
+```
+
+wrk:
+```bash
+wrk -d10s -c16 http://127.0.0.1:5555/
+```
