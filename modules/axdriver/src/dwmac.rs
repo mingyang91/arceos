@@ -84,8 +84,8 @@ impl DwmacHal for DwmacHalImpl {
         }
 
         // Self::setup_clocks();
-        // Self::init_clocks();
-        Self::set_clocks_linus();
+        Self::init_clocks();
+        // Self::set_clocks_linus();
         // Just do a quick status check without changing anything
         Self::print_preserved_status();
 
@@ -638,7 +638,7 @@ impl DwmacHalImpl {
             // 可选：GMAC0 GTXC时钟（用于时序调整）
             syscrg
                 .clk_gmac0_gtxclk()
-                .write(|w| w.dly_chain_sel().bits(0x0));
+                .write(|w| w.dly_chain_sel().bits(0x4));
 
             aoncrg.clk_ahb_gmac5().write(|w| w.clk_icg().set_bit());
             aoncrg.clk_axi_gmac5().write(|w| w.clk_icg().set_bit());
