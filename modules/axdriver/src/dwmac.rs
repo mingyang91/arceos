@@ -16,6 +16,10 @@ pub struct DwmacHalImpl;
 
 static INITIALIZED: AtomicBool = AtomicBool::new(false);
 
+fn mb() {
+    unsafe { core::arch::asm!("fence iorw, iorw") };
+}
+
 impl DwmacHal for DwmacHalImpl {
     fn cache_flush_range(start: NonNull<u8>, end: NonNull<u8>) {
         const CCACHE_BASE: usize = 0x0201_0000;
@@ -28,6 +32,7 @@ impl DwmacHal for DwmacHalImpl {
             .add(FLUSH64_OFFSET)
             .as_mut_ptr() as *mut u32;
         let end_addr = end.as_ptr() as usize;
+        mb();
         while addr < end_addr {
             unsafe {
                 core::ptr::write_volatile(flush_addr, addr as u32);
@@ -608,6 +613,9 @@ impl DwmacHalImpl {
             log::info!("   🔧 GMAC clocks (manual register access):");
 
             syscrg
+                .clk_gmac1_gtxclk()
+                .write(|w| w.bits(0x8000_0000).dly_chain_sel().bits(0x20));
+            syscrg
                 .clk_gmac5_axi64_ahb()
                 .write(|w| w.clk_icg().set_bit());
             syscrg
@@ -615,7 +623,7 @@ impl DwmacHalImpl {
                 .write(|w| w.clk_icg().set_bit());
             syscrg
                 .clk_gmac5_axi64_ptp()
-                .write(|w| w.clk_icg().set_bit());
+                .write(|w| w.clk_icg().set_bit().clk_divcfg().variant(0xa));
             syscrg.clk_gmac5_axi64_tx().write(|w| w.clk_icg().set_bit());
             syscrg
                 .clk_gmac5_axi64_txi()
@@ -626,10 +634,10 @@ impl DwmacHalImpl {
             // 添加缺失的SYSCRG时钟
             syscrg
                 .clk_gmac5_axi64_rx()
-                .write(|w| w.bits(0x8000_0000).dly_chain_sel().bits(0x0));
+                .write(|w| w.bits(0x8000_0000).dly_chain_sel().bits(0x20));
             syscrg
                 .clk_gmac5_axi64_rxi()
-                .write(|w| w.bits(0x8000_0000).clk_polarity().set_bit());
+                .write(|w| w.clk_polarity().set_bit());
             syscrg.clk_noc_stg_axi().write(|w| w.clk_icg().set_bit());
             syscrg
                 .clk_gmac_src()
@@ -645,6 +653,12 @@ impl DwmacHalImpl {
             aoncrg
                 .clk_gmac5_axi64_tx()
                 .write(|w| w.bits(0x8000_0000).clk_mux_sel().bits(0));
+            aoncrg
+                .clk_gmac5_axi64_rx()
+                .write(|w| w.dly_chain_sel().bits(0x20));
+            aoncrg
+                .clk_gmac5_axi64_rxi()
+                .write(|w| w.clk_polarity().set_bit());
 
             // GMAC1 clocks
             let gmac1_ahb = syscrg.clk_gmac5_axi64_ahb().read();
@@ -708,10 +722,10 @@ impl DwmacHalImpl {
 
             syscrg
                 .clk_gmac1_gtx()
-                .write(|w| w.bits(0x8000_0000).clk_divcfg().variant(0x8));
+                .write(|w| w.clk_divcfg().variant(0xc));
             syscrg
                 .clk_gmac1_rmii_rtx()
-                .write(|w| w.bits(0x8000_0000).clk_divcfg().variant(0x5));
+                .write(|w| w.clk_divcfg().variant(0x1));
         }
     }
 
