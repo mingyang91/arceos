@@ -8,7 +8,6 @@ use axdriver_net::dwmac::{DwmacHal, PhysAddr as DwmacPhysAddr};
 use axdriver_virtio::PhysAddr;
 use axhal::mem::{MemoryAddr, phys_to_virt, virt_to_phys};
 use core::sync::atomic::Ordering;
-use core::time::Duration;
 use core::{alloc::Layout, ptr::NonNull, sync::atomic::AtomicBool};
 use jh7110_vf2_13b_pac::{self as pac, aon_pinctrl::gmac0_mdio::GMAC0_MDIO_SPEC};
 
@@ -708,27 +707,19 @@ impl DwmacHalImpl {
                 );
             }
 
-            log::info!("   Resetting...");
             syscrg
                 .soft_rst_addr_sel_2()
                 .modify(|_, w| w.bits(0xffe5afc4));
-            Self::wait_until(Duration::from_millis(10));
 
             syscrg
                 .soft_rst_addr_sel_2()
                 .modify(|_, w| w.bits(0xffe5afc0));
-            Self::wait_until(Duration::from_millis(10));
 
             aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe1));
-            Self::wait_until(Duration::from_millis(10));
             aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe0));
-            Self::wait_until(Duration::from_millis(10));
             aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe2));
-            Self::wait_until(Duration::from_millis(10));
             aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe3));
-            Self::wait_until(Duration::from_millis(10));
 
-            log::info!("   Setting GMAC1 GTX and RMII RTX clocks...");
             syscrg
                 .clk_gmac1_gtx()
                 .write(|w| w.clk_divcfg().variant(0xc));
