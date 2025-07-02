@@ -1,0 +1,1488 @@
+python -m serial.tools.miniterm --eol LF --dtr 0 --rts 0 --filter direct /dev/tty.usbserial-214201 115200
+--- forcing DTR inactive
+--- forcing RTS inactive
+--- Miniterm on /dev/tty.usbserial-214201  115200,8,N,1 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+
+U-Boot SPL 2025.07-rc5-00012-g7027b445cc0b-dirty (Jul 02 2025 - 20:25:54 +0800)
+jh7110_reset_trigger: deasserting reset 81 (reg=0x13020300, value=0xffe5efcc)
+clk_request(dev=8150c78, clk=8156598)
+clk_enable(clk=8156598 name=clock-controller@13020000)
+clk_enable(clk=8153200 name=apb0)
+clk_enable(clk=8153100 name=apb_bus)
+clk_enable(clk=8152e00 name=stg_axiahb)
+clk_enable(clk=8152d00 name=axi_cfg0)
+clk_enable(clk=8152ac0 name=bus_root)
+clk_enable(clk=8152400 name=pll2_out)
+clk_gate_endisable: enabling clock apb0 (reg=0x13020030, bit=31, set=1)
+clk_gate_endisable: enabling clock i2c5_apb (reg=0x1302023c, bit=31, set=1)
+clk_set_defaults(pinctrl@13040000)
+clk_set_default_parents: could not read assigned-clock-parents for 8150f38
+clk_set_defaults(i2c5-0)
+clk_set_default_parents: could not read assigned-clock-parents for 8151000
+clk_set_defaults(i2c@12050000)
+clk_set_default_parents: could not read assigned-clock-parents for 8150910
+clk_get_rate(clk=8156598)
+clk_get_rate(clk=81561c0)
+clk_get_parent_rate(clk=81561c0)
+clk_get_parent(clk=81561c0)
+clk_get_rate(clk=8153200)
+clk_get_parent_rate(clk=8153200)
+clk_get_parent(clk=8153200)
+clk_get_rate(clk=8153100)
+clk_get_parent_rate(clk=8153100)
+clk_get_parent(clk=8153100)
+clk_get_rate(clk=8152e00)
+clk_get_parent_rate(clk=8152e00)
+clk_get_parent(clk=8152e00)
+clk_get_rate(clk=8152d00)
+clk_get_parent_rate(clk=8152d00)
+clk_get_parent(clk=8152d00)
+clk_get_rate(clk=8152ac0)
+clk_get_parent_rate(clk=8152ac0)
+clk_get_parent(clk=8152ac0)
+clk_get_rate(clk=8152400)
+clk_get_parent_rate(clk=8152400)
+clk_get_parent(clk=8152400)
+clk_set_defaults(eeprom@50)
+clk_set_default_parents: could not read assigned-clock-parents for 81509d8
+clk_set_defaults(dmc@15700000)
+clk_set_default_parents: could not read assigned-clock-parents for 8151c78
+jh7110_reset_trigger: deasserting reset 38 (reg=0x130202fc, value=0x7e7fe00)
+jh7110_reset_trigger: deasserting reset 39 (reg=0x130202fc, value=0x7e7fe00)
+jh7110_reset_trigger: deasserting reset 40 (reg=0x130202fc, value=0x7e7fe00)
+clk_request(dev=8150c78, clk=8156760)
+clk_set_rate(clk=8156760, rate=1066000000)
+clk_set_rate(clk=8152680, rate=1066000000)
+clk_get_parent_rate(clk=8152680)
+clk_get_parent(clk=8152680)
+clk_get_rate(clk=8152540)
+clk_get_parent_rate(clk=8152540)
+clk_get_parent(clk=8152540)
+clk_get_rate(clk=8152180)
+clk_get_parent_rate(clk=8152180)
+clk_get_parent(clk=8152180)
+clk_divider_set_rate: set clock cpu_core to rate 1066000000 (reg=0x13020004, val=0x00000001)
+clk_get_rate(clk=8152680)
+clk_get_parent_rate(clk=8152680)
+clk_get_parent(clk=8152680)
+DDR version: dc2e84f0.
+>>SPL: board_init_r()
+spl_init
+Trying to boot from MMC2
+clk_set_defaults(pinctrl@13040000)
+clk_set_default_parents: could not read assigned-clock-parents for 8156680
+clk_set_defaults(mmc1-0)
+clk_set_default_parents: could not read assigned-clock-parents for 8151260
+clk_set_defaults(mmc@16020000)
+clk_set_default_parents: could not read assigned-clock-parents for 81517d0
+clk_get_by_indexed_prop(dev=81517d0, index=0, clk=817fcd8)
+clk_request(dev=8150c78, clk=817fcd8)
+clk_set_rate(clk=8153cc0, rate=50000000)
+clk_get_parent_rate(clk=8153c80)
+clk_get_parent(clk=8153c80)
+clk_divider_set_rate: set clock sdio1_sdcard to rate 50000000 (reg=0x13020178, val=0x80000008)
+clk_get_rate(clk=8153c80)
+clk_get_parent_rate(clk=8153c80)
+clk_get_parent(clk=8153c80)
+clk_get_by_name_nodev(node=8024fac, name=ciu, clk=817fcd0)
+clk_request(dev=8150c78, clk=817fcd0)
+clk_enable(clk=817fcd0 name=clock-controller@13020000)
+clk_enable(clk=8152d00 name=axi_cfg0)
+clk_gate_endisable: enabling clock sdio1_sdcard (reg=0x13020178, bit=31, set=1)
+clk_get_rate(clk=817fcd0)
+clk_get_rate(clk=8153cc0)
+clk_get_parent_rate(clk=8153c80)
+clk_get_parent(clk=8153c80)
+clk_get_by_name_nodev(node=8024fac, name=biu, clk=817fcf8)
+clk_request(dev=8150c78, clk=817fcf8)
+clk_enable(clk=817fcf8 name=clock-controller@13020000)
+clk_enable(clk=8152f00 name=ahb0)
+clk_enable(clk=8152e00 name=stg_axiahb)
+clk_gate_endisable: enabling clock ahb0 (reg=0x13020024, bit=31, set=1)
+clk_gate_endisable: enabling clock sdio1_ahb (reg=0x13020170, bit=31, set=1)
+clock is disabled (0Hz)
+clock is enabled (400000Hz)
+clock is enabled (49500000Hz)
+
+loading hdr from 400000 to 401fffc0
+Found FIT
+Simple loading
+Jumping to U-Boot via RISC-V OpenSBI
+SPL malloc() used 0x6840 bytes (26 KB)
+
+OpenSBI v1.6-109-g69a0f02
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name               : StarFive VisionFive 2 v1.3B
+Platform Features           : medeleg
+Platform HART Count         : 4
+Platform IPI Device         : aclint-mswi
+Platform Timer Device       : aclint-mtimer @ 4000000Hz
+Platform Console Device     : uart8250
+Platform HSM Device         : ---
+Platform PMU Device         : ---
+Platform Reboot Device      : pm-reset
+Platform Shutdown Device    : pm-reset
+Platform Suspend Device     : ---
+Platform CPPC Device        : ---
+Firmware Base               : 0x40000000
+Firmware Size               : 353 KB
+Firmware RW Offset          : 0x40000
+Firmware RW Size            : 97 KB
+Firmware Heap Offset        : 0x4c000
+Firmware Heap Size          : 49 KB (total), 3 KB (reserved), 12 KB (used), 33 KB (free)
+Firmware Scratch Size       : 4096 B (total), 400 B (used), 3696 B (free)
+Runtime SBI Version         : 3.0
+Standard SBI Extensions     : ipi,pmu,srst,sse,hsm,rfnc,fwft,time,base,legacy,dbcn,dbtr
+Experimental SBI Extensions : none
+
+Domain0 Name                : root
+Domain0 Boot HART           : 2
+Domain0 HARTs               : 1*,2*,3*,4*
+Domain0 Region00            : 0x0000000010000000-0x0000000010000fff M: (I,R,W) S/U: (R,W)
+Domain0 Region01            : 0x0000000002000000-0x000000000200ffff M: (I,R,W) S/U: ()
+Domain0 Region02            : 0x0000000040040000-0x000000004005ffff M: (R,W) S/U: ()
+Domain0 Region03            : 0x0000000040000000-0x000000004003ffff M: (R,X) S/U: ()
+Domain0 Region04            : 0x000000000c000000-0x000000000fffffff M: (I,R,W) S/U: (R,W)
+Domain0 Region05            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
+Domain0 Next Address        : 0x0000000040200000
+Domain0 Next Arg1           : 0x00000000402c1f98
+Domain0 Next Mode           : S-mode
+Domain0 SysReset            : yes
+Domain0 SysSuspend          : yes
+
+Boot HART ID                : 2
+Boot HART Domain            : root
+Boot HART Priv Version      : v1.11
+Boot HART Base ISA          : rv64imafdcbx
+Boot HART ISA Extensions    : zihpm,sdtrig
+Boot HART PMP Count         : 8
+Boot HART PMP Granularity   : 12 bits
+Boot HART PMP Address Bits  : 34
+Boot HART MHPM Info         : 2 (0x00000018)
+Boot HART Debug Triggers    : 8 triggers
+Boot HART MIDELEG           : 0x0000000000000222
+Boot HART MEDELEG           : 0x000000000000b109
+clk_get_by_index_tail: Node 'timer', property 'clocks', failed to request CLK index 0: -2
+env_init: Environment SPIFlash init done (ret=-2)
+OF: translating address: 00000000 00000010
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000010
+clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
+
+
+U-Boot 2025.07-rc5-00012-g7027b445cc0b-dirty (Jul 02 2025 - 20:25:54 +0800)
+
+U-Boot code: 40200000 -> 402C2000  BSS: -> 402CB580
+clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
+clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
+clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
+clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
+CPU:   sifive,u74-mc
+Model: StarFive VisionFive 2 v1.3B
+DRAM:  OF: translating address: 00000000 00000040
+Monitor len: 000cb580
+Ram size: 100000000
+Ram top: 100000000
+Reserving 813k for U-Boot at: fff34000
+Reserving 8256k for malloc() at: ff724000
+Reserving 96 Bytes for Board Info at: ff723fa0
+Reserving 352 Bytes for Global Data at: ff723e40
+Reserving 50336 Bytes for FDT at: ff7179a0
+Reserving 0x660 Bytes for bootstage at: ff717340
+OF: translating address: 00000000 00000040
+
+RAM Configuration:
+Bank #0: 40000000 4 GiB
+
+DRAM:  4 GiB
+New Stack Pointer is: ff717330
+Relocation Offset is: bfd34000
+Relocating to fff34000, new gd at ff723e40, sp at ff717330
+Pre-reloc malloc() used 0x1aa0 bytes (6 KB)
+clk_set_defaults()
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724050
+clk_set_defaults(cpus)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729080
+clk_set_defaults(cpu@1)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729140
+clk_set_defaults(soc)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724db0
+clk_set_defaults(clock-controller@13020000)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff717058)
+OF: translating address: 00000000 00000313
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000313
+clk_set_defaults(syscon@13030000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725e30
+clk_set_defaults(clock-controller)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725ed0
+OF: translating address: 00000000 00000313
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000313
+OF: translating address: 00000000 00000213
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000213
+clk_set_defaults(oscillator)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724ad0
+clk_set_defaults(oscillator)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724ad0
+clk_set_defaults(clock-controller)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725ed0
+clk_request(dev=00000000ff725ed0, clk=00000000ff717058)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff717030)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717030)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff717058)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717058)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff717030)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717030)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff717058)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717058)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff717030)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717030)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff717058)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717058)
+clk_set_default_get_by_id(): could not get parent clock pointer, id 104
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff717030)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717030)
+OF: translating address: 00000000 00000213
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000213
+clk_set_defaults(gmac1-rmii-refin-clock)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7244b0
+clk_set_defaults(gmac1-rmii-refin-clock)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7244b0
+clk_set_defaults(gmac1-rgmii-rxin-clock)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7243d0
+clk_set_defaults(gmac1-rgmii-rxin-clock)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7243d0
+clk_set_defaults(clock-controller@13020000)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff717048)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717048)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff717020)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717020)
+clk_set_parent(clk=00000000ff729a40, parent=00000000ff7295c0)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_enable(clk=00000000ff724b70 name=oscillator)
+clk_mux_set_parent: set clock cpu_root to parent pll0_out (reg=0x0000000013020000, val=0x01000000)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff717048)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717048)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff717020)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717020)
+clk_set_parent(clk=00000000ff72a140, parent=00000000ff7298c0)
+clk_enable(clk=00000000ff7298c0 name=pll2_out)
+clk_enable(clk=00000000ff724b70 name=oscillator)
+clk_mux_set_parent: set clock bus_root to parent pll2_out (reg=0x0000000013020014, val=0x01000000)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff717048)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717048)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff717020)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717020)
+clk_set_parent(clk=00000000ff729f80, parent=00000000ff7298c0)
+clk_enable(clk=00000000ff7298c0 name=pll2_out)
+clk_mux_set_parent: set clock perh_root to parent pll2_out (reg=0x0000000013020010, val=0x01000000)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff717048)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717048)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff717020)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717020)
+clk_set_parent(clk=00000000ff72b080, parent=00000000ff72ae00)
+clk_enable(clk=00000000ff72ae00 name=qspi_ref_src)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_mux_set_parent: set clock qspi_ref to parent qspi_ref_src (reg=0x0000000013020168, val=0x01000000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717228)
+clk_enable(clk=00000000ff717228 name=clock-controller@13020000)
+clk_enable(clk=00000000ff729a40 name=cpu_root)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_set_defaults(cpu@2)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729210
+clk_request(dev=00000000ff725cf0, clk=00000000ff717228)
+clk_enable(clk=00000000ff717228 name=clock-controller@13020000)
+clk_set_defaults(cpu@3)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729380
+clk_request(dev=00000000ff725cf0, clk=00000000ff717228)
+clk_enable(clk=00000000ff717228 name=clock-controller@13020000)
+clk_set_defaults(cpu@4)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729450
+clk_request(dev=00000000ff725cf0, clk=00000000ff717228)
+clk_enable(clk=00000000ff717228 name=clock-controller@13020000)
+clk_get_by_index_tail: Node 'timer', property 'clocks', failed to request CLK index 0: -2
+clk_set_defaults(timer)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7289e0
+clk_set_defaults(cache-controller@2010000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724eb0
+OF: translating address: 00000000 00000102
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000102
+OF: translating address: 00000000 00000040
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000040
+OF: translating address: 00000000 00000440
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000440
+OF: translating address: 00000000 00000010
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000010
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171d8)
+clk_get_rate(clk=00000000ff7171d8)
+clk_get_rate(clk=00000000ff72d4c0)
+clk_get_parent_rate(clk=00000000ff72d4c0)
+clk_get_parent(clk=00000000ff72d4c0)
+clk_get_rate(clk=00000000ff724b70)
+clk_set_defaults(pinctrl@13040000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725fb0
+OF: translating address: 00000000 00000413
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000413
+clk_set_defaults(uart0-0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7272b0
+clk_set_defaults(serial@10000000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724f90
+clk_set_defaults(clock-controller@13020000)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=0, clk=00000000ff717028)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717028)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=0, clk=00000000ff717000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717000)
+clk_set_parent(clk=00000000ff729a40, parent=00000000ff7295c0)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_mux_set_parent: set clock cpu_root to parent pll0_out (reg=0x0000000013020000, val=0x01000000)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=1, clk=00000000ff717028)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717028)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=1, clk=00000000ff717000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717000)
+clk_set_parent(clk=00000000ff72a140, parent=00000000ff7298c0)
+clk_enable(clk=00000000ff7298c0 name=pll2_out)
+clk_mux_set_parent: set clock bus_root to parent pll2_out (reg=0x0000000013020014, val=0x01000000)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=2, clk=00000000ff717028)
+clk_request(dev=00000000ff725ed0, clk=00000000ff717028)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=2, clk=00000000ff717000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717000)
+clk_set_parent(clk=00000000ff729f80, parent=00000000ff7298c0)
+clk_enable(clk=00000000ff7298c0 name=pll2_out)
+clk_mux_set_parent: set clock perh_root to parent pll2_out (reg=0x0000000013020010, val=0x01000000)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=3, clk=00000000ff717028)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717028)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=3, clk=00000000ff717000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff717000)
+clk_set_parent(clk=00000000ff72b080, parent=00000000ff72ae00)
+clk_enable(clk=00000000ff72ae00 name=qspi_ref_src)
+clk_mux_set_parent: set clock qspi_ref to parent qspi_ref_src (reg=0x0000000013020168, val=0x01000000)
+OF: translating address: 00000000 00000213
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000213
+jh7110_reset_trigger: deasserting reset 83 (reg=0x13020300, value=0xffe5efcc)
+jh7110_reset_trigger: deasserting reset 84 (reg=0x13020300, value=0xffe5efcc)
+Now running in RAM - U-Boot at: fff34000
+Core:  159 devices, 29 uclasses, devicetree: board
+OF: translating address: 00000000 00000713
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000713
+clk_get_by_name_nodev(node=00000000ff71cd30, name=apb, clk=00000000ff72ef00)
+clk_request(dev=00000000ff725cf0, clk=00000000ff72ef00)
+clk_get_by_name_nodev(node=00000000ff71cd30, name=core, clk=00000000ff72ef80)
+clk_request(dev=00000000ff725cf0, clk=00000000ff72ef80)
+clk_set_defaults(watchdog@13070000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7274d0
+clk_enable(clk=00000000ff72ef00 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72aa40 name=apb0)
+clk_enable(clk=00000000ff72a900 name=apb_bus)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_enable(clk=00000000ff72a400 name=axi_cfg0)
+clk_enable(clk=00000000ff72a140 name=bus_root)
+clk_enable(clk=00000000ff7298c0 name=pll2_out)
+clk_gate_endisable: enabling clock apb0 (reg=0x0000000013020030, bit=31, set=1)
+clk_gate_endisable: enabling clock wdt_apb (reg=0x00000000130201e8, bit=31, set=1)
+clk_enable(clk=00000000ff72ef80 name=clock-controller@13020000)
+clk_enable(clk=00000000ff724b70 name=oscillator)
+clk_gate_endisable: enabling clock wdt_core (reg=0x00000000130201ec, bit=31, set=1)
+jh7110_reset_trigger: deasserting reset 109 (reg=0x13020304, value=0x1fffdfff)
+jh7110_reset_trigger: deasserting reset 110 (reg=0x13020304, value=0x1fff9fff)
+clk_get_rate(clk=00000000ff72ef80)
+clk_get_rate(clk=00000000ff72eac0)
+clk_get_parent_rate(clk=00000000ff72eac0)
+clk_get_parent(clk=00000000ff72eac0)
+WDT:   Not starting watchdog@13070000
+MMC:   OF: translating address: 00000000 00000116
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000116
+clk_set_defaults(mmc0-0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726590
+clk_set_defaults(mmc@16010000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7276c0
+clk_get_by_indexed_prop(dev=00000000ff7276c0, index=0, clk=00000000ff7171d8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171d8)
+clk_set_rate(clk=00000000ff72b5c0, rate=50000000)
+clk_get_parent_rate(clk=00000000ff72b540)
+clk_get_parent(clk=00000000ff72b540)
+clk_get_rate(clk=00000000ff72a400)
+clk_get_parent_rate(clk=00000000ff72a400)
+clk_get_parent(clk=00000000ff72a400)
+clk_get_rate(clk=00000000ff72a140)
+clk_get_parent_rate(clk=00000000ff72a140)
+clk_get_parent(clk=00000000ff72a140)
+clk_get_rate(clk=00000000ff7298c0)
+clk_get_parent_rate(clk=00000000ff7298c0)
+clk_get_parent(clk=00000000ff7298c0)
+clk_divider_set_rate: set clock sdio0_sdcard to rate 50000000 (reg=0x0000000013020174, val=0x80000008)
+clk_get_rate(clk=00000000ff72b540)
+clk_get_parent_rate(clk=00000000ff72b540)
+clk_get_parent(clk=00000000ff72b540)
+clk_get_by_name_nodev(node=00000000ff71d0a8, name=ciu, clk=00000000ff7171d0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171d0)
+clk_enable(clk=00000000ff7171d0 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a400 name=axi_cfg0)
+clk_gate_endisable: enabling clock sdio0_sdcard (reg=0x0000000013020174, bit=31, set=1)
+clk_get_rate(clk=00000000ff7171d0)
+clk_get_rate(clk=00000000ff72b5c0)
+clk_get_parent_rate(clk=00000000ff72b540)
+clk_get_parent(clk=00000000ff72b540)
+clk_get_by_name_nodev(node=00000000ff71d0a8, name=biu, clk=00000000ff7171f8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171f8)
+clk_enable(clk=00000000ff7171f8 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a680 name=ahb0)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock ahb0 (reg=0x0000000013020024, bit=31, set=1)
+clk_gate_endisable: enabling clock sdio0_ahb (reg=0x000000001302016c, bit=31, set=1)
+OF: translating address: 00000000 00000216
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000216
+clk_set_defaults(pinctrl@13040000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff72ec90
+clk_set_defaults(mmc1-0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726770
+clk_set_defaults(mmc@16020000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff727bc0
+clk_get_by_indexed_prop(dev=00000000ff727bc0, index=0, clk=00000000ff7171d8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171d8)
+clk_set_rate(clk=00000000ff72b880, rate=50000000)
+clk_get_parent_rate(clk=00000000ff72b800)
+clk_get_parent(clk=00000000ff72b800)
+clk_divider_set_rate: set clock sdio1_sdcard to rate 50000000 (reg=0x0000000013020178, val=0x80000008)
+clk_get_rate(clk=00000000ff72b800)
+clk_get_parent_rate(clk=00000000ff72b800)
+clk_get_parent(clk=00000000ff72b800)
+clk_get_by_name_nodev(node=00000000ff71d2b0, name=ciu, clk=00000000ff7171d0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171d0)
+clk_enable(clk=00000000ff7171d0 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a400 name=axi_cfg0)
+clk_gate_endisable: enabling clock sdio1_sdcard (reg=0x0000000013020178, bit=31, set=1)
+clk_get_rate(clk=00000000ff7171d0)
+clk_get_rate(clk=00000000ff72b880)
+clk_get_parent_rate(clk=00000000ff72b800)
+clk_get_parent(clk=00000000ff72b800)
+clk_get_by_name_nodev(node=00000000ff71d2b0, name=biu, clk=00000000ff7171f8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7171f8)
+clk_enable(clk=00000000ff7171f8 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a680 name=ahb0)
+clk_gate_endisable: enabling clock sdio1_ahb (reg=0x0000000013020170, bit=31, set=1)
+mmc@16010000: 0, mmc@16020000: 1
+Loading Environment from SPIFlash... OF: translating address: 00000000 00000113
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000113
+OF: translating address: 00000000 00000021
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000021
+clk_set_defaults(spi@13010000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725af0
+clk_request(dev=00000000ff725cf0, clk=00000000ff717128)
+clk_get_rate(clk=00000000ff717128)
+clk_get_rate(clk=00000000ff72b080)
+clk_get_parent_rate(clk=00000000ff72b080)
+clk_get_parent(clk=00000000ff72b080)
+clk_get_rate(clk=00000000ff72ae00)
+clk_get_parent_rate(clk=00000000ff72ae00)
+clk_get_parent(clk=00000000ff72ae00)
+clk_get_rate(clk=00000000ff7295c0)
+clk_get_parent_rate(clk=00000000ff7295c0)
+clk_get_parent(clk=00000000ff7295c0)
+jh7110_reset_trigger: deasserting reset 62 (reg=0x130202fc, value=0x7e7fe00)
+jh7110_reset_trigger: deasserting reset 61 (reg=0x130202fc, value=0x7e7fe00)
+jh7110_reset_trigger: deasserting reset 63 (reg=0x130202fc, value=0x7e7fe00)
+clk_set_defaults(flash@0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725c30
+SF: Detected gd25lq128 with page size 256 Bytes, erase size 4 KiB, total 16 MiB
+OK
+OF: translating address: 00000000 00000512
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000512
+jh7110_reset_trigger: deasserting reset 81 (reg=0x13020300, value=0xffe5efcc)
+clk_request(dev=00000000ff725cf0, clk=00000000ff73fc60)
+clk_enable(clk=00000000ff73fc60 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72aa40 name=apb0)
+clk_gate_endisable: enabling clock i2c5_apb (reg=0x000000001302023c, bit=31, set=1)
+clk_set_defaults(i2c5-0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726310
+clk_set_defaults(i2c@12050000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725870
+clk_get_rate(clk=00000000ff73fc60)
+clk_get_rate(clk=00000000ff72e840)
+clk_get_parent_rate(clk=00000000ff72e840)
+clk_get_parent(clk=00000000ff72e840)
+clk_get_rate(clk=00000000ff72aa40)
+clk_get_parent_rate(clk=00000000ff72aa40)
+clk_get_parent(clk=00000000ff72aa40)
+clk_get_rate(clk=00000000ff72a900)
+clk_get_parent_rate(clk=00000000ff72a900)
+clk_get_parent(clk=00000000ff72a900)
+clk_get_rate(clk=00000000ff72a540)
+clk_get_parent_rate(clk=00000000ff72a540)
+clk_get_parent(clk=00000000ff72a540)
+clk_set_defaults(eeprom@50)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725950
+StarFive EEPROM format v2
+
+--------EEPROM INFO--------
+Vendor : StarFive Technology Co., Ltd.
+Product full SN: VF7110B1-2310-D004E000-00003171
+data version: 0x2
+PCB revision: 0xb2
+BOM revision: A
+Ethernet MAC0 address: 6c:cf:39:00:5d:34
+Ethernet MAC1 address: 6c:cf:39:00:5d:35
+--------EEPROM INFO--------
+
+clk_set_defaults(pcie0-0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726950
+clk_set_defaults(pcie@940000000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff728860
+OF: translating address: 00000000 0000002b
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 0000002b
+OF: translating address: 09000000 00000040
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 09000000 00000040
+OF: translating address: 00000000 00002410
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00002410
+clk_set_defaults(syscon@10240000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7257d0
+clk_set_defaults(clock-controller@10230000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725610
+OF: translating address: 00000000 00002310
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00002310
+clk_set_defaults(clock-controller@10230000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725610
+clk_set_defaults(clock-controller@10230000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7256f0
+OF: translating address: 00000000 00002310
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00002310
+clk_request(dev=00000000ff725cf0, clk=00000000ff741700)
+clk_request(dev=00000000ff725610, clk=00000000ff741728)
+clk_request(dev=00000000ff725610, clk=00000000ff741750)
+clk_request(dev=00000000ff725610, clk=00000000ff741778)
+clk_enable(clk=00000000ff741700 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a2c0 name=nocstg_bus)
+clk_enable(clk=00000000ff72a140 name=bus_root)
+clk_gate_endisable: enabling clock noc_bus_stg_axi (reg=0x0000000013020180, bit=31, set=1)
+clk_enable(clk=00000000ff741728 name=clock-controller@10230000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock pcie0_tl (reg=0x0000000010230028, bit=31, set=1)
+clk_enable(clk=00000000ff741750 name=clock-controller@10230000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock pcie0_axi (reg=0x0000000010230020, bit=31, set=1)
+clk_enable(clk=00000000ff741778 name=clock-controller@10230000)
+clk_enable(clk=00000000ff72a900 name=apb_bus)
+clk_gate_endisable: enabling clock pcie0_apb (reg=0x0000000010230024, bit=31, set=1)
+jh7110_reset_trigger: deasserting reset 11 (reg=0x10230074, value=0x7ff7fe)
+jh7110_reset_trigger: deasserting reset 12 (reg=0x10230074, value=0x7fe7fe)
+jh7110_reset_trigger: deasserting reset 13 (reg=0x10230074, value=0x7fc7fe)
+jh7110_reset_trigger: deasserting reset 14 (reg=0x10230074, value=0x7f87fe)
+jh7110_reset_trigger: deasserting reset 15 (reg=0x10230074, value=0x7f07fe)
+jh7110_reset_trigger: deasserting reset 16 (reg=0x10230074, value=0x7e07fe)
+starfive_7110_pcie pcie@940000000: Starfive PCIe bus probed.
+PCI Autoconfig: Found P2P bridge, device 0
+PCI Autoconfig: BAR 0, Prf64, size=0x4000, 
+PCI Autoconfig: BAR 0, Mem64, size=0x1000, 
+clk_set_defaults(pcie1-0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726b30
+clk_set_defaults(pcie@9c0000000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff728900
+OF: translating address: 00000000 0000002c
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 0000002c
+OF: translating address: 09000000 000000c0
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 09000000 000000c0
+clk_request(dev=00000000ff725cf0, clk=00000000ff741cc0)
+clk_request(dev=00000000ff725610, clk=00000000ff741ce8)
+clk_request(dev=00000000ff725610, clk=00000000ff741d10)
+clk_request(dev=00000000ff725610, clk=00000000ff741d38)
+clk_enable(clk=00000000ff741cc0 name=clock-controller@13020000)
+clk_enable(clk=00000000ff741ce8 name=clock-controller@10230000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock pcie1_tl (reg=0x0000000010230034, bit=31, set=1)
+clk_enable(clk=00000000ff741d10 name=clock-controller@10230000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock pcie1_axi (reg=0x000000001023002c, bit=31, set=1)
+clk_enable(clk=00000000ff741d38 name=clock-controller@10230000)
+clk_enable(clk=00000000ff72a900 name=apb_bus)
+clk_gate_endisable: enabling clock pcie1_apb (reg=0x0000000010230030, bit=31, set=1)
+jh7110_reset_trigger: deasserting reset 17 (reg=0x10230074, value=0x7c07fe)
+jh7110_reset_trigger: deasserting reset 18 (reg=0x10230074, value=0x7807fe)
+jh7110_reset_trigger: deasserting reset 19 (reg=0x10230074, value=0x7007fe)
+jh7110_reset_trigger: deasserting reset 20 (reg=0x10230074, value=0x6007fe)
+jh7110_reset_trigger: deasserting reset 21 (reg=0x10230074, value=0x4007fe)
+jh7110_reset_trigger: deasserting reset 22 (reg=0x10230074, value=0x7fe)
+starfive_7110_pcie pcie@9c0000000: Starfive PCIe bus probed.
+PCI Autoconfig: Found P2P bridge, device 0
+PCI Autoconfig: BAR 0, Prf64, size=0x4000, 
+In:    serial@10000000
+Out:   serial@10000000
+Err:   serial@10000000
+Net:   clk_set_defaults(ethernet@16030000)
+clk_get_by_indexed_prop(dev=00000000ff7280a0, index=0, clk=00000000ff717208)
+clk_set_defaults(clock-controller@17000000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7285a0
+OF: translating address: 00000000 00000017
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000017
+clk_set_defaults(gmac0-rmii-refin-clock)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7242f0
+clk_set_defaults(gmac0-rmii-refin-clock)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7242f0
+clk_set_defaults(clock-controller@17000000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7285a0
+clk_request(dev=00000000ff7285a0, clk=00000000ff717208)
+clk_get_by_indexed_prop(dev=00000000ff7280a0, index=0, clk=00000000ff7171e0)
+clk_request(dev=00000000ff7285a0, clk=00000000ff7171e0)
+clk_set_parent(clk=00000000ff742bc0, parent=00000000ff742940)
+clk_enable(clk=00000000ff742940 name=gmac0_rmii_rtx)
+clk_enable(clk=00000000ff724390 name=gmac0-rmii-refin-clock)
+clk_mux_set_parent: set clock gmac0_tx to parent gmac0_rmii_rtx (reg=0x0000000017000014, val=0x01000000)
+eqos_probe(dev=00000000ff7280a0):
+eqos_probe_resources_core(dev=00000000ff7280a0):
+eqos_probe_resources_core: tx_dma_buf=00000000ff743280
+eqos_probe_resources_core: rx_dma_buf=00000000ff743900
+eqos_probe_resources_core: OK
+OF: translating address: 00000000 00000316
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000316
+clk_set_defaults(clock-controller@17000000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff728640
+OF: translating address: 00000000 00000017
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000017
+clk_request(dev=00000000ff7285a0, clk=00000000ff745340)
+clk_request(dev=00000000ff7285a0, clk=00000000ff745368)
+clk_request(dev=00000000ff725cf0, clk=00000000ff745390)
+clk_request(dev=00000000ff7285a0, clk=00000000ff7453b8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7453e0)
+clk_get_by_name_nodev(node=00000000ff71d4a4, name=gtx, clk=00000000ff7422f0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7422f0)
+OF: translating address: 00000000 00000117
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000117
+clk_set_defaults(syscon@17010000)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7286e0
+clk_enable(clk=00000000ff745340 name=clock-controller@17000000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock gmac0_axi (reg=0x000000001700000c, bit=31, set=1)
+clk_enable(clk=00000000ff745368 name=clock-controller@17000000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock gmac0_ahb (reg=0x0000000017000008, bit=31, set=1)
+clk_enable(clk=00000000ff745390 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72bf40 name=gmac_src)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_gate_endisable: enabling clock gmac0_ptp (reg=0x00000000130201b4, bit=31, set=1)
+clk_enable(clk=00000000ff7453b8 name=clock-controller@17000000)
+clk_enable(clk=00000000ff742bc0 name=gmac0_tx)
+clk_enable(clk=00000000ff742940 name=gmac0_rmii_rtx)
+clk_gate_endisable: enabling clock gmac0_tx (reg=0x0000000017000014, bit=31, set=1)
+clk_gate_endisable: enabling clock gmac0_tx_inv (reg=0x0000000017000018, bit=30, set=1)
+clk_enable(clk=00000000ff7453e0 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72cdc0 name=gmac0_gtxclk)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_gate_endisable: enabling clock gmac0_gtxclk (reg=0x00000000130201b0, bit=31, set=1)
+clk_gate_endisable: enabling clock gmac0_gtxc (reg=0x00000000130201bc, bit=31, set=1)
+clk_set_defaults(ethernet-phy@0)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7281b0
+clk_set_defaults(ethernet@16040000)
+clk_get_by_indexed_prop(dev=00000000ff728340, index=0, clk=00000000ff7170d8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7170d8)
+clk_get_by_indexed_prop(dev=00000000ff728340, index=0, clk=00000000ff7170b0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7170b0)
+clk_set_parent(clk=00000000ff72c9c0, parent=00000000ff72c300)
+clk_enable(clk=00000000ff72c300 name=gmac1_rmii_rtx)
+clk_enable(clk=00000000ff724550 name=gmac1-rmii-refin-clock)
+clk_mux_set_parent: set clock gmac1_tx to parent gmac1_rmii_rtx (reg=0x00000000130201a4, val=0x01000000)
+eqos_probe(dev=00000000ff728340):
+eqos_probe_resources_core(dev=00000000ff728340):
+eqos_probe_resources_core: tx_dma_buf=00000000ff745ac0
+eqos_probe_resources_core: rx_dma_buf=00000000ff746140
+eqos_probe_resources_core: OK
+OF: translating address: 00000000 00000416
+OF: parent translation for: 00000000 00000000
+OF: one level translation: 00000000 00000416
+clk_request(dev=00000000ff725cf0, clk=00000000ff747b40)
+clk_request(dev=00000000ff725cf0, clk=00000000ff747b68)
+clk_request(dev=00000000ff725cf0, clk=00000000ff747b90)
+clk_request(dev=00000000ff725cf0, clk=00000000ff747bb8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff747be0)
+clk_get_by_name_nodev(node=00000000ff71d814, name=gtx, clk=00000000ff7456e0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7456e0)
+clk_enable(clk=00000000ff747b40 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a540 name=stg_axiahb)
+clk_gate_endisable: enabling clock gmac1_axi (reg=0x0000000013020188, bit=31, set=1)
+clk_enable(clk=00000000ff747b68 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72a680 name=ahb0)
+clk_gate_endisable: enabling clock gmac1_ahb (reg=0x0000000013020184, bit=31, set=1)
+clk_enable(clk=00000000ff747b90 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72bf40 name=gmac_src)
+clk_gate_endisable: enabling clock gmac1_ptp (reg=0x0000000013020198, bit=31, set=1)
+clk_enable(clk=00000000ff747bb8 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72c9c0 name=gmac1_tx)
+clk_enable(clk=00000000ff72c300 name=gmac1_rmii_rtx)
+clk_gate_endisable: enabling clock gmac1_tx (reg=0x00000000130201a4, bit=31, set=1)
+clk_gate_endisable: enabling clock gmac1_tx_inv (reg=0x00000000130201a8, bit=30, set=1)
+clk_enable(clk=00000000ff747be0 name=clock-controller@13020000)
+clk_enable(clk=00000000ff72c080 name=gmac1_gtxclk)
+clk_enable(clk=00000000ff7295c0 name=pll0_out)
+clk_gate_endisable: enabling clock gmac1_gtxc (reg=0x00000000130201ac, bit=31, set=1)
+clk_set_defaults(ethernet-phy@1)
+clk_set_default_parents: could not read assigned-clock-parents for 00000000ff728410
+eqos_probe: OK
+eqos_probe: OK
+eth0: ethernet@16030000, eth1: ethernet@16040000
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+Command failed, result=1
+Command failed, result=1
+Command failed, result=1
+Command failed, result=1
+### main_loop entered: bootdelay=2
+
+### main_loop: bootcmd="run sdk_boot_env; run distro_boot_env"
+Hit any key to stop autoboot:  0 
+StarFive # dhcp 
+eqos_start(dev=00000000ff7280a0):
+jh7110_reset_trigger: deasserting reset 0 (reg=0x17000038, value=0xe2)
+jh7110_reset_trigger: deasserting reset 1 (reg=0x17000038, value=0xe0)
+clk_get_rate(clk=00000000ff7422f0)
+clk_get_rate(clk=00000000ff72d240)
+clk_get_parent_rate(clk=00000000ff72d240)
+clk_get_parent(clk=00000000ff72d240)
+clk_get_rate(clk=00000000ff72cdc0)
+clk_get_parent_rate(clk=00000000ff72cd40)
+clk_get_parent(clk=00000000ff72cd40)
+debug_writel: 00000000160300dc = 0x0000007c
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=2):
+debug_writel: 0000000016030200 = 0x0002050d
+eqos_mdio_read: val=4f51
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=3):
+debug_writel: 0000000016030200 = 0x0003050d
+eqos_mdio_read: val=e91b
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=0, val=8000):
+debug_writel: 0000000016030204 = 0x00008000
+debug_writel: 0000000016030200 = 0x00000505
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=0):
+debug_writel: 0000000016030200 = 0x0000050d
+eqos_mdio_read: val=0
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=4):
+debug_writel: 0000000016030200 = 0x0004050d
+eqos_mdio_read: val=11e1
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=9):
+debug_writel: 0000000016030200 = 0x0009050d
+eqos_mdio_read: val=200
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=9, val=300):
+debug_writel: 0000000016030204 = 0x00000300
+debug_writel: 0000000016030200 = 0x00090505
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=0):
+debug_writel: 0000000016030200 = 0x0000050d
+eqos_mdio_read: val=0
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=0, val=1200):
+debug_writel: 0000000016030204 = 0x00001200
+debug_writel: 0000000016030200 = 0x00000505
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a012):
+debug_writel: 0000000016030204 = 0x0000a012
+debug_writel: 0000000016030200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa012, mask=0x0040, set=0x0000
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=c8
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=31, val=88):
+debug_writel: 0000000016030204 = 0x00000088
+debug_writel: 0000000016030200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a001):
+debug_writel: 0000000016030204 = 0x0000a001
+debug_writel: 0000000016030200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa001, mask=0x0100, set=0x0000
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=8120
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=31, val=8020):
+debug_writel: 0000000016030204 = 0x00008020
+debug_writel: 0000000016030200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a003):
+debug_writel: 0000000016030204 = 0x0000a003
+debug_writel: 0000000016030200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa003, mask=0x3c0f, set=0x280a
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=f1
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=31, val=28fa):
+debug_writel: 0000000016030204 = 0x000028fa
+debug_writel: 0000000016030200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a001):
+debug_writel: 0000000016030204 = 0x0000a001
+debug_writel: 0000000016030200 = 0x001e0505
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=8020
+ytphy_read_ext: regnum=0xa001, ret=0x8020
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a010):
+debug_writel: 0000000016030204 = 0x0000a010
+debug_writel: 0000000016030200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa010, mask=0xe000, set=0xc000
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=6bff
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=31, val=cbff):
+debug_writel: 0000000016030204 = 0x0000cbff
+debug_writel: 0000000016030200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a001):
+debug_writel: 0000000016030204 = 0x0000a001
+debug_writel: 0000000016030200 = 0x001e0505
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=8020
+ytphy_read_ext: regnum=0xa001, ret=0x8020
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=30, val=a010):
+debug_writel: 0000000016030204 = 0x0000a010
+debug_writel: 0000000016030200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa010, mask=0x1030, set=0x0030
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=31):
+debug_writel: 0000000016030200 = 0x001f050d
+eqos_mdio_read: val=cbff
+eqos_mdio_write(dev=00000000ff7280a0, addr=0, reg=31, val=cbff):
+debug_writel: 0000000016030204 = 0x0000cbff
+debug_writel: 0000000016030200 = 0x001f0505
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+ethernet@16030000 Waiting for PHY auto negotiation to complete.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff7280a0, addr=0, reg=1):
+debug_writel: 0000000016030200 = 0x0001050d
+eqos_mdio_read: val=7949
+ TIMEOUT !
+phy_startup() failed: -110
+jh7110_reset_trigger: asserting reset 0 (reg=0x17000038, value=0xe1)
+jh7110_reset_trigger: asserting reset 1 (reg=0x17000038, value=0xe3)
+FAILED: -110
+eqos_start(dev=00000000ff728340):
+jh7110_reset_trigger: deasserting reset 66 (reg=0x13020300, value=0xffe5efc8)
+jh7110_reset_trigger: deasserting reset 67 (reg=0x13020300, value=0xffe5efc0)
+clk_get_rate(clk=00000000ff7456e0)
+clk_get_rate(clk=00000000ff72c1c0)
+clk_get_parent_rate(clk=00000000ff72c1c0)
+clk_get_parent(clk=00000000ff72c1c0)
+clk_get_rate(clk=00000000ff72c080)
+clk_get_parent_rate(clk=00000000ff72c080)
+clk_get_parent(clk=00000000ff72c080)
+debug_writel: 00000000160400dc = 0x0000007c
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=2):
+debug_writel: 0000000016040200 = 0x0002050d
+eqos_mdio_read: val=4f51
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=3):
+debug_writel: 0000000016040200 = 0x0003050d
+eqos_mdio_read: val=e91b
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=0, val=8000):
+debug_writel: 0000000016040204 = 0x00008000
+debug_writel: 0000000016040200 = 0x00000505
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=0):
+debug_writel: 0000000016040200 = 0x0000050d
+eqos_mdio_read: val=0
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=4):
+debug_writel: 0000000016040200 = 0x0004050d
+eqos_mdio_read: val=11e1
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=9):
+debug_writel: 0000000016040200 = 0x0009050d
+eqos_mdio_read: val=200
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=9, val=300):
+debug_writel: 0000000016040204 = 0x00000300
+debug_writel: 0000000016040200 = 0x00090505
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=0):
+debug_writel: 0000000016040200 = 0x0000050d
+eqos_mdio_read: val=0
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=0, val=1200):
+debug_writel: 0000000016040204 = 0x00001200
+debug_writel: 0000000016040200 = 0x00000505
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a012):
+debug_writel: 0000000016040204 = 0x0000a012
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa012, mask=0x0040, set=0x0000
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=c8
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=88):
+debug_writel: 0000000016040204 = 0x00000088
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a001):
+debug_writel: 0000000016040204 = 0x0000a001
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa001, mask=0x0100, set=0x0000
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=8120
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=8020):
+debug_writel: 0000000016040204 = 0x00008020
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a003):
+debug_writel: 0000000016040204 = 0x0000a003
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa003, mask=0x3c0f, set=0x0800
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=f1
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=8f0):
+debug_writel: 0000000016040204 = 0x000008f0
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a001):
+debug_writel: 0000000016040204 = 0x0000a001
+debug_writel: 0000000016040200 = 0x001e0505
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=8020
+ytphy_read_ext: regnum=0xa001, ret=0x8020
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a010):
+debug_writel: 0000000016040204 = 0x0000a010
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa010, mask=0xe000, set=0xc000
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=6bff
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=cbff):
+debug_writel: 0000000016040204 = 0x0000cbff
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a001):
+debug_writel: 0000000016040204 = 0x0000a001
+debug_writel: 0000000016040200 = 0x001e0505
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=8020
+ytphy_read_ext: regnum=0xa001, ret=0x8020
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a010):
+debug_writel: 0000000016040204 = 0x0000a010
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa010, mask=0x1030, set=0x0030
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=cbff
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=cbff):
+debug_writel: 0000000016040204 = 0x0000cbff
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+ethernet@16040000 Waiting for PHY auto negotiation to complete.eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=7949
+.eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=796d
+ done
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=17):
+debug_writel: 0000000016040200 = 0x0011050d
+eqos_mdio_read: val=7c00
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a003):
+debug_writel: 0000000016040204 = 0x0000a003
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa003, mask=0x4000, set=0x4000
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=8f0
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=48f0):
+debug_writel: 0000000016040204 = 0x000048f0
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_adjust_link(dev=00000000ff728340):
+eqos_set_full_duplex(dev=00000000ff728340):
+eqos_set_mii_speed_100(dev=00000000ff728340):
+debug_writel: 0000000016040d18 = 0x00000010
+debug_writel: 0000000016040300 = 0x0000355d
+debug_writel: 0000000016040304 = 0x0039cf6c
+debug_writel: 0000000016041004 = 0x0002080e
+debug_writel: 0000000016041110 = 0x00000000
+debug_writel: 0000000016041114 = 0xff745840
+debug_writel: 000000001604112c = 0x00000003
+debug_writel: 0000000016041118 = 0x00000000
+debug_writel: 000000001604111c = 0xff745980
+debug_writel: 0000000016041130 = 0x00000003
+debug_writel: 0000000016041128 = 0xff745a40
+eqos_start: OK
+eqos_stop(dev=00000000ff728340):
+jh7110_reset_trigger: asserting reset 66 (reg=0x13020300, value=0xffe5efc4)
+jh7110_reset_trigger: asserting reset 67 (reg=0x13020300, value=0xffe5efcc)
+eqos_stop: OK
+eqos_start(dev=00000000ff728340):
+jh7110_reset_trigger: deasserting reset 66 (reg=0x13020300, value=0xffe5efc8)
+jh7110_reset_trigger: deasserting reset 67 (reg=0x13020300, value=0xffe5efc0)
+clk_get_rate(clk=00000000ff7456e0)
+clk_get_rate(clk=00000000ff72c1c0)
+clk_get_parent_rate(clk=00000000ff72c1c0)
+clk_get_parent(clk=00000000ff72c1c0)
+debug_writel: 00000000160400dc = 0x0000007c
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=1):
+debug_writel: 0000000016040200 = 0x0001050d
+eqos_mdio_read: val=796d
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=17):
+debug_writel: 0000000016040200 = 0x0011050d
+eqos_mdio_read: val=7c00
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=30, val=a003):
+debug_writel: 0000000016040204 = 0x0000a003
+debug_writel: 0000000016040200 = 0x001e0505
+ytphy_modify_ext: regnum=0xa003, mask=0x4000, set=0x4000
+eqos_mdio_read(dev=00000000ff728340, addr=0, reg=31):
+debug_writel: 0000000016040200 = 0x001f050d
+eqos_mdio_read: val=48f0
+eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=48f0):
+debug_writel: 0000000016040204 = 0x000048f0
+debug_writel: 0000000016040200 = 0x001f0505
+eqos_adjust_link(dev=00000000ff728340):
+eqos_set_full_duplex(dev=00000000ff728340):
+eqos_set_mii_speed_100(dev=00000000ff728340):
+debug_writel: 0000000016040d18 = 0x00000010
+debug_writel: 0000000016040300 = 0x0000355d
+debug_writel: 0000000016040304 = 0x0039cf6c
+debug_writel: 0000000016041004 = 0x0002080e
+debug_writel: 0000000016041110 = 0x00000000
+debug_writel: 0000000016041114 = 0xff745840
+debug_writel: 000000001604112c = 0x00000003
+debug_writel: 0000000016041118 = 0x00000000
+debug_writel: 000000001604111c = 0xff745980
+debug_writel: 0000000016041130 = 0x00000003
+debug_writel: 0000000016041128 = 0xff745a40
+eqos_start: OK
+eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
+debug_writel: 0000000016041120 = 0xff745880
+eqos_recv(dev=00000000ff728340, flags=1):
+eqos_recv: *packetp=00000000ff746140, length=60
+eqos_free_pkt(packet=00000000ff746140, length=60)
+debug_writel: 0000000016041128 = 0xff745980
+eqos_recv(dev=00000000ff728340, flags=0):
+eqos_recv: *packetp=00000000ff746780, length=60
+eqos_free_pkt(packet=00000000ff746780, length=60)
+debug_writel: 0000000016041128 = 0xff7459c0
+eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
+debug_writel: 0000000016041120 = 0xff7458c0
+eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
+debug_writel: 0000000016041120 = 0xff745900
+eqos_recv(dev=00000000ff728340, flags=1):
+eqos_recv: *packetp=00000000ff746dc0, length=90
+eqos_free_pkt(packet=00000000ff746dc0, length=90)
+debug_writel: 0000000016041128 = 0xff745a00
+eqos_recv(dev=00000000ff728340, flags=0):
+eqos_recv: *packetp=00000000ff747400, length=86
+eqos_free_pkt(packet=00000000ff747400, length=86)
+debug_writel: 0000000016041128 = 0xff745a40
+eqos_send(dev=00000000ff728340, packet=00000000ff74af00, length=350):
+debug_writel: 0000000016041120 = 0xff745840
+eqos_recv(dev=00000000ff728340, flags=1):
+eqos_recv: *packetp=00000000ff746140, length=342
+eqos_send(dev=00000000ff728340, packet=00000000ff74b4c0, length=350):
+debug_writel: 0000000016041120 = 0xff745880
+eqos_free_pkt(packet=00000000ff746140, length=342)
+debug_writel: 0000000016041128 = 0xff745980
+eqos_recv(dev=00000000ff728340, flags=0):
+eqos_recv: *packetp=00000000ff746780, length=342
+eqos_send(dev=00000000ff728340, packet=00000000ff74b380, length=42):
+debug_writel: 0000000016041120 = 0xff7458c0
+eqos_free_pkt(packet=00000000ff746780, length=342)
+debug_writel: 0000000016041128 = 0xff7459c0
+eqos_recv(dev=00000000ff728340, flags=0):
+eqos_recv: *packetp=00000000ff746dc0, length=62
+eqos_free_pkt(packet=00000000ff746dc0, length=62)
+debug_writel: 0000000016041128 = 0xff745a00
+DHCP client bound to address 192.168.1.47 (592 ms)
+StarFive # 

@@ -260,9 +260,8 @@ fn init_interrupt() {
     }
 
     axhal::irq::register_handler(TIMER_IRQ_NUM, || {
-        // trace!("timer IRQ handler called");
+        trace!("timer IRQ handler called");
 
-        use core::ptr::read_volatile;
         update_timer();
         #[cfg(feature = "multitask")]
         axtask::on_timer_tick();

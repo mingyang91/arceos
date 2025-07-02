@@ -176,7 +176,8 @@ impl Executor {
 
             // If the future is still not ready, yield to other tasks
             if self.ready_tasks.lock().is_empty() {
-                axtask::yield_now();
+                // TODO: yield_now
+                // axtask::yield_now();
             }
         }
     }

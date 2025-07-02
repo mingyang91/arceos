@@ -153,3 +153,13 @@ wrk:
 ```bash
 wrk -d10s -c16 http://127.0.0.1:5555/
 ```
+
+build
+```bash
+make A=examples/async_server ARCH=riscv64 PLATFORM=riscv64-starfive LOG=trace NET=y SMP=1 BUS=mmio FEATURES=net,driver-dwmac,bus-mmio APP_FEATURES=default,starfive starfive IP=192.168.1.114 GW=192.168.1.1
+```
+
+boot
+```bash
+fatload mmc 1:3 0x40200000 arceos-starfive.bin; go 0x40200000
+```
