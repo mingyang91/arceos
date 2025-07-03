@@ -188,11 +188,11 @@ impl DwmacHalImpl {
 
         // reset
         unsafe {
-            // jh7110_reset_trigger: asserting reset 0 (reg=0x17000038, value=0xe1)
-            // jh7110_reset_trigger: asserting reset 1 (reg=0x17000038, value=0xe3)
-            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe1));
+            // jh7110_reset_trigger: deasserting reset 0 (reg=0x17000038, value=0xe2)
+            // jh7110_reset_trigger: deasserting reset 1 (reg=0x17000038, value=0xe0)
+            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe2));
             DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
-            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe3));
+            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe0));
             DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
 
             // jh7110_reset_trigger: deasserting reset 66 (reg=0x13020300, value=0xffe5efc8)
