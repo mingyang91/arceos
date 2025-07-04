@@ -4,7 +4,7 @@ python -m serial.tools.miniterm --eol LF --dtr 0 --rts 0 --filter direct /dev/tt
 --- Miniterm on /dev/tty.usbserial-214201  115200,8,N,1 ---
 --- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
 �
-U-Boot SPL 2025.07-rc5-00012-g7027b445cc0b-dirty (Jul 02 2025 - 21:53:30 +0800)
+U-Boot SPL 2025.07-rc5-00012-g7027b445cc0b-dirty (Jul 04 2025 - 21:22:43 +0800)
 jh7110_reset_trigger: deasserting reset 81 (reg=0x13020300, value=0xffe5efcc)
 clk_request(dev=8150c78, clk=8156598)
 clk_enable(clk=8156598 name=clock-controller@13020000)
@@ -154,7 +154,7 @@ Domain0 Region03            : 0x0000000040000000-0x000000004003ffff M: (R,X) S/U
 Domain0 Region04            : 0x000000000c000000-0x000000000fffffff M: (I,R,W) S/U: (R,W)
 Domain0 Region05            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
 Domain0 Next Address        : 0x0000000040200000
-Domain0 Next Arg1           : 0x00000000402c1f20
+Domain0 Next Arg1           : 0x00000000402c2540
 Domain0 Next Mode           : S-mode
 Domain0 SysReset            : yes
 Domain0 SysSuspend          : yes
@@ -179,9 +179,9 @@ OF: one level translation: 00000000 00000010
 clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
 
 
-U-Boot 2025.07-rc5-00012-g7027b445cc0b-dirty (Jul 02 2025 - 21:53:30 +0800)
+U-Boot 2025.07-rc5-00012-g7027b445cc0b-dirty (Jul 04 2025 - 21:22:43 +0800)
 
-U-Boot code: 40200000 -> 402C2000  BSS: -> 402CB580
+U-Boot code: 40200000 -> 402C2600  BSS: -> 402CBB80
 clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
 clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
 clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
@@ -189,24 +189,24 @@ clk_get_by_index_tail: uclass_get_device_by_of_offset failed: err=-19
 CPU:   sifive,u74-mc
 Model: StarFive VisionFive 2 v1.3B
 DRAM:  OF: translating address: 00000000 00000040
-Monitor len: 000cb580
+Monitor len: 000cbb80
 Ram size: 100000000
 Ram top: 100000000
-Reserving 813k for U-Boot at: fff34000
+Reserving 814k for U-Boot at: fff34000
 Reserving 8256k for malloc() at: ff724000
 Reserving 96 Bytes for Board Info at: ff723fa0
 Reserving 352 Bytes for Global Data at: ff723e40
-Reserving 50432 Bytes for FDT at: ff717940
-Reserving 0x660 Bytes for bootstage at: ff7172e0
+Reserving 52960 Bytes for FDT at: ff716f60
+Reserving 0x660 Bytes for bootstage at: ff716900
 OF: translating address: 00000000 00000040
 
 RAM Configuration:
 Bank #0: 40000000 4 GiB
 
 DRAM:  4 GiB
-New Stack Pointer is: ff7172d0
+New Stack Pointer is: ff7168f0
 Relocation Offset is: bfd34000
-Relocating to fff34000, new gd at ff723e40, sp at ff7172d0
+Relocating to fff34000, new gd at ff723e40, sp at ff7168f0
 Pre-reloc malloc() used 0x1aa0 bytes (6 KB)
 clk_set_defaults()
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724050
@@ -217,7 +217,7 @@ clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729
 clk_set_defaults(soc)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724db0
 clk_set_defaults(clock-controller@13020000)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff716ff8)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff716618)
 OF: translating address: 00000000 00000313
 OF: parent translation for: 00000000 00000000
 OF: one level translation: 00000000 00000313
@@ -237,22 +237,22 @@ clk_set_defaults(oscillator)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724ad0
 clk_set_defaults(clock-controller)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725ed0
-clk_request(dev=00000000ff725ed0, clk=00000000ff716ff8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff716fd0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fd0)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff716ff8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716ff8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff716fd0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fd0)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff716ff8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716ff8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff716fd0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fd0)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff716ff8)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716ff8)
+clk_request(dev=00000000ff725ed0, clk=00000000ff716618)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff7165f0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165f0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff716618)
+clk_request(dev=00000000ff725ed0, clk=00000000ff716618)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff7165f0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165f0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff716618)
+clk_request(dev=00000000ff725ed0, clk=00000000ff716618)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff7165f0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165f0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff716618)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716618)
 clk_set_default_get_by_id(): could not get parent clock pointer, id 104
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff716fd0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fd0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff7165f0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165f0)
 OF: translating address: 00000000 00000213
 OF: parent translation for: 00000000 00000000
 OF: one level translation: 00000000 00000213
@@ -265,53 +265,53 @@ clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724
 clk_set_defaults(gmac1-rgmii-rxin-clock)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7243d0
 clk_set_defaults(clock-controller@13020000)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff716fe8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716fe8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff716fc0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fc0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff716608)
+clk_request(dev=00000000ff725ed0, clk=00000000ff716608)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=0, clk=00000000ff7165e0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165e0)
 clk_set_parent(clk=00000000ff729a40, parent=00000000ff7295c0)
 clk_enable(clk=00000000ff7295c0 name=pll0_out)
 clk_enable(clk=00000000ff724b70 name=oscillator)
 clk_mux_set_parent: set clock cpu_root to parent pll0_out (reg=0x0000000013020000, val=0x01000000)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff716fe8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716fe8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff716fc0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fc0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff716608)
+clk_request(dev=00000000ff725ed0, clk=00000000ff716608)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=1, clk=00000000ff7165e0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165e0)
 clk_set_parent(clk=00000000ff72a140, parent=00000000ff7298c0)
 clk_enable(clk=00000000ff7298c0 name=pll2_out)
 clk_enable(clk=00000000ff724b70 name=oscillator)
 clk_mux_set_parent: set clock bus_root to parent pll2_out (reg=0x0000000013020014, val=0x01000000)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff716fe8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716fe8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff716fc0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fc0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff716608)
+clk_request(dev=00000000ff725ed0, clk=00000000ff716608)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=2, clk=00000000ff7165e0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165e0)
 clk_set_parent(clk=00000000ff729f80, parent=00000000ff7298c0)
 clk_enable(clk=00000000ff7298c0 name=pll2_out)
 clk_mux_set_parent: set clock perh_root to parent pll2_out (reg=0x0000000013020010, val=0x01000000)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff716fe8)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fe8)
-clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff716fc0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fc0)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff716608)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716608)
+clk_get_by_indexed_prop(dev=00000000ff725cf0, index=3, clk=00000000ff7165e0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165e0)
 clk_set_parent(clk=00000000ff72b080, parent=00000000ff72ae00)
 clk_enable(clk=00000000ff72ae00 name=qspi_ref_src)
 clk_enable(clk=00000000ff7295c0 name=pll0_out)
 clk_mux_set_parent: set clock qspi_ref to parent qspi_ref_src (reg=0x0000000013020168, val=0x01000000)
-clk_request(dev=00000000ff725cf0, clk=00000000ff7171c8)
-clk_enable(clk=00000000ff7171c8 name=clock-controller@13020000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7167e8)
+clk_enable(clk=00000000ff7167e8 name=clock-controller@13020000)
 clk_enable(clk=00000000ff729a40 name=cpu_root)
 clk_enable(clk=00000000ff7295c0 name=pll0_out)
 clk_set_defaults(cpu@2)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729210
-clk_request(dev=00000000ff725cf0, clk=00000000ff7171c8)
-clk_enable(clk=00000000ff7171c8 name=clock-controller@13020000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7167e8)
+clk_enable(clk=00000000ff7167e8 name=clock-controller@13020000)
 clk_set_defaults(cpu@3)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729380
-clk_request(dev=00000000ff725cf0, clk=00000000ff7171c8)
-clk_enable(clk=00000000ff7171c8 name=clock-controller@13020000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7167e8)
+clk_enable(clk=00000000ff7167e8 name=clock-controller@13020000)
 clk_set_defaults(cpu@4)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff729450
-clk_request(dev=00000000ff725cf0, clk=00000000ff7171c8)
-clk_enable(clk=00000000ff7171c8 name=clock-controller@13020000)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7167e8)
+clk_enable(clk=00000000ff7167e8 name=clock-controller@13020000)
 clk_get_by_index_tail: Node 'timer', property 'clocks', failed to request CLK index 0: -2
 clk_set_defaults(timer)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7289e0
@@ -329,8 +329,8 @@ OF: one level translation: 00000000 00000440
 OF: translating address: 00000000 00000010
 OF: parent translation for: 00000000 00000000
 OF: one level translation: 00000000 00000010
-clk_request(dev=00000000ff725cf0, clk=00000000ff717178)
-clk_get_rate(clk=00000000ff717178)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716798)
+clk_get_rate(clk=00000000ff716798)
 clk_get_rate(clk=00000000ff72d4c0)
 clk_get_parent_rate(clk=00000000ff72d4c0)
 clk_get_parent(clk=00000000ff72d4c0)
@@ -345,31 +345,31 @@ clk_set_default_parents: could not read assigned-clock-parents for 00000000ff727
 clk_set_defaults(serial@10000000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff724f90
 clk_set_defaults(clock-controller@13020000)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=0, clk=00000000ff716fc8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716fc8)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=0, clk=00000000ff716fa0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fa0)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=0, clk=00000000ff7165e8)
+clk_request(dev=00000000ff725ed0, clk=00000000ff7165e8)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=0, clk=00000000ff7165c0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165c0)
 clk_set_parent(clk=00000000ff729a40, parent=00000000ff7295c0)
 clk_enable(clk=00000000ff7295c0 name=pll0_out)
 clk_mux_set_parent: set clock cpu_root to parent pll0_out (reg=0x0000000013020000, val=0x01000000)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=1, clk=00000000ff716fc8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716fc8)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=1, clk=00000000ff716fa0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fa0)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=1, clk=00000000ff7165e8)
+clk_request(dev=00000000ff725ed0, clk=00000000ff7165e8)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=1, clk=00000000ff7165c0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165c0)
 clk_set_parent(clk=00000000ff72a140, parent=00000000ff7298c0)
 clk_enable(clk=00000000ff7298c0 name=pll2_out)
 clk_mux_set_parent: set clock bus_root to parent pll2_out (reg=0x0000000013020014, val=0x01000000)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=2, clk=00000000ff716fc8)
-clk_request(dev=00000000ff725ed0, clk=00000000ff716fc8)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=2, clk=00000000ff716fa0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fa0)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=2, clk=00000000ff7165e8)
+clk_request(dev=00000000ff725ed0, clk=00000000ff7165e8)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=2, clk=00000000ff7165c0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165c0)
 clk_set_parent(clk=00000000ff729f80, parent=00000000ff7298c0)
 clk_enable(clk=00000000ff7298c0 name=pll2_out)
 clk_mux_set_parent: set clock perh_root to parent pll2_out (reg=0x0000000013020010, val=0x01000000)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=3, clk=00000000ff716fc8)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fc8)
-clk_get_by_indexed_prop(dev=00000000ff725d90, index=3, clk=00000000ff716fa0)
-clk_request(dev=00000000ff725cf0, clk=00000000ff716fa0)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=3, clk=00000000ff7165e8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165e8)
+clk_get_by_indexed_prop(dev=00000000ff725d90, index=3, clk=00000000ff7165c0)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7165c0)
 clk_set_parent(clk=00000000ff72b080, parent=00000000ff72ae00)
 clk_enable(clk=00000000ff72ae00 name=qspi_ref_src)
 clk_mux_set_parent: set clock qspi_ref to parent qspi_ref_src (reg=0x0000000013020168, val=0x01000000)
@@ -383,9 +383,9 @@ Core:  159 devices, 29 uclasses, devicetree: board
 OF: translating address: 00000000 00000713
 OF: parent translation for: 00000000 00000000
 OF: one level translation: 00000000 00000713
-clk_get_by_name_nodev(node=00000000ff71ccd0, name=apb, clk=00000000ff72ef00)
+clk_get_by_name_nodev(node=00000000ff71c2f0, name=apb, clk=00000000ff72ef00)
 clk_request(dev=00000000ff725cf0, clk=00000000ff72ef00)
-clk_get_by_name_nodev(node=00000000ff71ccd0, name=core, clk=00000000ff72ef80)
+clk_get_by_name_nodev(node=00000000ff71c2f0, name=core, clk=00000000ff72ef80)
 clk_request(dev=00000000ff725cf0, clk=00000000ff72ef80)
 clk_set_defaults(watchdog@13070000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7274d0
@@ -415,8 +415,8 @@ clk_set_defaults(mmc0-0)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726590
 clk_set_defaults(mmc@16010000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7276c0
-clk_get_by_indexed_prop(dev=00000000ff7276c0, index=0, clk=00000000ff717178)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717178)
+clk_get_by_indexed_prop(dev=00000000ff7276c0, index=0, clk=00000000ff716798)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716798)
 clk_set_rate(clk=00000000ff72b5c0, rate=50000000)
 clk_get_parent_rate(clk=00000000ff72b540)
 clk_get_parent(clk=00000000ff72b540)
@@ -433,18 +433,18 @@ clk_divider_set_rate: set clock sdio0_sdcard to rate 50000000 (reg=0x00000000130
 clk_get_rate(clk=00000000ff72b540)
 clk_get_parent_rate(clk=00000000ff72b540)
 clk_get_parent(clk=00000000ff72b540)
-clk_get_by_name_nodev(node=00000000ff71d048, name=ciu, clk=00000000ff717170)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717170)
-clk_enable(clk=00000000ff717170 name=clock-controller@13020000)
+clk_get_by_name_nodev(node=00000000ff71c668, name=ciu, clk=00000000ff716790)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716790)
+clk_enable(clk=00000000ff716790 name=clock-controller@13020000)
 clk_enable(clk=00000000ff72a400 name=axi_cfg0)
 clk_gate_endisable: enabling clock sdio0_sdcard (reg=0x0000000013020174, bit=31, set=1)
-clk_get_rate(clk=00000000ff717170)
+clk_get_rate(clk=00000000ff716790)
 clk_get_rate(clk=00000000ff72b5c0)
 clk_get_parent_rate(clk=00000000ff72b540)
 clk_get_parent(clk=00000000ff72b540)
-clk_get_by_name_nodev(node=00000000ff71d048, name=biu, clk=00000000ff717198)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717198)
-clk_enable(clk=00000000ff717198 name=clock-controller@13020000)
+clk_get_by_name_nodev(node=00000000ff71c668, name=biu, clk=00000000ff7167b8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7167b8)
+clk_enable(clk=00000000ff7167b8 name=clock-controller@13020000)
 clk_enable(clk=00000000ff72a680 name=ahb0)
 clk_enable(clk=00000000ff72a540 name=stg_axiahb)
 clk_gate_endisable: enabling clock ahb0 (reg=0x0000000013020024, bit=31, set=1)
@@ -458,8 +458,8 @@ clk_set_defaults(mmc1-0)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff726770
 clk_set_defaults(mmc@16020000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff727bc0
-clk_get_by_indexed_prop(dev=00000000ff727bc0, index=0, clk=00000000ff717178)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717178)
+clk_get_by_indexed_prop(dev=00000000ff727bc0, index=0, clk=00000000ff716798)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716798)
 clk_set_rate(clk=00000000ff72b880, rate=50000000)
 clk_get_parent_rate(clk=00000000ff72b800)
 clk_get_parent(clk=00000000ff72b800)
@@ -467,18 +467,18 @@ clk_divider_set_rate: set clock sdio1_sdcard to rate 50000000 (reg=0x00000000130
 clk_get_rate(clk=00000000ff72b800)
 clk_get_parent_rate(clk=00000000ff72b800)
 clk_get_parent(clk=00000000ff72b800)
-clk_get_by_name_nodev(node=00000000ff71d250, name=ciu, clk=00000000ff717170)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717170)
-clk_enable(clk=00000000ff717170 name=clock-controller@13020000)
+clk_get_by_name_nodev(node=00000000ff71c870, name=ciu, clk=00000000ff716790)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716790)
+clk_enable(clk=00000000ff716790 name=clock-controller@13020000)
 clk_enable(clk=00000000ff72a400 name=axi_cfg0)
 clk_gate_endisable: enabling clock sdio1_sdcard (reg=0x0000000013020178, bit=31, set=1)
-clk_get_rate(clk=00000000ff717170)
+clk_get_rate(clk=00000000ff716790)
 clk_get_rate(clk=00000000ff72b880)
 clk_get_parent_rate(clk=00000000ff72b800)
 clk_get_parent(clk=00000000ff72b800)
-clk_get_by_name_nodev(node=00000000ff71d250, name=biu, clk=00000000ff717198)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717198)
-clk_enable(clk=00000000ff717198 name=clock-controller@13020000)
+clk_get_by_name_nodev(node=00000000ff71c870, name=biu, clk=00000000ff7167b8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7167b8)
+clk_enable(clk=00000000ff7167b8 name=clock-controller@13020000)
 clk_enable(clk=00000000ff72a680 name=ahb0)
 clk_gate_endisable: enabling clock sdio1_ahb (reg=0x0000000013020170, bit=31, set=1)
 mmc@16010000: 0, mmc@16020000: 1
@@ -490,8 +490,8 @@ OF: parent translation for: 00000000 00000000
 OF: one level translation: 00000000 00000021
 clk_set_defaults(spi@13010000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff725af0
-clk_request(dev=00000000ff725cf0, clk=00000000ff7170c8)
-clk_get_rate(clk=00000000ff7170c8)
+clk_request(dev=00000000ff725cf0, clk=00000000ff7166e8)
+clk_get_rate(clk=00000000ff7166e8)
 clk_get_rate(clk=00000000ff72b080)
 clk_get_parent_rate(clk=00000000ff72b080)
 clk_get_parent(clk=00000000ff72b080)
@@ -638,7 +638,7 @@ In:    serial@10000000
 Out:   serial@10000000
 Err:   serial@10000000
 Net:   clk_set_defaults(ethernet@16030000)
-clk_get_by_indexed_prop(dev=00000000ff7280a0, index=0, clk=00000000ff7171a8)
+clk_get_by_indexed_prop(dev=00000000ff7280a0, index=0, clk=00000000ff7167c8)
 clk_set_defaults(clock-controller@17000000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7285a0
 OF: translating address: 00000000 00000017
@@ -650,9 +650,9 @@ clk_set_defaults(gmac0-rmii-refin-clock)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7242f0
 clk_set_defaults(clock-controller@17000000)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7285a0
-clk_request(dev=00000000ff7285a0, clk=00000000ff7171a8)
-clk_get_by_indexed_prop(dev=00000000ff7280a0, index=0, clk=00000000ff717180)
-clk_request(dev=00000000ff7285a0, clk=00000000ff717180)
+clk_request(dev=00000000ff7285a0, clk=00000000ff7167c8)
+clk_get_by_indexed_prop(dev=00000000ff7280a0, index=0, clk=00000000ff7167a0)
+clk_request(dev=00000000ff7285a0, clk=00000000ff7167a0)
 clk_set_parent(clk=00000000ff742bc0, parent=00000000ff742940)
 clk_enable(clk=00000000ff742940 name=gmac0_rmii_rtx)
 clk_enable(clk=00000000ff724390 name=gmac0-rmii-refin-clock)
@@ -675,7 +675,7 @@ clk_request(dev=00000000ff7285a0, clk=00000000ff745368)
 clk_request(dev=00000000ff725cf0, clk=00000000ff745390)
 clk_request(dev=00000000ff7285a0, clk=00000000ff7453b8)
 clk_request(dev=00000000ff725cf0, clk=00000000ff7453e0)
-clk_get_by_name_nodev(node=00000000ff71d444, name=gtx, clk=00000000ff7422f0)
+clk_get_by_name_nodev(node=00000000ff71ca64, name=gtx, clk=00000000ff7422f0)
 clk_request(dev=00000000ff725cf0, clk=00000000ff7422f0)
 OF: translating address: 00000000 00000117
 OF: parent translation for: 00000000 00000000
@@ -705,10 +705,10 @@ clk_gate_endisable: enabling clock gmac0_gtxc (reg=0x00000000130201bc, bit=31, s
 clk_set_defaults(ethernet-phy@0)
 clk_set_default_parents: could not read assigned-clock-parents for 00000000ff7281b0
 clk_set_defaults(ethernet@16040000)
-clk_get_by_indexed_prop(dev=00000000ff728340, index=0, clk=00000000ff717078)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717078)
-clk_get_by_indexed_prop(dev=00000000ff728340, index=0, clk=00000000ff717050)
-clk_request(dev=00000000ff725cf0, clk=00000000ff717050)
+clk_get_by_indexed_prop(dev=00000000ff728340, index=0, clk=00000000ff716698)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716698)
+clk_get_by_indexed_prop(dev=00000000ff728340, index=0, clk=00000000ff716670)
+clk_request(dev=00000000ff725cf0, clk=00000000ff716670)
 clk_set_parent(clk=00000000ff72c9c0, parent=00000000ff72c300)
 clk_enable(clk=00000000ff72c300 name=gmac1_rmii_rtx)
 clk_enable(clk=00000000ff724550 name=gmac1-rmii-refin-clock)
@@ -726,7 +726,7 @@ clk_request(dev=00000000ff725cf0, clk=00000000ff747b68)
 clk_request(dev=00000000ff725cf0, clk=00000000ff747b90)
 clk_request(dev=00000000ff725cf0, clk=00000000ff747bb8)
 clk_request(dev=00000000ff725cf0, clk=00000000ff747be0)
-clk_get_by_name_nodev(node=00000000ff71d7b4, name=gtx, clk=00000000ff7456e0)
+clk_get_by_name_nodev(node=00000000ff71cdd4, name=gtx, clk=00000000ff7456e0)
 clk_request(dev=00000000ff725cf0, clk=00000000ff7456e0)
 clk_enable(clk=00000000ff747b40 name=clock-controller@13020000)
 clk_enable(clk=00000000ff72a540 name=stg_axiahb)
@@ -848,6 +848,7 @@ StarFive # dhcp
 eqos_start(dev=00000000ff7280a0):
 jh7110_reset_trigger: deasserting reset 0 (reg=0x17000038, value=0xe2)
 jh7110_reset_trigger: deasserting reset 1 (reg=0x17000038, value=0xe0)
+dma_regs->mode(0000000016031000): 1
 clk_get_rate(clk=00000000ff7422f0)
 clk_get_rate(clk=00000000ff72d240)
 clk_get_parent_rate(clk=00000000ff72d240)
@@ -1078,6 +1079,7 @@ FAILED: -110
 eqos_start(dev=00000000ff728340):
 jh7110_reset_trigger: deasserting reset 66 (reg=0x13020300, value=0xffe5efc8)
 jh7110_reset_trigger: deasserting reset 67 (reg=0x13020300, value=0xffe5efc0)
+dma_regs->mode(0000000016041000): 1
 clk_get_rate(clk=00000000ff7456e0)
 clk_get_rate(clk=00000000ff72c1c0)
 clk_get_parent_rate(clk=00000000ff72c1c0)
@@ -1199,9 +1201,27 @@ eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=48f0):
 eqos_adjust_link(dev=00000000ff728340):
 eqos_set_full_duplex(dev=00000000ff728340):
 eqos_set_mii_speed_100(dev=00000000ff728340):
+setbits_le32 mtl_regs->txq0_operation_mode(0000000016040d00): 7000a
 debug_writel: 0000000016040d18 = 0x00000010
+setbits_le32 mtl_regs->rxq0_operation_mode(0000000016040d30): 700020
+clrsetbits_le32 mtl_regs->txq0_operation_mode(0000000016040d00): 7000a
+clrsetbits_le32 mtl_regs->rxq0_operation_mode(0000000016040d30): 700020
+clrsetbits_le32 mac_regs->rxq_ctrl0(00000000160400a0): 0
+setbits_le32 mac_regs->unused_0a4(00000000160400a4): 0
+setbits_le32 mac_regs->unused_004[1](0000000016040008): 1
+setbits_le32 mac_regs->q0_tx_flow_ctrl(0000000016040070): ffff0000
+clrbits_le32 mac_regs->txq_prty_map0(0000000016040098): 0
+clrbits_le32 mac_regs->rxq_ctrl2(00000000160400a8): 0
+setbits_le32 mac_regs->q0_tx_flow_ctrl(0000000016040070): ffff0002
+setbits_le32 mac_regs->rx_flow_ctrl(0000000016040090): 1
+clrsetbits_le32 mac_regs->configuration(0000000016040000): 30e000
 debug_writel: 0000000016040300 = 0x0000355d
 debug_writel: 0000000016040304 = 0x0039cf6c
+setbits_le32 dma_regs->ch0_tx_control(0000000016041104): 10
+clrsetbits_le32 dma_regs->ch0_rx_control(0000000016041108): c80
+setbits_le32 dma_regs->ch0_control(0000000016041100): 190000
+clrsetbits_le32 dma_regs->ch0_tx_control(0000000016041104): 80010
+clrsetbits_le32 dma_regs->ch0_rx_control(0000000016041108): 80c80
 debug_writel: 0000000016041004 = 0x0002080e
 debug_writel: 0000000016041110 = 0x00000000
 debug_writel: 0000000016041114 = 0xff745840
@@ -1209,6 +1229,9 @@ debug_writel: 000000001604112c = 0x00000003
 debug_writel: 0000000016041118 = 0x00000000
 debug_writel: 000000001604111c = 0xff745980
 debug_writel: 0000000016041130 = 0x00000003
+setbits_le32 dma_regs->ch0_tx_control(0000000016041104): 80011
+setbits_le32 dma_regs->ch0_rx_control(0000000016041108): 80c81
+setbits_le32 mac_regs->configuration(0000000016040000): 30e003
 debug_writel: 0000000016041128 = 0xff745a40
 eqos_start: OK
 eqos_stop(dev=00000000ff728340):
@@ -1218,6 +1241,7 @@ eqos_stop: OK
 eqos_start(dev=00000000ff728340):
 jh7110_reset_trigger: deasserting reset 66 (reg=0x13020300, value=0xffe5efc8)
 jh7110_reset_trigger: deasserting reset 67 (reg=0x13020300, value=0xffe5efc0)
+dma_regs->mode(0000000016041000): 1
 clk_get_rate(clk=00000000ff7456e0)
 clk_get_rate(clk=00000000ff72c1c0)
 clk_get_parent_rate(clk=00000000ff72c1c0)
@@ -1235,9 +1259,27 @@ eqos_mdio_write(dev=00000000ff728340, addr=0, reg=31, val=48f0):
 eqos_adjust_link(dev=00000000ff728340):
 eqos_set_full_duplex(dev=00000000ff728340):
 eqos_set_mii_speed_100(dev=00000000ff728340):
+setbits_le32 mtl_regs->txq0_operation_mode(0000000016040d00): 7000a
 debug_writel: 0000000016040d18 = 0x00000010
+setbits_le32 mtl_regs->rxq0_operation_mode(0000000016040d30): 700020
+clrsetbits_le32 mtl_regs->txq0_operation_mode(0000000016040d00): 7000a
+clrsetbits_le32 mtl_regs->rxq0_operation_mode(0000000016040d30): 700020
+clrsetbits_le32 mac_regs->rxq_ctrl0(00000000160400a0): 0
+setbits_le32 mac_regs->unused_0a4(00000000160400a4): 0
+setbits_le32 mac_regs->unused_004[1](0000000016040008): 1
+setbits_le32 mac_regs->q0_tx_flow_ctrl(0000000016040070): ffff0000
+clrbits_le32 mac_regs->txq_prty_map0(0000000016040098): 0
+clrbits_le32 mac_regs->rxq_ctrl2(00000000160400a8): 0
+setbits_le32 mac_regs->q0_tx_flow_ctrl(0000000016040070): ffff0002
+setbits_le32 mac_regs->rx_flow_ctrl(0000000016040090): 1
+clrsetbits_le32 mac_regs->configuration(0000000016040000): 30e000
 debug_writel: 0000000016040300 = 0x0000355d
 debug_writel: 0000000016040304 = 0x0039cf6c
+setbits_le32 dma_regs->ch0_tx_control(0000000016041104): 10
+clrsetbits_le32 dma_regs->ch0_rx_control(0000000016041108): c80
+setbits_le32 dma_regs->ch0_control(0000000016041100): 190000
+clrsetbits_le32 dma_regs->ch0_tx_control(0000000016041104): 80010
+clrsetbits_le32 dma_regs->ch0_rx_control(0000000016041108): 80c80
 debug_writel: 0000000016041004 = 0x0002080e
 debug_writel: 0000000016041110 = 0x00000000
 debug_writel: 0000000016041114 = 0xff745840
@@ -1245,6 +1287,9 @@ debug_writel: 000000001604112c = 0x00000003
 debug_writel: 0000000016041118 = 0x00000000
 debug_writel: 000000001604111c = 0xff745980
 debug_writel: 0000000016041130 = 0x00000003
+setbits_le32 dma_regs->ch0_tx_control(0000000016041104): 80011
+setbits_le32 dma_regs->ch0_rx_control(0000000016041108): 80c81
+setbits_le32 mac_regs->configuration(0000000016040000): 30e003
 debug_writel: 0000000016041128 = 0xff745a40
 eqos_start: OK
 eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
@@ -1259,25 +1304,37 @@ eqos_free_pkt(packet=00000000ff746780, length=60)
 debug_writel: 0000000016041128 = 0xff7459c0
 eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
 debug_writel: 0000000016041120 = 0xff7458c0
+eqos_recv(dev=00000000ff728340, flags=1):
+eqos_recv: *packetp=00000000ff746dc0, length=151
+eqos_free_pkt(packet=00000000ff746dc0, length=151)
+debug_writel: 0000000016041128 = 0xff745a00
+eqos_recv(dev=00000000ff728340, flags=1):
+eqos_recv: *packetp=00000000ff747400, length=151
+eqos_free_pkt(packet=00000000ff747400, length=151)
+debug_writel: 0000000016041128 = 0xff745a40
 eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
 debug_writel: 0000000016041120 = 0xff745900
 eqos_send(dev=00000000ff728340, packet=00000000ff74ae80, length=350):
 debug_writel: 0000000016041120 = 0xff745840
 eqos_recv(dev=00000000ff728340, flags=1):
-eqos_recv: *packetp=00000000ff746dc0, length=342
+eqos_recv: *packetp=00000000ff746140, length=342
 eqos_send(dev=00000000ff728340, packet=00000000ff74b4c0, length=350):
 debug_writel: 0000000016041120 = 0xff745880
-eqos_free_pkt(packet=00000000ff746dc0, length=342)
-debug_writel: 0000000016041128 = 0xff745a00
+eqos_free_pkt(packet=00000000ff746140, length=342)
+debug_writel: 0000000016041128 = 0xff745980
 eqos_recv(dev=00000000ff728340, flags=0):
-eqos_recv: *packetp=00000000ff747400, length=342
+eqos_recv: *packetp=00000000ff746780, length=342
 eqos_send(dev=00000000ff728340, packet=00000000ff74b380, length=42):
 debug_writel: 0000000016041120 = 0xff7458c0
-eqos_free_pkt(packet=00000000ff747400, length=342)
-debug_writel: 0000000016041128 = 0xff745a40
+eqos_free_pkt(packet=00000000ff746780, length=342)
+debug_writel: 0000000016041128 = 0xff7459c0
 eqos_recv(dev=00000000ff728340, flags=0):
-eqos_recv: *packetp=00000000ff746140, length=62
-eqos_free_pkt(packet=00000000ff746140, length=62)
-debug_writel: 0000000016041128 = 0xff745980
-DHCP client bound to address 192.168.1.47 (589 ms)
+eqos_recv: *packetp=00000000ff746dc0, length=74
+eqos_free_pkt(packet=00000000ff746dc0, length=74)
+debug_writel: 0000000016041128 = 0xff745a00
+eqos_recv(dev=00000000ff728340, flags=0):
+eqos_recv: *packetp=00000000ff747400, length=62
+eqos_free_pkt(packet=00000000ff747400, length=62)
+debug_writel: 0000000016041128 = 0xff745a40
+DHCP client bound to address 192.168.1.47 (605 ms)
 StarFive # 
