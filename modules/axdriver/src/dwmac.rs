@@ -41,8 +41,8 @@ impl DwmacHal for DwmacHalImpl {
         }
     }
 
-    fn dma_alloc(size: usize) -> (DwmacPhysAddr, NonNull<u8>) {
-        let layout = Layout::from_size_align(size, 16).unwrap();
+    fn dma_alloc(size: usize, align: usize) -> (DwmacPhysAddr, NonNull<u8>) {
+        let layout = Layout::from_size_align(size, align).unwrap();
         match unsafe { alloc_coherent(layout) } {
             Ok(dma_info) => {
                 // Return bus address for hardware and CPU virtual address
@@ -55,8 +55,13 @@ impl DwmacHal for DwmacHalImpl {
         }
     }
 
-    unsafe fn dma_dealloc(paddr: DwmacPhysAddr, vaddr: NonNull<u8>, size: usize) -> i32 {
-        let layout = Layout::from_size_align(size, 16).unwrap();
+    unsafe fn dma_dealloc(
+        paddr: DwmacPhysAddr,
+        vaddr: NonNull<u8>,
+        size: usize,
+        align: usize,
+    ) -> i32 {
+        let layout = Layout::from_size_align(size, align).unwrap();
         let dma_info = DMAInfo {
             cpu_addr: vaddr,
             bus_addr: BusAddr::from(paddr as u64),
