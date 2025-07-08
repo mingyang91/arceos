@@ -352,6 +352,7 @@ pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
 }
 
 fn handler() {
+    info!("eth_irq called");
     SOCKET_SET.poll_interfaces();
 }
 
