@@ -406,6 +406,24 @@ impl DwmacHalImpl {
                 "   🔧 Clock config - GMAC1 RMII RTX: {:#x} (preserved)",
                 syscrg.clk_gmac1_rmii_rtx().read().clk_divcfg().bits()
             );
+
+            log::info!(
+                "   🔧 Clock config - GMAC1 GTX: {:#x} (preserved)",
+                syscrg.clk_gmac1_gtx().read().clk_divcfg().bits()
+            );
+
+            log::info!(
+                "   🔧 Clock config - CPU Root: {:#x} (preserved)",
+                syscrg.clk_cpu_root().read().bits()
+            );
+            log::info!(
+                "   🔧 Clock config - CPU Core: {:#x} (preserved)",
+                syscrg.clk_cpu_core().read().bits()
+            );
+            log::info!(
+                "   🔧 Clock config - CPU Bus: {:#x} (preserved)",
+                syscrg.clk_cpu_bus().read().bits()
+            );
         }
     }
 
