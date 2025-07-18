@@ -302,6 +302,10 @@ impl DwmacHalImpl {
 
         // reset
         unsafe {
+            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe1));
+            let _ = DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
+            aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe3));
+            let _ = DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
             // jh7110_reset_trigger: deasserting reset 0 (reg=0x17000038, value=0xe2)
             // jh7110_reset_trigger: deasserting reset 1 (reg=0x17000038, value=0xe0)
             aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe2));
@@ -309,6 +313,10 @@ impl DwmacHalImpl {
             aoncrg.soft_rst_addr_sel().write(|w| w.bits(0xe0));
             let _ = DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
 
+            syscrg.soft_rst_addr_sel_2().write(|w| w.bits(0xffe5efc4));
+            let _ = DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
+            syscrg.soft_rst_addr_sel_2().write(|w| w.bits(0xffe5efcc));
+            let _ = DwmacHalImpl::wait_until(core::time::Duration::from_millis(100));
             // jh7110_reset_trigger: deasserting reset 66 (reg=0x13020300, value=0xffe5efc8)
             // jh7110_reset_trigger: deasserting reset 67 (reg=0x13020300, value=0xffe5efc0)
             syscrg.soft_rst_addr_sel_2().write(|w| w.bits(0xffe5efc8));
