@@ -349,6 +349,14 @@ impl DwmacHalImpl {
         };
 
         unsafe {
+            syscrg.clk_tim_apb().write(|w| w.clk_icg().set_bit());
+            syscrg.clk_tim_0().write(|w| w.clk_icg().set_bit());
+            syscrg.clk_tim_1().write(|w| w.clk_icg().set_bit());
+            syscrg.clk_tim_2().write(|w| w.clk_icg().set_bit());
+            syscrg.clk_tim_3().write(|w| w.clk_icg().set_bit());
+        }
+
+        unsafe {
             // Read-only status check - don't interpret disabled as bad
             log::info!("   🔍 Clock register readings (may not reflect actual hardware state):");
 

@@ -32,6 +32,10 @@ kernel-aspace-size = "0x0000_003f_ffff_f000" # uint
 # MMIO regions with format (`base_paddr`, `size`).
 mmio-regions = [
     [
+        0x0200_0000,
+        0xc000,
+    ], # CLINT
+    [
         0x0201_0000,
         0x1000,
     ], # cache_flush
@@ -99,6 +103,10 @@ mmio-regions = [
         0x1703_0000,
         0x1_0000,
     ], # PMU (Power Management Unit)
+    [
+        0x1704_0000,
+        0x1_0000,
+    ], # RTC (goldfish)
 ] # [(uint, uint)]
 
 virtio-mmio-regions = [
@@ -129,7 +137,7 @@ pci-ranges = [
 
 
 # Timer interrupt frequency in Hz.
-timer-frequency = 24_000_000 # uint
+timer-frequency = 4_000_000 # uint
 
-# VisionFive 2 doesn't use goldfish RTC
-# rtc-paddr = 0x10_1000 # uint
+# VisionFive 2 RTC
+rtc-paddr = 0x17040000 # uint

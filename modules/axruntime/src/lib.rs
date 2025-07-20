@@ -83,7 +83,10 @@ impl axlog::LogIf for LogIfImpl {
     }
 }
 
-use core::sync::atomic::{AtomicUsize, Ordering};
+use core::{
+    ptr::read_volatile,
+    sync::atomic::{AtomicUsize, Ordering},
+};
 
 static INITED_CPUS: AtomicUsize = AtomicUsize::new(0);
 
@@ -237,11 +240,19 @@ fn init_allocator() {
 
 #[cfg(feature = "irq")]
 fn init_interrupt() {
+    axlog::debug!("init_interrupt");
     use axhal::time::TIMER_IRQ_NUM;
 
     // Setup timer interrupt handler
     const PERIODIC_INTERVAL_NANOS: u64 =
         axhal::time::NANOS_PER_SEC / axconfig::TICKS_PER_SEC as u64;
+
+    axlog::trace!(
+        "PERIODIC_INTERVAL_NANOS: {}, NANOS_PER_SEC: {}, TICKS_PER_SEC: {}",
+        PERIODIC_INTERVAL_NANOS,
+        axhal::time::NANOS_PER_SEC,
+        axconfig::TICKS_PER_SEC
+    );
 
     #[percpu::def_percpu]
     static NEXT_DEADLINE: u64 = 0;
@@ -257,6 +268,7 @@ fn init_interrupt() {
         }
         unsafe { NEXT_DEADLINE.write_current_raw(deadline + PERIODIC_INTERVAL_NANOS) };
         axhal::time::set_oneshot_timer(deadline);
+        axlog::trace!("now_ns: {}, deadline: {}", now_ns, deadline);
     }
 
     axhal::irq::register_handler(TIMER_IRQ_NUM, || {
@@ -268,9 +280,12 @@ fn init_interrupt() {
         #[cfg(feature = "axasync-timer")]
         axasync::check_timer_events();
     });
+    update_timer();
+    debug_print();
 
     // Enable IRQs before starting app
     axhal::arch::enable_irqs();
+    axlog::debug!("enable_irqs");
 }
 
 #[cfg(all(feature = "tls", not(feature = "multitask")))]
@@ -278,4 +293,27 @@ fn init_tls() {
     let main_tls = axhal::tls::TlsArea::alloc();
     unsafe { axhal::arch::write_thread_pointer(main_tls.tls_ptr() as usize) };
     core::mem::forget(main_tls);
+}
+
+fn debug_print() {
+    let plic_addr: usize = 0xFFFF_FFC0_0c00_0000;
+    for i in [5, 6, 7, 76, 77, 78] {
+        let priority = unsafe { read_volatile((plic_addr + i * 4) as *const u32) };
+        trace!("priority of IRQ {}: {:#x}", i, priority);
+    }
+
+    let enable_reg = unsafe { read_volatile((plic_addr + 0x2180) as *const u128) };
+    trace!("plic enable_reg: {:#x}", enable_reg);
+
+    let pending_reg = unsafe { read_volatile((plic_addr + 0x1000) as *const u64) };
+    trace!("plic pending_reg: {:#x}", pending_reg);
+
+    let sie = riscv::register::sie::read().bits();
+    trace!("sie: {:#x}", sie);
+
+    let sip = riscv::register::sip::read().bits();
+    trace!("sip: {:#x}", sip);
+
+    let sstatus = riscv::register::sstatus::read();
+    trace!("sstatus: {:x?}", sstatus);
 }

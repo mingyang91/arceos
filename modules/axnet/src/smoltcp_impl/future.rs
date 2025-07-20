@@ -138,7 +138,7 @@ impl<'a> Future for AcceptFuture<'a> {
             }
         }
 
-        SOCKET_SET.poll_interfaces();
+        // SOCKET_SET.poll_interfaces();
         let local_port = this.socket.local_addr().unwrap().port();
         let (handle, (local_addr, peer_addr)) = match LISTEN_TABLE.accept(local_port) {
             Ok(res) => res,

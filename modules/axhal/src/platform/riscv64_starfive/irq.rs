@@ -5,7 +5,7 @@ use crate::mem::{PhysAddr, phys_to_virt};
 use core::num::NonZeroU32;
 use lazyinit::LazyInit;
 use log::{info, trace};
-use riscv::register::sie;
+use riscv::register::{sie, sstatus};
 use riscv_plic::{HartContext, InterruptSource, Plic};
 
 /// `Interrupt` bit in `scause`
@@ -65,8 +65,9 @@ pub fn set_enable(irq_num: usize, enabled: bool) {
     let irq = Irq(irq_num as u32);
     if enabled {
         // For other IRQs, enable/disable in PLIC
-        PLIC.enable(irq, hart_ctx);
+        PLIC.disable(irq, hart_ctx);
         PLIC.set_priority(irq, 1);
+        PLIC.enable(irq, hart_ctx);
     } else {
         PLIC.disable(irq, hart_ctx);
     }
@@ -100,7 +101,7 @@ pub fn register_handler(irq_num: usize, handler: IrqHandler) -> bool {
 pub fn dispatch_irq(scause: usize) {
     match scause {
         TIMER_IRQ_NUM => {
-            // trace!("IRQ: timer");
+            trace!("IRQ: timer");
             TIMER_HANDLER();
         }
         S_EXT => {
@@ -144,5 +145,6 @@ pub(super) fn init_percpu() {
         sie::set_ssoft();
         sie::set_stimer();
         sie::set_sext();
+        sstatus::set_sie();
     }
 }

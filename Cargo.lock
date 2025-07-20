@@ -643,6 +643,7 @@ dependencies = [
  "ctor_bare",
  "kernel_guard",
  "percpu",
+ "riscv 0.12.1",
 ]
 
 [[package]]
