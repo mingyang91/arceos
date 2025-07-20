@@ -268,21 +268,19 @@ fn init_interrupt() {
         }
         unsafe { NEXT_DEADLINE.write_current_raw(deadline + PERIODIC_INTERVAL_NANOS) };
         axhal::time::set_oneshot_timer(deadline);
-        axlog::trace!("now_ns: {}, deadline: {}", now_ns, deadline);
     }
 
     axhal::irq::register_handler(TIMER_IRQ_NUM, || {
-        trace!("timer IRQ handler called");
-
         update_timer();
         #[cfg(feature = "multitask")]
         axtask::on_timer_tick();
         #[cfg(feature = "axasync-timer")]
         axasync::check_timer_events();
+        #[cfg(feature = "net")]
+        axnet::poll_interfaces();
     });
     update_timer();
     debug_print();
-
     // Enable IRQs before starting app
     axhal::arch::enable_irqs();
     axlog::debug!("enable_irqs");

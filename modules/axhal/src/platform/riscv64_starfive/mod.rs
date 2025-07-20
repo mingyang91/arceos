@@ -39,7 +39,7 @@ pub fn platform_init() {
         self::irq::init_primary();
         self::irq::init_percpu();
     }
-    self::time::init_percpu();
+    // self::time::init_percpu();
 }
 
 /// Initializes the platform devices for secondary CPUs.
@@ -47,5 +47,5 @@ pub fn platform_init() {
 pub fn platform_init_secondary() {
     #[cfg(feature = "irq")]
     self::irq::init_percpu();
-    self::time::init_percpu();
+    // self::time::init_percpu();
 }

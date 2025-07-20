@@ -101,7 +101,6 @@ pub fn register_handler(irq_num: usize, handler: IrqHandler) -> bool {
 pub fn dispatch_irq(scause: usize) {
     match scause {
         TIMER_IRQ_NUM => {
-            trace!("IRQ: timer");
             TIMER_HANDLER();
         }
         S_EXT => {

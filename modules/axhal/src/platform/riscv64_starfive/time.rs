@@ -32,7 +32,6 @@ pub fn epochoffset_nanos() -> u64 {
 /// A timer interrupt will be triggered at the specified monotonic time deadline (in nanoseconds).
 #[cfg(feature = "irq")]
 pub fn set_oneshot_timer(deadline_ns: u64) {
-    axlog::debug!("now: {}", riscv::register::time::read());
     let ret = sbi_rt::set_timer(nanos_to_ticks(deadline_ns));
     if ret.is_err() {
         axlog::error!("set_oneshot_timer failed: {:?}", ret);
@@ -60,5 +59,11 @@ pub(super) fn init_early() {
 
 pub(super) fn init_percpu() {
     #[cfg(feature = "irq")]
-    sbi_rt::set_timer(0);
+    {
+        let ret = sbi_rt::set_timer(0);
+        axlog::info!("set_timer: {:?}", ret);
+        if ret.is_err() {
+            axlog::error!("set_timer failed: {:?}", ret);
+        }
+    }
 }
