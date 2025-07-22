@@ -84,7 +84,7 @@ impl axlog::LogIf for LogIfImpl {
 }
 
 use core::{
-    ptr::read_volatile,
+    ptr::{read_volatile, write_volatile},
     sync::atomic::{AtomicUsize, Ordering},
 };
 
@@ -159,6 +159,12 @@ pub extern "C" fn rust_main(cpu_id: usize, dtb: usize) -> ! {
     #[cfg(feature = "axasync-timer")]
     axasync::init_timer_waker();
 
+    #[cfg(feature = "irq")]
+    {
+        info!("Initialize interrupt handlers...");
+        init_interrupt();
+    }
+
     #[cfg(any(feature = "fs", feature = "net", feature = "display"))]
     {
         #[allow(unused_variables)]
@@ -176,12 +182,6 @@ pub extern "C" fn rust_main(cpu_id: usize, dtb: usize) -> ! {
 
     #[cfg(feature = "smp")]
     self::mp::start_secondary_cpus(cpu_id);
-
-    #[cfg(feature = "irq")]
-    {
-        info!("Initialize interrupt handlers...");
-        init_interrupt();
-    }
 
     #[cfg(all(feature = "tls", not(feature = "multitask")))]
     {
@@ -276,8 +276,9 @@ fn init_interrupt() {
         axtask::on_timer_tick();
         #[cfg(feature = "axasync-timer")]
         axasync::check_timer_events();
-        #[cfg(feature = "net")]
-        axnet::poll_interfaces();
+        // #[cfg(feature = "net")]
+        // axnet::poll_interfaces();
+        // debug_78();
     });
     update_timer();
     debug_print();
@@ -314,4 +315,19 @@ fn debug_print() {
 
     let sstatus = riscv::register::sstatus::read();
     trace!("sstatus: {:x?}", sstatus);
+
+    let uart_addr: usize = 0xffff_ffc0_1000_0000;
+    let dlh_ier = unsafe { read_volatile((uart_addr + 0x4) as *const u32) };
+    trace!("uart DLH/IER: {:#x}", dlh_ier);
+
+    unsafe { write_volatile((uart_addr + 0x4) as *mut u32, 0x1) };
+    let dlh_ier = unsafe { read_volatile((uart_addr + 0x4) as *const u32) };
+    trace!("uart DLH/IER: {:#x}", dlh_ier);
+}
+
+fn debug_78() {
+    let plic_addr: usize = 0xFFFF_FFC0_0c00_0000;
+    let word = unsafe { read_volatile((plic_addr + 0x1000 + (78 / 32) * 4) as *const u32) };
+    let pending = (word >> (78 % 32)) & 1;
+    trace!("plic pending_reg: {:#x}", pending);
 }

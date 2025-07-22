@@ -61,15 +61,15 @@ impl InterruptSource for Irq {
 
 /// Enables or disables the given IRQ.
 pub fn set_enable(irq_num: usize, enabled: bool) {
-    let hart_ctx = HartCtx::this_hart_supervisor();
+    let m_hart_ctx = HartCtx::this_hart_machine();
     let irq = Irq(irq_num as u32);
     if enabled {
         // For other IRQs, enable/disable in PLIC
-        PLIC.disable(irq, hart_ctx);
-        PLIC.set_priority(irq, 1);
-        PLIC.enable(irq, hart_ctx);
+        PLIC.disable(irq, m_hart_ctx);
+        PLIC.set_priority(irq, 7);
+        PLIC.enable(irq, m_hart_ctx);
     } else {
-        PLIC.disable(irq, hart_ctx);
+        PLIC.disable(irq, m_hart_ctx);
     }
 }
 
@@ -135,9 +135,9 @@ pub(super) fn init_primary() {
 pub(super) fn init_percpu() {
     // PLIC is already initialized by primary CPU, just configure per-CPU settings
     let hart_ctx_machine = HartCtx::this_hart_machine();
-    PLIC.set_threshold(hart_ctx_machine, 1);
-    let hart_ctx_supervisor = HartCtx::this_hart_supervisor();
-    PLIC.set_threshold(hart_ctx_supervisor, 0);
+    PLIC.set_threshold(hart_ctx_machine, 0);
+    // let hart_ctx_supervisor = HartCtx::this_hart_supervisor();
+    // PLIC.set_threshold(hart_ctx_supervisor, 0);
 
     // Enable all types of interrupts
     unsafe {
