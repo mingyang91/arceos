@@ -276,13 +276,13 @@ fn init_interrupt() {
         axtask::on_timer_tick();
         #[cfg(feature = "axasync-timer")]
         axasync::check_timer_events();
-        #[cfg(feature = "net")]
-        {
-            let now_ns = axhal::time::monotonic_time_nanos();
-            if now_ns > 20_000_000_000 {
-                axnet::poll_interfaces();
-            }
-        }
+        // #[cfg(feature = "net")]
+        // {
+        //     let now_ns = axhal::time::monotonic_time_nanos();
+        //     if now_ns > 20_000_000_000 {
+        //         axnet::poll_interfaces();
+        //     }
+        // }
         // debug_78();
     });
     update_timer();

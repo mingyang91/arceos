@@ -363,10 +363,10 @@ pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
 
 fn handler() {
     info!("eth_irq called");
-    {
-        ETH0.dev.lock().inner.borrow_mut().clear_intr_status();
+    let rx = { ETH0.dev.lock().inner.borrow_mut().clear_intr_status() };
+    if rx {
+        SOCKET_SET.poll_interfaces();
     }
-    SOCKET_SET.poll_interfaces();
 }
 
 fn eth_wake_irq() {
