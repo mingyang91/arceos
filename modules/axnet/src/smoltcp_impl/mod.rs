@@ -331,6 +331,12 @@ pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
     SOCKET_SET.init_once(SocketSetWrapper::new());
     LISTEN_TABLE.init_once(ListenTable::new());
 
+    info!("created net interface {:?}:", ETH0.name());
+    info!("  ether:    {}", ETH0.ethernet_address());
+    info!("  ip:       {}/{}", ip, IP_PREFIX);
+    info!("  gateway:  {}", gateway);
+    info!("  IRQ:      {}", irq);
+
     // // for qemu virt eth0
     // axhal::irq::register_handler(irq as usize, handler);
 
@@ -344,15 +350,22 @@ pub(crate) fn init(net_dev: AxNetDevice, irq: u32) {
     // axhal::irq::register_handler(76, eth_lpi);
     axhal::irq::register_handler(78, handler);
 
-    info!("created net interface {:?}:", ETH0.name());
-    info!("  ether:    {}", ETH0.ethernet_address());
-    info!("  ip:       {}/{}", ip, IP_PREFIX);
-    info!("  gateway:  {}", gateway);
-    info!("  IRQ:      {}", irq);
+    // jh7110 uart0 input interrupt for test if PLIC is working
+    // axhal::irq::register_handler(32, || {
+    //     info!("uart0");
+    // });
+
+    // jh7110 rtc_sec_pulse interrupt for test but rtc need more clock setting
+    // axhal::irq::register_handler(11, || {
+    //     info!("rtc_sec_pulse");
+    // });
 }
 
 fn handler() {
     info!("eth_irq called");
+    {
+        ETH0.dev.lock().inner.borrow_mut().clear_intr_status();
+    }
     SOCKET_SET.poll_interfaces();
 }
 
